@@ -1,7 +1,7 @@
 # Back end
 Trabalho de conclusão de curso(TCC) - curso técnico em informática
 
-# executar o código
+# <p> executar o código </p>
 python main.py
 # Baixar a venv
 python -m venv venv
