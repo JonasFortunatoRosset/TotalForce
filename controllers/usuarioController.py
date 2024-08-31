@@ -4,12 +4,14 @@ from models.usuario import Usuario
 
 def usuariosController():
     if request.method == 'POST':
-        data = request.get_json()
-        usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=data['senha'],peso=data['peso'],altura=data['altura'])
-        db.session.add(usuario)
-        db.session.commit()
-        return jsonify({'message': 'Usuario cadastrado'}),200
-    
+        try:
+            data = request.get_json()
+            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=data['senha'],peso=data['peso'],altura=data['altura'])
+            db.session.add(usuario)
+            db.session.commit()
+            return jsonify({'message': 'Usuario cadastrado'}),200
+        except Exception as e:
+            return jsonify({'error': 'Erro ao inserir novo usuario. Erro: {}'.format(str(e))}), 400
     
     elif request.method == 'GET':
         try:
