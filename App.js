@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { createStackNavigator }   from '@react-navigation/stack';
+import {NavigationConteiner} from '@react-navigation/native'
   
 // Importação das páginas
 import { LoginPage }   from './src/Screens/LoginPage';
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <NavigationConteiner>
       <Stack.Navigator initialRouteName='LoginPage'>
         <Stack.Screen name="LoginPage"   component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomePage"    component={HomePage}></Stack.Screen>
@@ -21,6 +23,7 @@ export default function App() {
         <Stack.Screen name="ConfigPage"  component={ConfigPage}></Stack.Screen>
         <Stack.Screen name="PaymentPage" component={PaymentPage}></Stack.Screen>
       </Stack.Navigator>
+      </NavigationConteiner>
     </View>
   );
 }

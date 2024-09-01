@@ -1,14 +1,14 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Fontisto from '@expo/vector-icons/Fontisto';
 
+import totalforcelogo from './Images/totalforcelogo.png';
 
 {/* lógica de login */}
-const[login,  setLogin] = useState('');
-const[password, setPassword] = useState('');
+export default function LoginPage({navigation}) {
 
-export default function LoginPage(navigation) {
+  const[login,  setLogin] = useState("");
+  const[password, setPassword] = useState("");
 
   const functionLogin = async () => {
 
@@ -37,7 +37,7 @@ export default function LoginPage(navigation) {
 
   <View style={styles.container}>
     <View style={styles.header}>
-      <Image source={require("./Image/totalforcelogo.png")} style={styles.headerimg}/>
+      <Image source={totalforcelogo} style={styles.headerimg}/>
     </View>
     <View style={styles.body}>
       <View style={styles.boxlogin}>

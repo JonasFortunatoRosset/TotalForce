@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
+import totalforcelogo from './Images/totalforcelogo.png';
+
 
 export default function HomePage({Navigation}) {
   return (
@@ -17,14 +19,14 @@ export default function HomePage({Navigation}) {
           <TouchableHighlight onPress={() => Navigation.navigate('TrainPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Treino</Text>
-            <Image source={require("./Image/totalforcelogo.png")} style={styles.boxImage}/>
+            <Image source={totalforcelogo} style={styles.boxImage}/>
           </View>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => Navigation.navigate('#')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Nutrição</Text>
-            <Image source={require("./Image/totalforcelogo.png")} style={styles.boxImage} />
+            <Image source={totalforcelogo} style={styles.boxImage} />
           </View>
           </TouchableHighlight>
         </View>
@@ -40,7 +42,7 @@ export default function HomePage({Navigation}) {
           <TouchableHighlight onPress={() => Navigation.navigate('PaymentPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Pagamento</Text>
-            <Image source={require("./Image/totalforcelogo.png")} style={styles.boxImage} />
+            <Image source={totalforcelogo} style={styles.boxImage} />
           </View>
           </TouchableHighlight>
         </View>
