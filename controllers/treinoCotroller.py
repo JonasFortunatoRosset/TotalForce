@@ -6,7 +6,7 @@ def treinoController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            treino = Treino(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codusuario=['codusuario'],proprieda=data['propriedade'],codmodalidade=data['codmodalidade'])
+            treino = Treino(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codusuario=['codusuario'],propriedade=data['propriedade'],codmodalidade=data['codmodalidade'])
             db.session.add(treino)
             db.session.commit()
             return jsonify({'message': 'Treino cadastrado com sucesso'}),200
@@ -23,9 +23,20 @@ def treinoController():
     
     elif request.method == 'PUT':
         try:
-            pass
+            data = request.get_json()
+            put_treino_id = data['codigo']
+            put_treino = Treino.query.get(put_treino_id)
+            if put_treino is None:
+                return {'Treino não encontrado'}
+            put_treino.nome          = data('nome', put_treino.nome)
+            put_treino.descricao     = data('descricao', put_treino.descricao)
+            put_treino.codusuario    = data('codusuario', put_treino.codusuario)
+            put_treino.propriedade   = data('propriedade', put_treino.propriedade)
+            put_treino.codmodalidade = data('codmodalidade', put_treino.codmodalidade)
+            db.session.commit()
+            return {'Treino alterado com sucesso'}, 200
         except Exception as e:
-            pass   
+            return {'error': 'Erro ao alterar treino'.format(e)}, 400
     
     elif request.method == 'DELETE':
         try:

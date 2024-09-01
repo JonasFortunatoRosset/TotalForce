@@ -14,7 +14,7 @@ def administradorController():
         except Exception as e:
             return jsonify({'error': 'Erro ao inserir novo administrador. Erro: {}'.format(str(e))}), 400
         
-    if request.method == 'GET':
+    elif request.method == 'GET':
         try:
             data = Administrador.query.all()
             administradores = {'administrador': [administrador.to_dict() for administrador in data]}
@@ -22,7 +22,7 @@ def administradorController():
         except Exception as e:
             return 'Não foi possível buscar nenhum administrador. Error: {}'.format(str(e)), 405
     
-    if  request.method == 'PUT':
+    elif  request.method == 'PUT':
         try:
             data = request.get_json()
             put_admistrador_id = data['codigo']
@@ -38,7 +38,7 @@ def administradorController():
         except Exception as e:
             return {'error': 'Erro ao atualizar Administrador. Erro{}'.format(e)}, 400
     
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         try:
             codigo = request.args.get('codigo')
             delete_administrador = Administrador.query.get(codigo)
