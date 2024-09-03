@@ -4,14 +4,17 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 import totalforcelogo from './Images/totalforcelogo.png';
+import dumbel from './Images/dumbel.png';
+import nutricao from './Images/nutricao.png';
+import configuracao from './Images/configuracao.png';
+import pagamento from './Images/pagamento.png';
 
-
-export  function HomePage({navigation}) {
+export function HomePage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <AntDesign name="user" size={24} color="white" />
+        <AntDesign name="user" size={24} color="#000" />
       </View>
 
       <View style={styles.body}>
@@ -19,14 +22,14 @@ export  function HomePage({navigation}) {
           <TouchableHighlight onPress={() => navigation.navigate('TrainPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Treino</Text>
-            <Image source={totalforcelogo} style={styles.boxImage}/>
+            <Image source={dumbel} style={styles.boxImageTrain}/>
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('#')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('NutricaoPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Nutrição</Text>
-            <Image source={totalforcelogo} style={styles.boxImage} />
+            <Image source={nutricao} style={styles.boxImageNutricao} />
           </View>
           </TouchableHighlight>
         </View>
@@ -35,14 +38,14 @@ export  function HomePage({navigation}) {
           <TouchableHighlight onPress={() => navigation.navigate('ConfigPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Configurações</Text>
-            <EvilIcons name="gear" size={24} color="white" />
+            <Image source={configuracao} style={styles.boxImageConfig} />
           </View>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => navigation.navigate('PaymentPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Pagamento</Text>
-            <Image source={totalforcelogo} style={styles.boxImage} />
+            <Image source={pagamento} style={styles.boxImagePagamento} />
           </View>
           </TouchableHighlight>
         </View>
@@ -58,7 +61,7 @@ export  function HomePage({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f000',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   txtheader: {
-    color: '#fff',
+    color: '#000',
     fontSize: 20,
   },
   body: {
@@ -85,22 +88,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 30,
-    gap: 50, 
+    gap: 45, 
   },
   box: {
     backgroundColor: '#E49413',
     padding: 10,
+    height: 200,
+    width: 150,
     alignItems: 'center',
     justifyContent: 'center',
   },
   boxText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 18,
     marginBottom: 10,
   },
-  boxImage: {
-    width: 75,
-    height: 75,
+  boxImageTrain: {
+    width: 120,
+    height: 120,
+  },
+  boxImageNutricao: {
+    width: 92,
+    height: 120,
+  },
+  boxImageConfig: {
+    width: 120,
+    height: 120,
+  },
+  boxImagePagamento: {
+    width: 120,
+    height: 120,
   },
   footer: {
     width: '100%',

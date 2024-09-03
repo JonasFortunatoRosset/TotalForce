@@ -3,11 +3,12 @@ import { createStackNavigator }   from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native'
   
 // Importação das páginas
-import {LoginPage}    from './src/Screens/LoginPage';
+import { LoginPage }   from './src/Screens/LoginPage';
 import { HomePage }    from './src/Screens/HomePage';
 import { TrainPage }   from './src/Screens/TrainPage';
 import { ConfigPage }  from './src/Screens/ConfigPage';
 import { PaymentPage } from './src/Screens/PaymentPage';
+import {NutricaoPage} from './src/Screens/NutricaoPage';
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="TrainPage"   component={TrainPage}></Stack.Screen>
         <Stack.Screen name="ConfigPage"  component={ConfigPage}></Stack.Screen>
         <Stack.Screen name="PaymentPage" component={PaymentPage}></Stack.Screen>
+        <Stack.Screen name="NutricaoPage" component={NutricaoPage}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
