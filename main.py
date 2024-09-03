@@ -6,4 +6,13 @@ from flask_cors import CORS
 class App():
     def __init__(self) -> None:
         self.app = Flask(__name__)
+        self.app.config['SQLALQUEMY_DATABASE_URI'] = 'mysql.pymysql://root:''@localhost/totalforce'
+        db.init_app(self.app)
+
+        default_routes(self.app)
+
+    def run(self):
+        return self.app.run(port=3000, host='localhost', debug=True)
         
+app = App()
+app.run()
