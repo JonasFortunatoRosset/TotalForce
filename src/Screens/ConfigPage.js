@@ -2,11 +2,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 
-export default function ConfigPage({Navigation}) {
+export  function ConfigPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <AntDesign name="arrowleft" size={17} color="black" onPress={() => Navigation.navigate('HomePage') }/>
+      <AntDesign name="arrowleft" size={17} color="black" onPress={() => navigation.navigate('HomePage') }/>
       <Text style={styles.txtheader}> Configurações </Text>
       </View>
       <View style={styles.body}>
@@ -27,7 +27,7 @@ export default function ConfigPage({Navigation}) {
          <AntDesign name="right" size={14} color="#B0B0B0" />
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.boxbtnfooter} onPress={() => Navigation.navigate('LoginPage') }>
+          <TouchableOpacity style={styles.boxbtnfooter} onPress={() => navigation.navigate('LoginPage') }>
             <Text style={styles.txtbtnfooter}> Sair </Text>
           </TouchableOpacity>
         </View>

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function TrainPage(Navigation) {
+export  function TrainPage(navigation) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <AntDesign name="arrowleft" size={17} color="black" onPress={() => Navigation.navigate('HomePage') }/>
+        <AntDesign name="arrowleft" size={17} color="black" onPress={() => navigation.navigate('HomePage') }/>
         <Text style={styles.txtheader}>TREINOS</Text>
       </View>
       <View style={styles.body}>

@@ -6,7 +6,7 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import totalforcelogo from './Images/totalforcelogo.png';
 
 
-export default function HomePage({Navigation}) {
+export  function HomePage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -16,14 +16,14 @@ export default function HomePage({Navigation}) {
 
       <View style={styles.body}>
         <View style={styles.line}>
-          <TouchableHighlight onPress={() => Navigation.navigate('TrainPage')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('TrainPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Treino</Text>
             <Image source={totalforcelogo} style={styles.boxImage}/>
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => Navigation.navigate('#')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('#')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Nutrição</Text>
             <Image source={totalforcelogo} style={styles.boxImage} />
@@ -32,14 +32,14 @@ export default function HomePage({Navigation}) {
         </View>
 
         <View style={styles.line}>
-          <TouchableHighlight onPress={() => Navigation.navigate('ConfigPage')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('ConfigPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Configurações</Text>
             <EvilIcons name="gear" size={24} color="white" />
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => Navigation.navigate('PaymentPage')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('PaymentPage')} underlayColor={'#A6701A'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Pagamento</Text>
             <Image source={totalforcelogo} style={styles.boxImage} />

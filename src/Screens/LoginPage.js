@@ -1,50 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Fontisto from '@expo/vector-icons/Fontisto';
 
 import totalforcelogo from './Images/totalforcelogo.png';
 
-{/* lógica de login */}
-export default function LoginPage({navigation}) {
-
-  const[login,  setLogin] = useState("");
-  const[password, setPassword] = useState("");
-
-  const functionLogin = async () => {
-
-    if (login == 'alvaro123' && password == '1234') {
-      navigation.navigate('HomePage')
-      
-      setPassword('');
-      setLogin('');
-    }
-     
-  
-    if (!login) {
-      Alert.alert('Erro', 'O campo de Login é obrigatório');
-      return;
-    }
-  
-    if (!password) {
-      Alert.alert('Erro', 'O campo de Senha é obrigatório');
-      return;
-    }
-  
-    else{
-      Alert.alert('Erro','Credenciais inválidas');
-    }
-  }
-
-  <View style={styles.container}>
+export function LoginPage({navigation}) {
+  return(
+    <View style={styles.container}>
     <View style={styles.header}>
       <Image source={totalforcelogo} style={styles.headerimg}/>
     </View>
     <View style={styles.body}>
       <View style={styles.boxlogin}>
        <View style={styles.btnstipos}>
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de usuasrio */}
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de Colaborador */}
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de Adm */}
+        <Fontisto name="checkbox-passive" size={24} color="black" />  
+        <Fontisto name="checkbox-passive" size={24} color="black" /> 
+        <Fontisto name="checkbox-passive" size={24} color="black" />  
        </View>
        <View style={styles.txttiposbox}>
          <Text style={styles.txttipos}> User </Text>
@@ -52,16 +22,16 @@ export default function LoginPage({navigation}) {
          <Text style={styles.txttipos}> Admin </Text>
        </View>
        <View style={styles.boxbtn}>
-         <TextInput style={styles.inputs} placeholder='Login' placeholderTextColor={'#000'} value={login}  onChangeText={setLogin}/>
-         <TextInput style={styles.inputs} placeholder='Password' placeholderTextColor={'#000'} value={password}  onChangeText={setPassword} secureTextEntry/>
+         <TextInput style={styles.inputs} placeholder='Login' placeholderTextColor={'#000'} value={''}  onChangeText={''}/>
+         <TextInput style={styles.inputs} placeholder='Password' placeholderTextColor={'#000'} value={''}  onChangeText={''} secureTextEntry/>
        </View>
        <TouchableOpacity style={styles.boxbtnacess}>
-         <Text style={styles.txtbtnlogin} onPress={functionLogin}> Acessar </Text>
+         <Text style={styles.txtbtnlogin} onPress={() => navigation.navigate('HomePage') }> Acessar </Text>
        </TouchableOpacity>
        </View>
      </View>
-  </View>
-  
+    </View>
+  )
 } 
 
 const styles = StyleSheet.create({
