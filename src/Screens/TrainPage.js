@@ -28,6 +28,18 @@ export function TrainPage(navigation) {
         <TouchableOpacity style={styles.boxnovotreino}>
           <Text style={styles.txtnovotreino}>Novo Treino</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.txtfooter}> Navegação entre telas </Text>
@@ -82,6 +94,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 43,
     backgroundColor: '#E49413',
   },
   txtfooter: {
