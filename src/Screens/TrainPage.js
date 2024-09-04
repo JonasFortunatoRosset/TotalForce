@@ -1,15 +1,30 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export function TrainPage(navigation) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <AntDesign name="arrowleft" size={17} color="black" onPress={() => navigation.navigate('HomePage') }/>
+        <TouchableHighlight style={styles.seta}  onPress={() => navigation.navigate('HomePage')} >
+          <AntDesign  name="arrowleft" size={30} color="black"/>
+       </TouchableHighlight>
+       <View>
         <Text style={styles.txtheader}>TREINOS</Text>
       </View>
+      </View>
       <View style={styles.body}>
-        <Text style={styles.txttopo}>Meu Treino</Text>
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.boxnovotreino}>
           <Text style={styles.txtnovotreino}>Novo Treino</Text>
         </TouchableOpacity>
@@ -25,15 +40,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFB031',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
-      display: 'flex',
-      justifyContent: 'space-evenly',
-      margin: 10,
-      backgroundColor: '#E49413'
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent:'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#E49413',
   },
+  seta: {
+    marginRight: 82
+  },
+
   txtheader: {
     fontSize: 50,
     fontFamily: '#',
@@ -41,11 +59,9 @@ const styles = StyleSheet.create({
   body: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: 5,
-  },
-  txttopo: {
-    fontSize: 15,
-    fontFamily: '#',
+    alignItems: 'center',
+    margin: 20,
+
   },
   boxnovotreino: {
     borderRadius: 6,
@@ -54,6 +70,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     color: '#000',
+    width: 150,
+    height: 60,
+    margin: 15,
   },
   txtnovotreino: {
     fontSize: 25,

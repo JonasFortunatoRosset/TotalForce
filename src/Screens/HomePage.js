@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
 
-import totalforcelogo from './Images/totalforcelogo.png';
+import totalforcelogo from './Images/totalforcelogo.png'
 import dumbel from './Images/dumbel.png';
 import nutricao from './Images/nutricao.png';
 import configuracao from './Images/configuracao.png';
@@ -16,17 +15,16 @@ export function HomePage({navigation}) {
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
         <AntDesign name="user" size={24} color="#000" />
       </View>
-
       <View style={styles.body}>
-        <View style={styles.line}>
-          <TouchableHighlight onPress={() => navigation.navigate('TrainPage')} underlayColor={'#A6701A'}>
+        <View style={styles.line1}>
+          <TouchableHighlight onPress={() => navigation.navigate('TrainPage')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Treino</Text>
             <Image source={dumbel} style={styles.boxImageTrain}/>
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('NutricaoPage')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('NutricaoPage')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Nutrição</Text>
             <Image source={nutricao} style={styles.boxImageNutricao} />
@@ -34,15 +32,15 @@ export function HomePage({navigation}) {
           </TouchableHighlight>
         </View>
 
-        <View style={styles.line}>
-          <TouchableHighlight onPress={() => navigation.navigate('ConfigPage')} underlayColor={'#A6701A'}>
+        <View style={styles.line2}>
+          <TouchableHighlight onPress={() => navigation.navigate('ConfigPage')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Configurações</Text>
             <Image source={configuracao} style={styles.boxImageConfig} />
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('PaymentPage')} underlayColor={'#A6701A'}>
+          <TouchableHighlight onPress={() => navigation.navigate('PaymentPage')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Pagamento</Text>
             <Image source={pagamento} style={styles.boxImagePagamento} />
@@ -50,9 +48,8 @@ export function HomePage({navigation}) {
           </TouchableHighlight>
         </View>
       </View>
-
       <View style={styles.footer}>
-          <Text>TOTALFORCE</Text>
+        <Image style={styles.imgfooter} source={totalforcelogo}/>
       </View>
     </View>
   );
@@ -84,11 +81,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFB031'
   },
-  line: {
+  line1: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 30,
     gap: 45, 
+
+  },
+  line2: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 30,
+    gap: 45, 
+    marginBottom: '25%'
+
   },
   box: {
     backgroundColor: '#E49413',
@@ -125,4 +131,8 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
   },
+  imgfooter: {
+    width: 110,
+    height: 50,
+  }
 });
