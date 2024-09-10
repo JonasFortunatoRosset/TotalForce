@@ -1,89 +1,108 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import Fontisto from '@expo/vector-icons/Fontisto';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import axios from 'axios';
+import { useState } from 'react';
 
+import personal from './Images/personal.png'
+import user from './Images/user.png'
+import adm from './Images/adm.png'
 import totalforcelogo from './Images/totalforcelogo.png';
 
-{/* lógica de login */}
-export default function LoginPage({navigation}) {
+export function LoginPage({navigation}) {
 
-  const[login,  setLogin] = useState("");
-  const[password, setPassword] = useState("");
+  const [usuario, setUsuario] = useState({
+    login: "",
+    senha: ""
+  })
 
-  const functionLogin = async () => {
-
-    if (login == 'alvaro123' && password == '1234') {
+  function Login(){
+    axios.post('http://locahost:3000/usuarios', {
+      login: usuario.login,
+      senha: usuario.senha
+    })
+    .then(response =>{
+      setUsuario({
+        login: "",
+        senha: ""
+      })
+    })
+    .catch(error => {
+      Alert.alert("Erro", "Credenciais incorretas!")
+      console.error(error)
       navigation.navigate('HomePage')
-      
-      setPassword('');
-      setLogin('');
-    }
-     
-  
-    if (!login) {
-      Alert.alert('Erro', 'O campo de Login é obrigatório');
-      return;
-    }
-  
-    if (!password) {
-      Alert.alert('Erro', 'O campo de Senha é obrigatório');
-      return;
-    }
-  
-    else{
-      Alert.alert('Erro','Credenciais inválidas');
-    }
+    })
   }
 
-  <View style={styles.container}>
+  return(
+    <View style={styles.container}>
     <View style={styles.header}>
       <Image source={totalforcelogo} style={styles.headerimg}/>
     </View>
     <View style={styles.body}>
       <View style={styles.boxlogin}>
        <View style={styles.btnstipos}>
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de usuasrio */}
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de Colaborador */}
-       <Fontisto name="checkbox-passive" size={24} color="black" />  {/* Login de Adm */}
+        <Image source={user} style={styles.imguser} />  
+        <Image source={personal} style={styles.imguser} /> 
+        <Image source={adm} style={styles.imguser} /> 
        </View>
        <View style={styles.txttiposbox}>
-         <Text style={styles.txttipos}> User </Text>
+         <Text style={styles.txttipos}> Usuário </Text>
          <Text style={styles.txttipos}> Personal </Text>
-         <Text style={styles.txttipos}> Admin </Text>
+         <Text style={styles.txttipos}> Administrador </Text>
        </View>
        <View style={styles.boxbtn}>
-         <TextInput style={styles.inputs} placeholder='Login' placeholderTextColor={'#000'} value={login}  onChangeText={setLogin}/>
-         <TextInput style={styles.inputs} placeholder='Password' placeholderTextColor={'#000'} value={password}  onChangeText={setPassword} secureTextEntry/>
-       </View>
-       <TouchableOpacity style={styles.boxbtnacess}>
-         <Text style={styles.txtbtnlogin} onPress={functionLogin}> Acessar </Text>
+         <TextInput 
+          style={styles.inputs} 
+          placeholder='Login' 
+          placeholderTextColor={'#000'} 
+          value={usuario.login}  
+          onChangeText={(text) => setUsuario({...usuario, login: text})}/>
+
+         <TextInput 
+         style={styles.inputs}
+          placeholder='Senha' 
+          placeholderTextColor={'#000'} 
+          value={usuario.senha}
+          onChangeText={(text) => setUsuario({...usuario, senha: text})}
+          secureTextEntry={true}/>
+
+         <TouchableOpacity onPress={Login} style={styles.boxbtnacess}>
+         <Text style={styles.txtbtnlogin}> Acessar </Text>
        </TouchableOpacity>
        </View>
+       </View>
      </View>
-  </View>
-  
+    </View>
+  )
 } 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFB031'
+    backgroundColor: '#FFB031',
+    height: '100%'
   },
   header: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
   headerimg: {
-    width: 170,
-    height: 170,
+    width: 270,
+    height: 370,
+  },
+  imguser:{
+    width: 60,
+    height: 60,
+    marginTop: 10
   },
   body: {
     backgroundColor: '#E49413',
-    borderRadius: 5,
+    borderRadius: 15,
+    width:'90%',
+    height: '40%'
   },
   boxlogin: {
     display: 'flex',
@@ -93,12 +112,16 @@ const styles = StyleSheet.create({
   btnstipos: {
     display: 'flex',
     justifyContent: 'space-between',
+    flexDirection: 'row',
     margin: 5,
+    width: '82%',
   },
   txttiposbox: {
     display: 'flex',
     justifyContent: 'space-between',
+    flexDirection: 'row',
     margin: 5,
+    width: '82%',
   },
   txttipos:{
     size: 10,
@@ -106,27 +129,41 @@ const styles = StyleSheet.create({
   boxbtn: {
     display: 'flex',
     flexDirection: 'column',
-    margin: 10,
+    margin: 18,
+    
   },
   btnslogin: {
     backgroundColor: '#fff',
     borderRadius: 12,
   },
   inputs: {
-    color: '#fff',
+    color: '#000',
     size: 20,
-    
+    marginBottom: 20,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    width: 300,
+    height: 45,
+    padding: 10,
   },
   boxbtnacess: {
     display: 'flex',
-    justifyContent: 'flex-end',
-    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#fff',
+    size: 20,
+    marginBottom: 20,
+    borderRadius: 12,
+    backgroundColor: '#FFB031',
+    width: 300,
+    height: 45,
   },
   txtbtnlogin: {
     display: 'flex',
     justifyContent:'center',
     backgroundColor: '#FFB031',
-    color: '#000'
+    color: '#000',
+    fontSize: 20
   },
 });
  
