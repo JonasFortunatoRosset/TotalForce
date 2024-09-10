@@ -1,10 +1,41 @@
-import { StyleSheet, Text, TextInput, View,TouchableHighlight,ScrollView } from 'react-native';
+import { StyleSheet, Text, TextInput, View,TouchableHighlight,ScrollView,TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 
 export  function NutricaoPage() {
+
+  const[peso,setPeso] = useState('')
+  const[resultadoC,setResultadoC] = useState(0)
+  const[resultadoP,setResultadoP] = useState(0)
+  const[resultadoCa,setResultadoCa] = useState(0)
+  const[resultadoD,setResultadoD] = useState(0)
+  
+  function calc(){
+    const vlr = parseInt(peso)
+    if (!isNaN(vlr)){
+      const resultC = (vlr * 0.07).toFixed(1)
+      setResultadoC(resultC)
+
+      const resultP = (vlr * 2).toFixed(1)
+      setResultadoP(resultP)
+
+      const resultCa = (vlr * 4).toFixed(1)
+      setResultadoCa(resultCa)
+
+      const resultD = (vlr * 0.02).toFixed(1)
+      setResultadoD(resultD)
+    }
+
+    else {
+      setResultadoC(0)
+      setResultadoP(0)
+      setResultadoCa(0)
+      setResultadoD(0)
+    }
+  }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -20,31 +51,40 @@ export  function NutricaoPage() {
           <Text>Pesquisar</Text>
           <FontAwesome name="search" size={24} color="black" /> 
         </View>
+        <TouchableOpacity onPress={calc} style={styles.boxbtn}>
+         <Text> Calcular </Text>
+       </TouchableOpacity>
         <View style={styles.boxinputpeso}>
-         <TextInput style={styles.inputpeso} placeholder='Digite seu Peso'/>
+    
+         <TextInput style={styles.inputpeso} 
+         placeholder='Digite seu Peso'
+         value={peso}
+         onChangeText={setPeso}
+         />
+
         </View>
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Creatina</Text>
           <Text style={styles.txtbox}>Peso x 0,07 = C</Text>
-          <Text style={styles.txtbox}>4,2g</Text>
+          <Text style={styles.txtbox}>{resultadoC}g</Text>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Proteina</Text>
           <Text style={styles.txtbox}>Peso x 1,6 a 2,0 = P</Text>
-          <Text style={styles.txtbox}>150g</Text>
+          <Text style={styles.txtbox}>{resultadoP}g</Text>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Carboidratos</Text>
           <Text style={styles.txtbox}>Peso x 2 a 4 = C</Text>
-          <Text style={styles.txtbox}>220</Text>
+          <Text style={styles.txtbox}>{resultadoCa}g</Text>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Durateston</Text>
           <Text style={styles.txtbox}>Peso x 0,02 = D</Text>
-          <Text style={styles.txtbox}>5ml</Text>
+          <Text style={styles.txtbox}>{resultadoD}ml</Text>
         </View>
       </View>
     </ScrollView>
@@ -112,8 +152,16 @@ const styles = StyleSheet.create({
     height: 140,
 
   },
-  
   txtbox: {
       fontSize: 18,
   },
+  boxbtn:{
+    backgroundColor: '#E49413',
+    width: 80,
+    height: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+  }
 });
