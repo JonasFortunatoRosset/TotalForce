@@ -10,7 +10,7 @@ export  function NutricaoPage() {
   const[resultadoC,setResultadoC] = useState(0)
   const[resultadoP,setResultadoP] = useState(0)
   const[resultadoCa,setResultadoCa] = useState(0)
-  const[resultadoD,setResultadoD] = useState(0)
+  const[resultadoD,setResultadoD] = useState(0) 
   
   function calc(){
     const vlr = parseInt(peso)

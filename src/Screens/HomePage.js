@@ -40,7 +40,7 @@ export function HomePage({navigation}) {
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('PaymentPage')} underlayColor={'#855200'}>
+          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Pagamento</Text>
             <Image source={pagamento} style={styles.boxImagePagamento} />

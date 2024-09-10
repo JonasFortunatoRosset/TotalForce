@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet }             from 'react-native';
 import { createStackNavigator }   from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native'
+import {NavigationContainer}      from '@react-navigation/native'
   
 // Importação das páginas
 import { LoginPage }   from './src/Screens/LoginPage';
@@ -8,7 +8,18 @@ import { HomePage }    from './src/Screens/HomePage';
 import { TrainPage }   from './src/Screens/TrainPage';
 import { ConfigPage }  from './src/Screens/ConfigPage';
 import { PaymentPage } from './src/Screens/PaymentPage';
-import {NutricaoPage} from './src/Screens/NutricaoPage';
+import {NutricaoPage}  from './src/Screens/NutricaoPage';
+import {CadastroGeral} from './src/Screens/Crud/Cadastros/cadastrosGerais';
+
+// importação de telas de cadastro
+import {cadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
+import {cadastroExercicio}     from './src/Screens/Crud/Cadastros/cadastroExercicio'
+import {cadastroModalidade}    from './src/Screens/Crud/Cadastros/cadastroModalidade'
+import {cadastroPersonal}      from './src/Screens/Crud/Cadastros/cadastroPersonal'
+import {cadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
+import {cadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
+
+
 
 export default function App() {
 
@@ -17,12 +28,20 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='LoginPage'>
-        <Stack.Screen name="LoginPage"   component={LoginPage}></Stack.Screen>
-        <Stack.Screen name="HomePage"    component={HomePage}></Stack.Screen>
-        <Stack.Screen name="TrainPage"   component={TrainPage}></Stack.Screen>
-        <Stack.Screen name="ConfigPage"  component={ConfigPage}></Stack.Screen>
-        <Stack.Screen name="PaymentPage" component={PaymentPage}></Stack.Screen>
-        <Stack.Screen name="NutricaoPage" component={NutricaoPage}></Stack.Screen>
+        <Stack.Screen name="LoginPage"     component={LoginPage}></Stack.Screen>
+        <Stack.Screen name="HomePage"      component={HomePage}></Stack.Screen>
+        <Stack.Screen name="TrainPage"     component={TrainPage}></Stack.Screen>
+        <Stack.Screen name="ConfigPage"    component={ConfigPage}></Stack.Screen>
+        <Stack.Screen name="PaymentPage"   component={PaymentPage}></Stack.Screen>
+        <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
+        <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
+
+        <Stack.Screen name="cadastroAdministrador" component={cadastroAdministrador}></Stack.Screen>
+        <Stack.Screen name="cadastroExercicio"     component={cadastroExercicio}></Stack.Screen>
+        <Stack.Screen name="cadastroModalidade"    component={cadastroModalidade}></Stack.Screen>
+        <Stack.Screen name="cadastroPersonal"      component={cadastroPersonal}></Stack.Screen>
+        <Stack.Screen name="cadastroTreino"        component={cadastroTreino}></Stack.Screen>
+        <Stack.Screen name="cadastroUsuario"       component={cadastroUsuario}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
