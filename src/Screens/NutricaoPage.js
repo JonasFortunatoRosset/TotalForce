@@ -1,21 +1,12 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View,TouchableHighlight,ScrollView } from 'react-native';
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-const[peso,Setpeso] = useState('')
-
-function calcnutri(){
-
-   Creatina = peso * 0.07
-   Proteina = peso * 1.6
-   Carbo = peso * 2
-     Durateston = peso * 0.02 
-}
 
 export  function NutricaoPage() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableHighlight style={styles.seta}  onPress={() => navigation.navigate('HomePage')} >
           <AntDesign  name="arrowleft" size={30} color="black"/>
@@ -25,42 +16,38 @@ export  function NutricaoPage() {
       </View>
       </View>
       <View style={styles.body}>
-        <View styles={styles.barradepesquiza}>
+        <View style={styles.pesquisa}>
           <Text>Pesquisar</Text>
           <FontAwesome name="search" size={24} color="black" /> 
         </View>
         <View style={styles.boxinputpeso}>
-         <TextInput style={styles.inputpeso} placeholder='Digite seu Peso' value={peso} onChangeText={Nutri => Setpeso(Nutri)}/>
+         <TextInput style={styles.inputpeso} placeholder='Digite seu Peso'/>
         </View>
         <View style={styles.boxnutri}>
-          <Text>Creatina</Text>
-          <Text>Peso x 0,07 = C</Text>
-          <Text>{Creatina}</Text>
+          <Text style={styles.txtbox}>Creatina</Text>
+          <Text style={styles.txtbox}>Peso x 0,07 = C</Text>
+          <Text style={styles.txtbox}>4,2g</Text>
         </View>
 
         <View style={styles.boxnutri}>
-          <Text>Proteina</Text>
-          <Text>Peso x 1,6 a 2,0 = C</Text>
-          <Text>{Proteina}</Text>
+          <Text style={styles.txtbox}>Proteina</Text>
+          <Text style={styles.txtbox}>Peso x 1,6 a 2,0 = P</Text>
+          <Text style={styles.txtbox}>150g</Text>
         </View>
 
         <View style={styles.boxnutri}>
-          <Text>Carboidratos</Text>
-          <Text>Peso x 2 a 4 = C</Text>
-          <Text>{Carbo}</Text>
+          <Text style={styles.txtbox}>Carboidratos</Text>
+          <Text style={styles.txtbox}>Peso x 2 a 4 = C</Text>
+          <Text style={styles.txtbox}>220</Text>
         </View>
 
         <View style={styles.boxnutri}>
-          <Text>Durateston</Text>
-          <Text>Peso x 0,02 = D</Text>
-          <Text>{Durateston}</Text>
+          <Text style={styles.txtbox}>Durateston</Text>
+          <Text style={styles.txtbox}>Peso x 0,02 = D</Text>
+          <Text style={styles.txtbox}>5ml</Text>
         </View>
-
-        <TouchableOpacity style={styles.btncalc} onPress={calcnutri}>
-          <Text>Calcule</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -77,13 +64,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#E49413',
     width: '100%',
+
   },
   seta: {
-    marginRight: 82
+    marginRight: 130
   },
   txtheader: {
     fontSize: 25,
     fontFamily: '#',
+  },
+  pesquisa: {
+    backgroundColor: '#E49413',
+    width: 220,
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 20,
+    padding: 5
   },
   body: {
     display: 'flex',
@@ -91,31 +89,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  barradepesquiza: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 15,
-    margin: 10,
-    backgroundColor: '#E49413'
-  },
+
   boxinputpeso: {
 
   },
   inputpeso: {
     backgroundColor: '#E49413',
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 130,
+    borderRadius: 6,
+    padding: 3,
   },
   boxnutri: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: '#E49413',
+    width: 220,
+    height: 140,
 
   },
-  btncalc: {
-      backgroundColor: '#E49413',
-      borderRadius: 12,
+  
+  txtbox: {
+      fontSize: 18,
   },
 });
