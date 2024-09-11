@@ -2,12 +2,31 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } fro
 import axios from 'axios';
 import { useState } from 'react';
 
-import personal from './Images/personal.png'
-import user from './Images/user.png'
-import adm from './Images/adm.png'
+import personal from       './Images/personal.png'
+import user from           './Images/user.png'
+import adm from            './Images/adm.png'
 import totalforcelogo from './Images/totalforcelogo.png';
 
 export function LoginPage({navigation}) {
+
+  function Acess(){
+    const[entrar,setEntrar] = useState('')
+    const[password,setPassword] = useState('')
+
+    if(entrar === '' || password === ''){
+      Alert.alert("Prencher todos os campos")
+    }
+
+    if(entrar === 'user123' || password === '123'){
+      Alert.alert("Prencher todos os campos")
+      navigation.navigate('HomePage')
+    }
+    else{
+      Alert.alert("Usuário ou senha incorreto")
+    }
+
+    
+  }
 
   const [usuario, setUsuario] = useState({
     login: "",
@@ -54,15 +73,15 @@ export function LoginPage({navigation}) {
           style={styles.inputs} 
           placeholder='Login' 
           placeholderTextColor={'#000'} 
-          value={usuario.login}  
-          onChangeText={(text) => setUsuario({...usuario, login: text})}/>
+          value={entrar}
+          onChangeText={setEntrar}/>
 
          <TextInput 
          style={styles.inputs}
           placeholder='Senha' 
           placeholderTextColor={'#000'} 
-          value={usuario.senha}
-          onChangeText={(text) => setUsuario({...usuario, senha: text})}
+          value={password}
+          onChangeText={setPassword}
           secureTextEntry={true}/>
 
          <TouchableOpacity onPress={Login} style={styles.boxbtnacess}>

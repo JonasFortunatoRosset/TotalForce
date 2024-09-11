@@ -13,7 +13,9 @@ export  function NutricaoPage() {
   const[resultadoD,setResultadoD] = useState(0) 
   
   function calc(){
+    
     const vlr = parseInt(peso)
+
     if (!isNaN(vlr)){
       const resultC = (vlr * 0.07).toFixed(1)
       setResultadoC(resultC)
