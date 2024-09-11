@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, TouchableOpacity,TouchableHighlight } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 export  function ConfigPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-       <TouchableHighlight style={styles.seta} onPress={() => navigation.navigate('HomePage')} underlayColor={fa}>
+       <TouchableHighlight style={styles.seta} onPress={() => navigation.navigate('HomePage')} underlayColor={false}>
         <AntDesign name="arrowleft" size={30} color="black"/>
        </TouchableHighlight>  
       
@@ -15,8 +15,8 @@ export  function ConfigPage({navigation}) {
       <View style={styles.body}>
       <View style={styles.acessuser}>
        <View style={styles.user}>
-        <AntDesign name="user" size={24} color="white" />
-        <Text>Usuário</Text>
+       <EvilIcons name="user" size={45} color="black" />
+        <Text>Fulano</Text>
        </View>
       <AntDesign name="right" size={24} color="black" />
       </View>

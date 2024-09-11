@@ -10,6 +10,7 @@ import { ConfigPage }  from './src/Screens/ConfigPage';
 import { PaymentPage } from './src/Screens/PaymentPage';
 import {NutricaoPage}  from './src/Screens/NutricaoPage';
 import {CadastroGeral} from './src/Screens/Crud/Cadastros/cadastrosGerais';
+import { Funcoes } from './src/Screens/funcoes';
 
 // importação de telas de cadastro
 import {cadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="PaymentPage"   component={PaymentPage}></Stack.Screen>
         <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
+        <Stack.Screen name="Funções"       component={Funcoes}></Stack.Screen>
 
         <Stack.Screen name="cadastroAdministrador" component={cadastroAdministrador}></Stack.Screen>
         <Stack.Screen name="cadastroExercicio"     component={cadastroExercicio}></Stack.Screen>

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function cadastroUsuario(){
+export  function cadastroUsuario(){
     const [usuario, setUsuario] = useState({
         codigo: "",
         nome: "",

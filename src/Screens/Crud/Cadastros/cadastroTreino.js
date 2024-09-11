@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function cadastroTreino(){
+export  function cadastroTreino(){
     const [treino, setTreino] = useState({
         codigo: "",
         nome: "",

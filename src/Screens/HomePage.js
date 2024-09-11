@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 import totalforcelogo from './Images/totalforcelogo.png'
 import dumbel from './Images/dumbel.png';
@@ -13,7 +13,7 @@ export function HomePage({navigation}) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <AntDesign name="user" size={24} color="#000" />
+        <EvilIcons name="user" size={60} color="black" />
       </View>
       <View style={styles.body}>
         <View style={styles.line1}>

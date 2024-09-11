@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function cadastroModalidade(){
+export  function cadastroModalidade(){
     const [modalidade, setModalidade] = useState({
         codigo: "",
         nome: "",

@@ -1,12 +1,12 @@
 import { ScrollView,View, Text, StyleSheet,TouchableHighlight} from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
-export function CadastroGeral({ navigation }) {
+export function Funcoes({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-                <EvilIcons name="user" size={60} color="black" />
+                <EvilIcons name="user" size={24} color="black" />
             </View>
             <View style={styles.body}>
 
@@ -31,7 +31,7 @@ export function CadastroGeral({ navigation }) {
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('Funções')}>
-                <Text>funções</Text>
+                <Text>Funções</Text>
              </TouchableHighlight>
 
             </View>

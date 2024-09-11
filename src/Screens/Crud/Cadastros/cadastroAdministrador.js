@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function cadastroAdministrador(){
+export  function cadastroAdministrador(){
     const [administrador, setAdministrador] = useState({
         codigo: "",
         nome: "",
@@ -35,9 +35,13 @@ export default function cadastroAdministrador(){
     }
 
     return(
-        <View>
-            <Text>Cadastro de administrador</Text>
+        <View style={styles.container}>
+            <View>
+                <Text>Cadastro de Administrador</Text>
+            </View>
+            
             <TextInput
+            
             placeholder='Código'
             value={administrador.codigo}
             onChangeText={(text) => setPersonal({...administrador, codigo: text})}/>
@@ -64,3 +68,9 @@ export default function cadastroAdministrador(){
         </View>
     )
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFB031',
+      },
+})

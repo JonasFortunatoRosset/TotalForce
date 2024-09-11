@@ -9,16 +9,12 @@ import totalforcelogo from './Images/totalforcelogo.png';
 
 export function LoginPage({navigation}) {
 
+  const[entrar,setEntrar] = useState('')
+  const[password,setPassword] = useState('')
+
   function Acess(){
-    const[entrar,setEntrar] = useState('')
-    const[password,setPassword] = useState('')
 
-    if(entrar === '' || password === ''){
-      Alert.alert("Prencher todos os campos")
-    }
-
-    if(entrar === 'user123' || password === '123'){
-      Alert.alert("Prencher todos os campos")
+    if(entrar === 'alvaro01' || password === '1234'){
       navigation.navigate('HomePage')
     }
     else{
@@ -84,7 +80,7 @@ export function LoginPage({navigation}) {
           onChangeText={setPassword}
           secureTextEntry={true}/>
 
-         <TouchableOpacity onPress={Login} style={styles.boxbtnacess}>
+         <TouchableOpacity onPress={Acess} style={styles.boxbtnacess}>
          <Text style={styles.txtbtnlogin}> Acessar </Text>
        </TouchableOpacity>
        </View>
