@@ -2,23 +2,28 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } fro
 import axios from 'axios';
 import { useState } from 'react';
 
-import personal from       './Images/personal.png'
-import user from           './Images/user.png'
-import adm from            './Images/adm.png'
-import totalforcelogo from './Images/totalforcelogo.png';
+import personal from        './Images/personal.png';
+import user from            './Images/user.png';
+import adm from             './Images/adm.png';
+import totalforcelogo from  './Images/totalforcelogo.png';
 
 export function LoginPage({navigation}) {
 
   const[entrar,setEntrar] = useState('')
   const[password,setPassword] = useState('')
 
+
   function Acess(){
 
-    if(entrar === 'alvaro01' || password === '1234'){
+    if(entrar === 'user' && password === '123'){
       navigation.navigate('HomePage')
     }
+    else if(entrar === 'adm' && password === '123'){
+      navigation.navigate('LoginAdmPage')
+    }
+
     else{
-      Alert.alert("Usuário ou senha incorreto")
+      Alert.alert("Usuário ou senha incorreto") 
     }
 
     
@@ -55,15 +60,24 @@ export function LoginPage({navigation}) {
     <View style={styles.body}>
       <View style={styles.boxlogin}>
        <View style={styles.btnstipos}>
+
+        <View style={styles.logs}>
         <Image source={user} style={styles.imguser} />  
+        <Text style={styles.txttipos}> Usuário </Text>
+        </View>
+
+        <View style={styles.logs}>
         <Image source={personal} style={styles.imguser} /> 
+        <Text style={styles.txttipos}> Personal </Text>
+        </View>
+
+        <View style={styles.logs}>
         <Image source={adm} style={styles.imguser} /> 
+        <Text style={styles.txttipos}> Admin </Text>
+        </View>
+
        </View>
-       <View style={styles.txttiposbox}>
-         <Text style={styles.txttipos}> Usuário </Text>
-         <Text style={styles.txttipos}> Personal </Text>
-         <Text style={styles.txttipos}> Administrador </Text>
-       </View>
+
        <View style={styles.boxbtn}>
          <TextInput 
           style={styles.inputs} 
@@ -96,7 +110,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFB031',
-    height: '100%'
+    height: '100%',
+
   },
   header: {
     display: 'flex',
@@ -120,29 +135,24 @@ const styles = StyleSheet.create({
     height: '40%'
   },
   boxlogin: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnstipos: {
-    display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    margin: 5,
+    margin: 8,
     width: '82%',
   },
-  txttiposbox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    margin: 5,
-    width: '82%',
+  logs:{
+    alignItems: 'center',
+    padding: 10
+
   },
   txttipos:{
     size: 10,
   },
   boxbtn: {
-    display: 'flex',
     flexDirection: 'column',
     margin: 18,
     

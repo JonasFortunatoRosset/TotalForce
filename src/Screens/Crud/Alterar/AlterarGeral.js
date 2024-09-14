@@ -1,7 +1,7 @@
 import { ScrollView,View, Text, StyleSheet,TouchableHighlight} from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
-export function CadastroGeral({ navigation }) {
+export function AlrerarGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
@@ -10,29 +10,27 @@ export function CadastroGeral({ navigation }) {
             </View>
             <View style={styles.body}>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroAdministrador')}>
-                <Text>Cadastro Administrador</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text>Alterar Administrador</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroExercicio')}>
-                <Text>Cadastro Exercícios</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text>Alterar Exercícios</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroModalidade')}>
-                <Text>Cadastro Modalidades</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text>Alterar Modalidades</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPersonal')}>
-                <Text>Cadastro Personais</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text>Alterar Personais</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroUsuario')}>
-                <Text>Cadastro Usuários</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text>Alterar Usuários</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('Funções')}>
-                <Text>funções</Text>
-             </TouchableHighlight>
+
 
             </View>
         </ScrollView>
