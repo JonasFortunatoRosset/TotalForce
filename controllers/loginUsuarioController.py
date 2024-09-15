@@ -13,7 +13,7 @@ def loginUsuarioController():
         return bcrypt.hashpw(dados['senha'].encode(), usuario_banco)
 
 
-    def create_token(cpf, nome, chave_secreta):
+    def create_token(cpf, nome, secret_key):
         header = {"alg":"H256","type":"JWT"} # algoritimo e tipo de token 
         payload = {
             "sub": cpf,
@@ -22,7 +22,7 @@ def loginUsuarioController():
         
         header_encoded = base64.urisafe_b64encode(json.dumps(header).encode().rstrip(b'=')) # json => byte => base64
         payload_encoded = base64.urisafe_b64encode(json.dumps(payload).encode().rstrip(b'='))
-        assinatura = jwt.encode(payload, chave_secreta, algorithm='HS256')
+        assinatura = jwt.encode(payload, secret_key, algorithm='HS256')
 
         return f"{header_encoded.decode()}.{payload_encoded.decode()}.{base64.urlsafe_b64encode(assinatura.encode()).rstrip(b'=').decode()}"
     

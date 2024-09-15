@@ -1,10 +1,9 @@
-from usuarioRoute       import usuarios 
-from treinoRoute        import treinos
-from modalidadeRoute    import modalidades
-from exercicioRoute     import exercicios
-from colaboradorRoute   import colaboradores
-from administradorRoute import administradores
-from loginUsuarioRoute import loginUsuario
+from routes.usuarioRoute       import usuarios 
+from routes.treinoRoute        import treinos
+from routes.modalidadeRoute    import modalidades
+from routes.exercicioRoute     import exercicios
+from routes.colaboradorRoute   import colaboradores
+from routes.administradorRoute import administradores
 
 def default_routes(app):
     app.route(usuarios)
@@ -13,4 +12,3 @@ def default_routes(app):
     app.route(exercicios)
     app.route(colaboradores)
     app.route(administradores)
-    app.route(loginUsuario)

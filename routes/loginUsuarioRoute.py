@@ -1,4 +1,4 @@
 from controllers.loginUsuarioController import loginUsuarioController
 
-def loginUsuario(app):
-    app.route('loginusuario', methods=['POST'])(loginUsuarioController)
+def loginusuario(app):
+    app.route('/loginusuarios', methods=['POST'])(loginUsuarioController)

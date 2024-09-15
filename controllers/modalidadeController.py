@@ -6,6 +6,7 @@ def modalidadeController():
     if request.method == 'POST':
         try:
             data = request.get_json()
+            print(data)
             modalidade = Modalidade(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'])
             db.session.add(modalidade)
             db.session.commit()

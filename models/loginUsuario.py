@@ -9,7 +9,7 @@ class LoginUsuario(db.Model):
             'senha':  self.senha
         }
     
-    cpf  = db.Column(db.String(100))
+    cpf  = db.Column(db.String(100), primary_key=True, unique=True, nullable=True)
     senha  = db.Column(db.String(100))
 
 
