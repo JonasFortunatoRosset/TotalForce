@@ -20,8 +20,16 @@ import {cadastroPersonal}      from './src/Screens/Crud/Cadastros/cadastroPerson
 import {cadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
 import {cadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
 
-// importação de telas de cadastro
+// importação de telas de alteração
 import { AlrerarGeral } from './src/Screens/Crud/Alterar/AlterarGeral';
+
+// importação de telas de ver
+import { VerGeral } from './src/Screens/Crud/Ver/VerGeral';
+
+// importação de telas de Excluir
+import { ExcluirGeral } from './src/Screens/Crud/Excluir/ExcluirGeral';
+
+
 
 
 
@@ -41,6 +49,8 @@ export default function App() {
         <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
         <Stack.Screen name="AlterarGeral"  component={AlrerarGeral}></Stack.Screen>
+        <Stack.Screen name="VerGeral"      component={VerGeral}></Stack.Screen>
+        <Stack.Screen name="ExcluirGeral"  component={ExcluirGeral}></Stack.Screen>
         
 
         <Stack.Screen name="cadastroAdministrador" component={cadastroAdministrador}></Stack.Screen>

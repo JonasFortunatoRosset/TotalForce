@@ -11,7 +11,7 @@ export function AlrerarGeral({ navigation }) {
             <View style={styles.body}>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Administrador</Text>
+                <Text>Alterar Admin</Text>
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
@@ -58,12 +58,16 @@ const styles = StyleSheet.create({
     },
     boxtbns: {
         backgroundColor: '#E49413',
-        width: 170,
+        width: '70%',
+        height: '10%',
         padding: 10,
         margin: 25,
         borderRadius: 14,
         alignItems: 'center',
-        
-    }
+        justifyContent: 'center',
+    },
+    txtbox: {
+        fontSize: 20,
+    },
 
 })

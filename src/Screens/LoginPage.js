@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert, Pressable } from 'react-native';
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -11,46 +11,64 @@ export function LoginPage({navigation}) {
 
   const[entrar,setEntrar] = useState('')
   const[password,setPassword] = useState('')
+  
+  const [Click, setClick] = useState(null); 
+
+  function boxClick(buttonIndex){
+    setClick(buttonIndex); 
+  };
+
 
 
   function Acess(){
 
-    if(entrar === 'user' && password === '123'){
+    if(entrar === 'user' && password === '123' && Click === 1){
       navigation.navigate('HomePage')
     }
-    else if(entrar === 'adm' && password === '123'){
+     else if(entrar === 'personal' && password === '123' && Click === 2){
+      navigation.navigate('HomePage')
+    }
+    else if(entrar === 'adm' && password === '123' && Click === 3){
       navigation.navigate('LoginAdmPage')
     }
 
     else{
       Alert.alert("Usuário ou senha incorreto") 
     }
-
-    
   }
 
   const [usuario, setUsuario] = useState({
-    login: "",
+    cpf: "",
     senha: ""
-  })
-
-  function Login(){
-    axios.post('http://locahost:3000/usuarios', {
-      login: usuario.login,
-      senha: usuario.senha
-    })
-    .then(response =>{
+  });
+  
+  const login = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/loginusuarios', {
+        cpf: usuario.cpf,
+        senha: usuario.senha
+      });
+      
       setUsuario({
-        login: "",
-        senha: ""
-      })
-    })
-    .catch(error => {
-      Alert.alert("Erro", "Credenciais incorretas!")
-      console.error(error)
-      navigation.navigate('HomePage')
-    })
-  }
+        cpf: "",
+        senha: "",
+      });
+  
+      if (response.data && response.data.token) {
+        const { token } = response.data;
+        
+        await AsyncStorage.setItem('token', token);
+  
+        navigation.navigate('HomePage');
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Credenciais incorretas!");
+      console.error(error);
+    }
+  };
+  
+      
+    
 
   return(
     <View style={styles.container}>
@@ -61,20 +79,33 @@ export function LoginPage({navigation}) {
       <View style={styles.boxlogin}>
        <View style={styles.btnstipos}>
 
-        <View style={styles.logs}>
+        <Pressable 
+                onPress={() => boxClick(1)}
+                style={[
+                  styles.logs,
+                  { backgroundColor: Click === 1 ? '#FFB031' : '#E49413' },
+                ]}>
         <Image source={user} style={styles.imguser} />  
         <Text style={styles.txttipos}> Usuário </Text>
-        </View>
+        </Pressable>
 
-        <View style={styles.logs}>
+        <Pressable  onPress={() => boxClick(2)}
+                style={[
+                  styles.logs,
+                  { backgroundColor: Click === 2 ? '#FFB031' : '#E49413' },
+                ]}>
         <Image source={personal} style={styles.imguser} /> 
         <Text style={styles.txttipos}> Personal </Text>
-        </View>
+        </Pressable>
 
-        <View style={styles.logs}>
+        <Pressable   onPress={() => boxClick(3)}
+                style={[
+                  styles.logs,
+                  { backgroundColor: Click === 3 ? '#FFB031' : '#E49413' },
+                ]}>
         <Image source={adm} style={styles.imguser} /> 
         <Text style={styles.txttipos}> Admin </Text>
-        </View>
+        </Pressable>
 
        </View>
 
@@ -141,12 +172,15 @@ const styles = StyleSheet.create({
   btnstipos: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    margin: 8,
+    margin: 15,
     width: '82%',
   },
   logs:{
     alignItems: 'center',
-    padding: 10
+    paddingTop: 2,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
 
   },
   txttipos:{

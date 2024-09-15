@@ -23,7 +23,7 @@ export function HomeAdmPage({navigation}) {
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('NutricaoPage')} underlayColor={'#855200'}>
+          <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Ver</Text>
              <Entypo name="eye" size={120} color="black" />
@@ -39,10 +39,10 @@ export function HomeAdmPage({navigation}) {
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'}>
+          <TouchableHighlight onPress={() => navigation.navigate('ExcluirGeral')} underlayColor={'#855200'}>
           <View style={styles.box}>
             <Text style={styles.boxText}>Deletar</Text>
-             <AntDesign name="delete" size={120} color="black" /> 
+             <AntDesign name="delete" size={120} color="black" />   
           </View>
           </TouchableHighlight>
         </View>

@@ -1,7 +1,7 @@
 import { ScrollView,View, Text, StyleSheet,TouchableHighlight} from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
-export function CadastroGeral({ navigation }) {
+export function VerGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
@@ -10,24 +10,24 @@ export function CadastroGeral({ navigation }) {
             </View>
             <View style={styles.body}>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroAdministrador')}>
-                <Text style={styles.txtbox}>Cadastro Admin</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text style={styles.txtbox}>Ver Admin</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroExercicio')}>
-                <Text style={styles.txtbox}>Cadastro Exercícios</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text style={styles.txtbox}>Ver Exercícios</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroModalidade')}>
-                <Text style={styles.txtbox}>Cadastro Modalidades</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text style={styles.txtbox}>Ver Modalidades</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPersonal')}>
-                <Text style={styles.txtbox}>Cadastro Personais</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text style={styles.txtbox}>Ver Personais</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroUsuario')}>
-                <Text style={styles.txtbox}>Cadastro Usuários</Text>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+                <Text style={styles.txtbox}>Ver Usuários</Text>
              </TouchableHighlight>
 
 
@@ -64,10 +64,11 @@ const styles = StyleSheet.create({
         margin: 25,
         borderRadius: 14,
         alignItems: 'center',
-        
+        justifyContent: 'center',   
     },
     txtbox: {
         fontSize: 20,
     },
+
 
 })
