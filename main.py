@@ -9,6 +9,7 @@ class App():
         self.app.config['SQLALQUEMY_DATABASE_URI'] = 'mysql.pymysql://root:''@localhost/'
         self.app.config['SECRET_KEY']
         db.init_app(self.app)
+        CORS(self.app)
         default_routes(self.app)
 
     def run(self):
