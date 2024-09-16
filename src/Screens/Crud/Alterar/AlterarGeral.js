@@ -11,23 +11,23 @@ export function AlrerarGeral({ navigation }) {
             <View style={styles.body}>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Admin</Text>
+                <Text style={styles.txtbox}>Alterar Admin</Text>
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Exercícios</Text>
+                <Text style={styles.txtbox}>Alterar Exercícios</Text>
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Modalidades</Text>
+                <Text style={styles.txtbox}>Alterar Modalidades</Text>
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Personais</Text>
+                <Text style={styles.txtbox}>Alterar Personais</Text>
              </TouchableHighlight>
 
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
-                <Text>Alterar Usuários</Text>
+                <Text style={styles.txtbox}>Alterar Usuários</Text>
              </TouchableHighlight>
 
 

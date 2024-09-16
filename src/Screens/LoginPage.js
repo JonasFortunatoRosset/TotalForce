@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   boxbtnacess: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     color: '#fff',
@@ -218,7 +217,6 @@ const styles = StyleSheet.create({
     height: 45,
   },
   txtbtnlogin: {
-    display: 'flex',
     justifyContent:'center',
     backgroundColor: '#FFB031',
     color: '#000',

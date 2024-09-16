@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
         margin: 25,
         borderRadius: 14,
         alignItems: 'center',
+        justifyContent: 'center',
         
     },
     txtbox: {
