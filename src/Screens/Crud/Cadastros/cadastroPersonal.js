@@ -6,29 +6,29 @@ export  function cadastroPersonal(){
     const [personal, setPersonal] = useState({
         codigo: "",
         nome: "",
-        descricao: "",
-        codusuario: "",
-        propriedade: "",
-        codmodalidade: ""
+        cpf: "",
+        endereco: "",
+        cidade: "",
+        senha: ""
     })
 
     function inserirPersonal(){
-        axios.post("http://localhost:3000/personal", {
+        axios.post("http://localhost:3000/colaboradores", {
             codigo: personal.codigo,
             nome: personal.nome,
-            descricao: personal.descricao,
-            codusuario: personal.codusuario,
-            propriedade: personal.propriedade,
-            codmodalidade: personal.codmodalidade
+            cpf: personal.cpf,
+            endereco: personal.endereco,
+            cidade: personal.cidade,
+            senha: personal.senha
         }).then(response => {
             alert.Alert("Sucesso", "Personal cadastrado com exito")
             setPersonal({
                 codigo: "",
                 nome: "",
-                descricao: "",
-                codusuario: "",
-                propriedade: "",
-                codmodalidade: ""
+                cpf: "",
+                endereco: "",
+                cidade: "",
+                senha: ""
             })
         }).catch(error => {
             alert.Alert("Erro", "Personal não cadastrado")
@@ -57,30 +57,30 @@ export  function cadastroPersonal(){
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Descrição'
-            value={personal.descricao}
-            onChangeText={(text) => setPersonal({...personal, descricao: text})}/>
+            placeholder='CPF'
+            value={personal.cpf}
+            onChangeText={(text) => setPersonal({...personal, cpf: text})}/>
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Código do usuário'
-            value={personal.codusuario}
-            onChangeText={(text) => setPersonal({...personal, codusuario: text})}/>
+            placeholder='Endereço'
+            value={personal.endereco}
+            onChangeText={(text) => setPersonal({...personal, endereco: text})}/>
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Propriedade'
-            value={personal.propriedade}
-            onChangeText={(text) => setPersonal({...personal, propriedade: text})}/>
+            placeholder='Cidade'
+            value={personal.cidade}
+            onChangeText={(text) => setPersonal({...personal, cidade: text})}/>
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Código da modalidade'
-            value={personal.codmodalidade}
-            onChangeText={(text) => setPersonal({...personal, codmodalidade: text})}/>
+            placeholder='Senha'
+            value={personal.senha}
+            onChangeText={(text) => setPersonal({...personal, senha: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn} onPress={inserirPersonal}> Cadastrar</Text>
             </TouchableOpacity>
             </View>
         </View>

@@ -110,7 +110,7 @@ export  function cadastroUsuario(){
             />
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn} onPress={inserirUsuarios}> Cadastrar</Text>
             </TouchableOpacity>
             </View>
         </View>

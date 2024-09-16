@@ -65,7 +65,7 @@ export  function cadastroExercicio(){
             onChangeText={(text) => setExercicio({...exercicio, codtreino: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn} onPress={inserirExercicio}> Cadastrar</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -12,7 +12,7 @@ export  function cadastroAdministrador(){
     })
 
     function inserirAdministrador(){
-        axios.post("http://localhost:3000/administrador", {
+        axios.post("http://localhost:3000/administradores", {
             codigo: administrador.codigo,
             nome: administrador.nome,
             cpf: administrador.cpf,
@@ -77,7 +77,7 @@ export  function cadastroAdministrador(){
             onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn} onPress={inserirAdministrador}> Cadastrar</Text>
             </TouchableOpacity>
 
 
