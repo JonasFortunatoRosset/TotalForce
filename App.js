@@ -21,7 +21,13 @@ import {cadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino
 import {cadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
 
 // importação de telas de alteração
-import { AlrerarGeral } from './src/Screens/Crud/Alterar/AlterarGeral';
+import { alterarGeral } from './src/Screens/Crud/Alterar/AlterarGeral';
+import { alteracaoAdministrador } from './src/Screens/Crud/Alterar/AlterarAdministrador';
+import { alteracaoExercicio } from './src/Screens/Crud/Alterar/AlterarExercicio';
+import { alteracaoModalidade } from './src/Screens/Crud/Alterar/AlterarModalidade';
+import { alteracaoPersonal } from './src/Screens/Crud/Alterar/AlterarPersonal';
+import { alteracaoTreino} from './src/Screens/Crud/Alterar/AlterarTreino';
+import { alteracaoUsuario } from './src/Screens/Crud/Alterar/AlterarUsuario';
 
 // importação de telas de ver
 import { VerGeral } from './src/Screens/Crud/Ver/VerGeral';
@@ -48,7 +54,7 @@ export default function App() {
         <Stack.Screen name="PaymentPage"   component={PaymentPage}></Stack.Screen>
         <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
-        <Stack.Screen name="AlterarGeral"  component={AlrerarGeral}></Stack.Screen>
+        <Stack.Screen name="AlterarGeral"  component={alterarGeral}></Stack.Screen>
         <Stack.Screen name="VerGeral"      component={VerGeral}></Stack.Screen>
         <Stack.Screen name="ExcluirGeral"  component={ExcluirGeral}></Stack.Screen>
         
@@ -59,6 +65,15 @@ export default function App() {
         <Stack.Screen name="cadastroPersonal"      component={cadastroPersonal}></Stack.Screen>
         <Stack.Screen name="cadastroTreino"        component={cadastroTreino}></Stack.Screen>
         <Stack.Screen name="cadastroUsuario"       component={cadastroUsuario}></Stack.Screen>
+
+        <Stack.Screen name="AlteracaoAdministrador"  component={alteracaoAdministrador}></Stack.Screen>
+        <Stack.Screen name="AlteracaoExercicio"      component={alteracaoExercicio}></Stack.Screen>
+        <Stack.Screen name="AlteracaoModalidade"     component={alteracaoModalidade}></Stack.Screen>
+        <Stack.Screen name="AlteracaoPersonal"       component={alteracaoPersonal}></Stack.Screen>
+        <Stack.Screen name="AlteracaoTreino"         component={alteracaoTreino}></Stack.Screen>
+        <Stack.Screen name="AlteracaoUsuario"        component={alteracaoUsuario}></Stack.Screen>
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

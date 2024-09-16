@@ -1,7 +1,7 @@
 import { ScrollView,View, Text, StyleSheet,TouchableHighlight} from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
-export function AlrerarGeral({ navigation }) {
+export function alterarGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
@@ -10,23 +10,27 @@ export function AlrerarGeral({ navigation }) {
             </View>
             <View style={styles.body}>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoAdministrador')}>
                 <Text style={styles.txtbox}>Alterar Admin</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoExercicio')}>
                 <Text style={styles.txtbox}>Alterar Exercícios</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoModalidade')}>
                 <Text style={styles.txtbox}>Alterar Modalidades</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoPersonal')}>
                 <Text style={styles.txtbox}>Alterar Personais</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoTreino')}>
+                <Text style={styles.txtbox}>Alterar Treino</Text>
+             </TouchableHighlight>
+
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('AlteracaoUsuario')}>
                 <Text style={styles.txtbox}>Alterar Usuários</Text>
              </TouchableHighlight>
 

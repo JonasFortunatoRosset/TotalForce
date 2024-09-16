@@ -2,91 +2,75 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroPersonal(){
-    const [personal, setPersonal] = useState({
+export  function excluirExercicio(){
+    const [exercicio, setExercicio] = useState({
         codigo: "",
         nome: "",
         descricao: "",
-        codusuario: "",
-        propriedade: "",
-        codmodalidade: ""
-    })
-
-    function inserirPersonal(){
-        axios.post("http://localhost:3000/personal", {
-            codigo: personal.codigo,
-            nome: personal.nome,
-            descricao: personal.descricao,
-            codusuario: personal.codusuario,
-            propriedade: personal.propriedade,
-            codmodalidade: personal.codmodalidade
+        codtreino: ""
+        })
+    
+    function inserirExercicio(){
+        axios.post("http://localhost:3000/exercicios",{
+            codigo:    exercicio.codigo,
+            nome:      exercicio.nome,
+            descricao: exercicio.descricao,
+            codtreino: exercicio.codtreino
         }).then(response => {
-            alert.Alert("Sucesso", "Personal cadastrado com exito")
-            setPersonal({
+            alert.Alert("Sucesso", "exercício cadastrado")
+            console.response(response)
+            setExercicio({
                 codigo: "",
                 nome: "",
                 descricao: "",
-                codusuario: "",
-                propriedade: "",
-                codmodalidade: ""
+                codtreino: ""
             })
         }).catch(error => {
-            alert.Alert("Erro", "Personal não cadastrado")
+            alert.Alert("Erro", "exercício não cadastrado")
             console.error(error)
         })
     }
 
     return(
+    
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Personal</Text>
+                <Text style={styles.txtheader}>Exclusão de Exercícios</Text>
             </View>
 
-            <View style={styles.body}>
+           <View style={styles.body}>
+            
             <TextInput 
             style={styles.inputs}
             placeholder='Código'
-            value={personal.codigo}
-            onChangeText={(text) => setPersonal({...personal, codigo: text})}/>
-        
-            <TextInput 
+            value={exercicio.codigo}
+            onChangeText={(text) => setExercicio({...exercicio, codigo: text})}/>
+
+            <TextInput
             style={styles.inputs}
             placeholder='Nome'
-            value={personal.nome}
-            onChangeText={(text) => setPersonal({...personal, nome: text})}/>
+            value={exercicio.nome}
+            onChangeText={(text) => setExercicio({...exercicio, nome: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Descrição'
-            value={personal.descricao}
-            onChangeText={(text) => setPersonal({...personal, descricao: text})}/>
+            value={exercicio.descricao}
+            onChangeText={(text) => setExercicio({...exercicio, descricao: text})}/>
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Código do usuário'
-            value={personal.codusuario}
-            onChangeText={(text) => setPersonal({...personal, codusuario: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Propriedade'
-            value={personal.propriedade}
-            onChangeText={(text) => setPersonal({...personal, propriedade: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código da modalidade'
-            value={personal.codmodalidade}
-            onChangeText={(text) => setPersonal({...personal, codmodalidade: text})}/>
+            placeholder='Código do treino'
+            value={exercicio.codtreino}
+            onChangeText={(text) => setExercicio({...exercicio, codtreino: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn}> Excluir </Text>
             </TouchableOpacity>
-            </View>
+          </View>
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

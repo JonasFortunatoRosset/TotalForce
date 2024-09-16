@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroPersonal(){
+export  function alteracaoPersonal(){
     const [personal, setPersonal] = useState({
         codigo: "",
         nome: "",
@@ -13,7 +13,7 @@ export  function cadastroPersonal(){
     })
 
     function inserirPersonal(){
-        axios.post("http://localhost:3000/personal", {
+        axios.post("http//localhost:3000/personal", {
             codigo: personal.codigo,
             nome: personal.nome,
             descricao: personal.descricao,
@@ -39,7 +39,7 @@ export  function cadastroPersonal(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Personal</Text>
+                <Text style={styles.txtheader}>Alteração de Personal</Text>
             </View>
 
             <View style={styles.body}>
@@ -80,7 +80,7 @@ export  function cadastroPersonal(){
             onChangeText={(text) => setPersonal({...personal, codmodalidade: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn}> Alterar </Text>
             </TouchableOpacity>
             </View>
         </View>

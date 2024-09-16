@@ -50,37 +50,37 @@ export  function cadastroTreino(){
             style={styles.inputs}
             placeholder='Código'
             value={treino.codigo}
-            onChangeText={(text) => setUsuario({...treino, codigo: text})}/>
+            onChangeText={(text) => setTreino({...treino, codigo: text})}/>
         
             <TextInput
             style={styles.inputs}
             placeholder='Nome'
             value={treino.nome}
-            onChangeText={(text) => setUsuario({...treino, nome: text})}/>
+            onChangeText={(text) => setTreino({...treino, nome: text})}/>
 
             <TextInput
             style={styles.inputs}
             placeholder='Descrição'
             value={treino.descricao}
-            onChangeText={(text) => setUsuario({...treino, descricao: text})}/>
+            onChangeText={(text) => setTreino({...treino, descricao: text})}/>
 
             <TextInput
             style={styles.inputs}
             placeholder='Código do usuário'
             value={treino.codusuario}
-            onChangeText={(text) => setUsuario({...treino, codusuario: text})}/>
+            onChangeText={(text) => setTreino({...treino, codusuario: text})}/>
 
             <TextInput
             style={styles.inputs}
             placeholder='Propriedade'
             value={treino.propriedade}
-            onChangeText={(text) => setUsuario({...treino, propriedade: text})}/>
+            onChangeText={(text) => setTreino({...treino, propriedade: text})}/>
 
             <TextInput
             style={styles.inputs}
             placeholder='Código da modalidade'
             value={treino.codmodalidade}
-            onChangeText={(text) => setUsuario({...treino, codmodalidade: text})}/>
+            onChangeText={(text) => setTreino({...treino, codmodalidade: text})}/>
 
             <TouchableOpacity style={styles.btn}>
                 <Text style={styles.txtbtn}> Cadastrar</Text>

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroModalidade(){
+export  function alteracaoModalidade(){
     const [modalidade, setModalidade] = useState({
         codigo: "",
         nome: "",
@@ -10,7 +10,7 @@ export  function cadastroModalidade(){
     })
 
     function inserirModalidade(){
-        axios.post("http://localhost:3000/modalidades", {
+        axios.post("http//localhost:3000/modalidades", {
             codigo: modalidade.codigo,
             nome: modalidade.nome,
             descricao: modalidade.descricao
@@ -29,7 +29,7 @@ export  function cadastroModalidade(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Modalidades</Text>
+                <Text style={styles.txtheader}>Alteração de Modalidades</Text>
             </View>
 
             <View style={styles.body}>
@@ -37,22 +37,22 @@ export  function cadastroModalidade(){
             style={styles.inputs}
             placeholder='Código'
             value={modalidade.codigo}
-            onChangeText={(text) => setModalidade({...modalidade, codigo: text})}/>
+            onChangeText={(text) => setPersonal({...modalidade, codigo: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Nome'
             value={modalidade.nome}
-            onChangeText={(text) => setModalidade({...modalidade, nome: text})}/>
+            onChangeText={(text) => setPersonal({...modalidade, nome: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Descricao'
             value={modalidade.descricao}
-            onChangeText={(text) => setModalidade({...modalidade, descricao: text})}/>
+            onChangeText={(text) => setPersonal({...modalidade, descricao: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn}> Alterar </Text>
             </TouchableOpacity>
 
             </View>

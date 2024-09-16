@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroAdministrador(){
+export  function excluirAdministrador(){
     const [administrador, setAdministrador] = useState({
         codigo: "",
         nome: "",
@@ -37,7 +37,7 @@ export  function cadastroAdministrador(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Administrador</Text>
+                <Text style={styles.txtheader}>Exclusão de Administrador</Text>
             </View>
             
         <View style={styles.body}>
@@ -77,7 +77,7 @@ export  function cadastroAdministrador(){
             onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn}> Excluir </Text>
             </TouchableOpacity>
 
 

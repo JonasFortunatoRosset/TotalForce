@@ -11,7 +11,7 @@ export  function cadastroExercicio(){
         })
     
     function inserirExercicio(){
-        axios.post("http//localhost:3000/exercicios",{
+        axios.post("http://localhost:3000/exercicios",{
             codigo:    exercicio.codigo,
             nome:      exercicio.nome,
             descricao: exercicio.descricao,
@@ -44,25 +44,25 @@ export  function cadastroExercicio(){
             style={styles.inputs}
             placeholder='Código'
             value={exercicio.codigo}
-            onChangeText={(text) => setPersonal({...exercicio, codigo: text})}/>
+            onChangeText={(text) => setExercicio({...exercicio, codigo: text})}/>
 
             <TextInput
             style={styles.inputs}
             placeholder='Nome'
             value={exercicio.nome}
-            onChangeText={(text) => setPersonal({...exercicio, nome: text})}/>
+            onChangeText={(text) => setExercicio({...exercicio, nome: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Descrição'
             value={exercicio.descricao}
-            onChangeText={(text) => setPersonal({...exercicio, descricao: text})}/>
+            onChangeText={(text) => setExercicio({...exercicio, descricao: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Código do treino'
             value={exercicio.codtreino}
-            onChangeText={(text) => setPersonal({...exercicio, codtreino: text})}/>
+            onChangeText={(text) => setExercicio({...exercicio, codtreino: text})}/>
 
             <TouchableOpacity style={styles.btn}>
                 <Text style={styles.txtbtn}> Cadastrar</Text>

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroModalidade(){
+export  function excluirModalidade(){
     const [modalidade, setModalidade] = useState({
         codigo: "",
         nome: "",
@@ -29,7 +29,7 @@ export  function cadastroModalidade(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Modalidades</Text>
+                <Text style={styles.txtheader}>Exclusão de Modalidades</Text>
             </View>
 
             <View style={styles.body}>
@@ -52,7 +52,7 @@ export  function cadastroModalidade(){
             onChangeText={(text) => setModalidade({...modalidade, descricao: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Cadastrar</Text>
+                <Text style={styles.txtbtn}> Excluir </Text>
             </TouchableOpacity>
 
             </View>
