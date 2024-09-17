@@ -1,15 +1,12 @@
 from flask import request, jsonify
 from database.db import db
 from models.usuario import Usuario
-import bcrypt
 
 def usuariosController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            senha1 = data['senha']
-            senha_hash = bcrypt.hashpw(senha1(), bcrypt.gensalt())
-            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=[senha_hash],peso=data['peso'],altura=data['altura'])
+            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=['senha'],peso=data['peso'],altura=data['altura'])
             db.session.add(usuario)
             db.session.commit()
             return jsonify({'message': 'Usuario cadastrado'}),200

@@ -8,9 +8,7 @@ def administradorController():
     if request.method == 'POST':
         try:
             data = request.get_json() # nome cpf login senha
-            senha1 = data['senha']
-            senha_hash = bcrypt.hashpw(senha1(), bcrypt.gensalt())
-            administrador = Administrador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],login=data['login'],senha=senha_hash)
+            administrador = Administrador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],login=data['login'],senha=data['senha'])
             db.session.add(administrador)
             db.session.commit()
             return ({'message' : 'Administrador inserido com sucesso'})

@@ -6,7 +6,7 @@ def treinoController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            treino = Treino(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codusuario=['codusuario'],propriedade=data['propriedade'],codmodalidade=data['codmodalidade'])
+            treino = Treino(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codusuario=data['codusuario'],propriedade=data['propriedade'],codmodalidade=data['codmodalidade'])
             db.session.add(treino)
             db.session.commit()
             return jsonify({'message': 'Treino cadastrado com sucesso'}),200

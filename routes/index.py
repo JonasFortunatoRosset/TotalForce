@@ -6,9 +6,9 @@ from routes.colaboradorRoute   import colaboradores
 from routes.administradorRoute import administradores
 
 def default_routes(app):
-    app.route(usuarios)
-    app.route(treinos)
-    app.route(modalidades)
-    app.route(exercicios)
-    app.route(colaboradores)
-    app.route(administradores)
+    usuarios(app)
+    treinos(app)
+    modalidades(app)
+    exercicios(app)
+    colaboradores(app)
+    administradores(app)

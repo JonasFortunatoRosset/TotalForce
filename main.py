@@ -7,7 +7,7 @@ import secrets
 class App():
     def __init__(self) -> None:
         self.app = Flask(__name__)
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:J010406%40@localhost/totalforce'
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:''@localhost/totalforce'
         self.app.config['SECRET_KEY'] = secrets.token_hex(32)
         db.init_app(self.app)
         CORS(self.app)

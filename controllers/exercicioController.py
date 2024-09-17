@@ -7,7 +7,7 @@ def exercicioController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=['descricao'],codtreino=data['codtreino'])
+            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codtreino=data['codtreino'])
             db.session.add(exercicio)
             db.session.commit()
             return ({'message': 'Exercio novo inserido com sucesso'}), 200
