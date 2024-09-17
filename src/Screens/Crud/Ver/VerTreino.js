@@ -1,43 +1,21 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, FlatList } from 'react-native';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verTreino(){
-    const [treino, setTreino] = useState({
-        codigo: "",
-        nome: "",
-        descricao: "",
-        codusuario: "",
-        propriedade: "",
-        codmodalidade: ""
-    })
+    const [treino, setTreino] = useState([])
 
-    function inserirTreino(){
-        axios.post("http://localhost:3000/treinos", {
-            codigo: treino.codigo,
-            nome: treino.nome,
-            descricao: treino.descricao,
-            codusuario: treino.codusuario,
-            propriedade: treino.propriedade,
-            codmodalidade: treino.codmodalidade
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            alert.Alert("Sucesso", "O treino foi cadastrado")
-            setTreino({
-                codigo: "",
-                nome: "",
-                descricao: "",
-                codusuario: "",
-                propriedade: "",
-                codmodalidade: ""
+    function PesquisaTreino(){
+      useEffect(() => {
+        axios.get('http://localhost:3000/treinos')
+            .then(response => {
+              setTreino(response.data.treino);
             })
-        }).catch(error => {
-            alert.Alert("Erro", "Não foi possível cadastrar o treino")
-            console.error(error)
-        })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
     }
 
     return(
@@ -46,44 +24,23 @@ export  function verTreino(){
             <Text style={styles.txtheader}>Pesquisa de Treino</Text>
          </View>
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={treino.codigo}
-            onChangeText={(text) => setTreino({...treino, codigo: text})}/>
-        
-            <TextInput
-            style={styles.inputs}
-            placeholder='Nome'
-            value={treino.nome}
-            onChangeText={(text) => setTreino({...treino, nome: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Descrição'
-            value={treino.descricao}
-            onChangeText={(text) => setTreino({...treino, descricao: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Código do usuário'
-            value={treino.codusuario}
-            onChangeText={(text) => setTreino({...treino, codusuario: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Propriedade'
-            value={treino.propriedade}
-            onChangeText={(text) => setTreino({...treino, propriedade: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Código da modalidade'
-            value={treino.codmodalidade}
-            onChangeText={(text) => setTreino({...treino, codmodalidade: text})}/>
+            <FlatList
+                data={treino}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>descrição: {item.descricao}</Text>
+                        <Text style={styles.itemText}>CodUsuario: {item.codusuario}</Text>
+                        <Text style={styles.itemText}>Propriedade: {item.propriedade}</Text>
+                        <Text style={styles.itemText}>CodMOdalidade: {item.codmodalidade}</Text>
+                    </View>
+                )}
+            />
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirTreino}> Pesquisar</Text>
+                <Text style={styles.txtbtn} onPress={PesquisaTreino}> Pesquisar</Text>
             </TouchableOpacity>
             </View>
         </View>
@@ -114,7 +71,13 @@ const styles = StyleSheet.create({
 
       },
 
-      inputs: {
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
+
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,

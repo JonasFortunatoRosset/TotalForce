@@ -1,38 +1,24 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,FlatList } from 'react-native';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verAdministrador(){
-    const [administrador, setAdministrador] = useState({
-        codigo: "",
-        nome: "",
-        cpf: "",
-        login: "",
-        senha: ""
-    })
+    const [administrador, setAdministrador] = useState([])
 
     function PesquisarAdministrador(){
-        axios.post("http://localhost:3000/administradores", {
-            codigo: administrador.codigo,
-            nome: administrador.nome,
-            cpf: administrador.cpf,
-            login: administrador.login,
-            senha: administrador.senha
-        }).then(response => {
-            alert.Alert("Sucesso", "administrador cadastrado!")
-            console.response(response)
-            setAdministrador({
-                codigo: "",
-                nome: "",
-                cpf: "",
-                login: "",
-                senha: ""
+
+      useEffect(() => {
+        axios.get('http://localhost:3000/administradores')
+            .then(response => {
+              setAdministrador(response.data.administrador);
             })
-        }).catch(error => {
-            alert.Alert("Erro", "não foi possível cadastrar o administrador")
-            console.error(error)
-        })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
     }
+     
 
     return(
         <View style={styles.container}>
@@ -41,42 +27,21 @@ export  function verAdministrador(){
             </View>
             
         <View style={styles.body}>
-            <TextInput
-            
-            style={styles.inputs}
-            placeholder='Código'
-            value={administrador.codigo}
-            onChangeText={(text) => setAdministrador({...administrador, codigo: text})}/>
+        <FlatList
+                data={administrador}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
+                        <Text style={styles.itemText}>Login: {item.login}</Text>
+                        <Text style={styles.itemText}>Senha: {item.senha}</Text>
+                    </View>
+                )}
+            />
 
-            <TextInput
-
-            style={styles.inputs}
-            placeholder='Nome'
-            value={administrador.nome}
-            onChangeText={(text) => setAdministrador({...administrador, nome: text})}/>
-
-            <TextInput
-            
-            style={styles.inputs}
-            placeholder='CPF'
-            value={administrador.cpf}
-            onChangeText={(text) => setAdministrador({...administrador, cpf: text})}/>
-
-            <TextInput
-
-            style={styles.inputs}
-            placeholder='Login'
-            value={administrador.login}
-            onChangeText={(text) => setAdministrador({...administrador, login: text})}/>
-
-            <TextInput
-
-            style={styles.inputs}
-            placeholder='Senha'
-            value={administrador.senha}
-            onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
-
-            <TouchableOpacity style={styles.btn} onPress={inserirAdministrador}>
+            <TouchableOpacity style={styles.btn} onPress={PesquisarAdministrador}>
                 <Text style={styles.txtbtn}> Pesquisar</Text>
             </TouchableOpacity>
 
@@ -85,7 +50,7 @@ export  function verAdministrador(){
         </View>
     </View>
     )
-}
+  }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -109,8 +74,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
       },
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
 
-      inputs: {
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,

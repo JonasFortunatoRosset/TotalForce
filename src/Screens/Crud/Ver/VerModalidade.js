@@ -1,23 +1,19 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,ActivityIndicator,FlatList } from 'react-native';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 
 export  function verModalidade(){
-    const [loading, setLoading] = useState(true);
     const [modalidades, setModalidades] = useState([]);
 
 
     function PesquisaModalidade(){
       useEffect(() => {
-        axios.get('http://localhost:3000/exercicios')
+        axios.get('http://localhost:3000/modalidades')
             .then(response => {
               setModalidades(response.data.modalidades);
-                setLoading(false);
             })
             .catch(error => {
                 console.error(error);
-                setLoading(false);
             });
     }, []);
     }
@@ -81,8 +77,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
       },
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
 
-      inputs: {
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,

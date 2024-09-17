@@ -1,39 +1,21 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,FlatList } from 'react-native';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verPersonal(){
-    const [personal, setPersonal] = useState({
-        codigo: "",
-        nome: "",
-        cpf: "",
-        endereco: "",
-        cidade: "",
-        senha: ""
-    })
+    const [personal, setPersonal] = useState([])
 
-    function inserirPersonal(){
-        axios.post("http://localhost:3000/colaboradores", {
-            codigo: personal.codigo,
-            nome: personal.nome,
-            cpf: personal.cpf,
-            endereco: personal.endereco,
-            cidade: personal.cidade,
-            senha: personal.senha
-        }).then(response => {
-            alert.Alert("Sucesso", "Personal cadastrado com exito")
-            setPersonal({
-                codigo: "",
-                nome: "",
-                cpf: "",
-                endereco: "",
-                cidade: "",
-                senha: ""
+    function PesquisarPersonal(){
+      useEffect(() => {
+        axios.get('http://localhost:3000/colaboradores')
+            .then(response => {
+              setPersonal(response.data.personal);
             })
-        }).catch(error => {
-            alert.Alert("Erro", "Personal não cadastrado")
-            console.error(error)
-        })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
     }
 
     return(
@@ -43,44 +25,22 @@ export  function verPersonal(){
             </View>
 
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={personal.codigo}
-            onChangeText={(text) => setPersonal({...personal, codigo: text})}/>
-        
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Nome'
-            value={personal.nome}
-            onChangeText={(text) => setPersonal({...personal, nome: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='CPF'
-            value={personal.cpf}
-            onChangeText={(text) => setPersonal({...personal, cpf: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Endereço'
-            value={personal.endereco}
-            onChangeText={(text) => setPersonal({...personal, endereco: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Cidade'
-            value={personal.cidade}
-            onChangeText={(text) => setPersonal({...personal, cidade: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Senha'
-            value={personal.senha}
-            onChangeText={(text) => setPersonal({...personal, senha: text})}/>
-
+            <FlatList
+                data={personal}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
+                        <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
+                        <Text style={styles.itemText}>Cidade: {item.cidade}</Text>
+                        <Text style={styles.itemText}>Senha: {item.senha}</Text>
+                    </View>
+                )}
+            />
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirPersonal}> Pesquisar</Text>
+                <Text style={styles.txtbtn} onPress={PesquisarPersonal}> Pesquisar</Text>
             </TouchableOpacity>
             </View>
         </View>
@@ -111,7 +71,13 @@ const styles = StyleSheet.create({
 
       },
 
-      inputs: {
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
+
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,
@@ -120,7 +86,8 @@ const styles = StyleSheet.create({
         width: 300,
         height: 45,
         padding: 10,
-      },
+        },
+        
       btn:{
         justifyContent: 'center',
         alignItems: 'center',

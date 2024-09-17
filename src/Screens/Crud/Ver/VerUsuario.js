@@ -1,50 +1,20 @@
-import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity, FlatList } from 'react-native';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export  function verUsuario(){
-    const [usuario, setUsuario] = useState({
-        codigo: "",
-        nome: "",
-        cpf: "",
-        endereco: "",
-        cidade: "",
-        senha: "",
-        peso: "",
-        altura: ""
-    })
+    const [usuario, setUsuario] = useState([])
 
-    function inserirUsuarios(){
-        axios.post("http://localhost:3000/usuarios", {
-            codigo:   usuario.codigo,
-            nome:     usuario.nome,
-            cpf:      usuario.cpf,
-            endereco: usuario.endereco,
-            cidade:   usuario.cidade,
-            senha:    usuario.senha,
-            peso:     usuario.peso,
-            altura:   usuario.altura
-
-        }, {
-            Headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            Alert.alert("Sucesso", "Usuário foi cadastrado");
-            setUsuario({
-                codigo: "",
-                nome: "",
-                cpf: "",
-                endereco: "",
-                cidade: "",
-                senha: "",
-                peso: "",
-                altura: ""    
+    function PesquisarUsuarios(){
+      useEffect(() => {
+        axios.get('http://localhost:3000/usuarios')
+            .then(response => {
+              setUsuario(response.data.usuario);
             })
-        }).catch(error => {
-            Alert.alert("Erro", "Não foi possível cadastrar o usuário")
-            console.error(error)
-        })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
     }
 
     return(
@@ -54,63 +24,25 @@ export  function verUsuario(){
          </View>
 
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={usuario.codigo}
-            onChangeText={(text) => setUsuario({...usuario, codigo: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Nome'
-            value={usuario.nome}
-            onChangeText={(text) => setUsuario({...usuario, nome: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='CPF'
-            value={usuario.cpf}
-            onChangeText={(text) => setUsuario({...usuario, cpf: text})}
-            />
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Endereço'
-            value={usuario.endereco}
-            onChangeText={(text) => setUsuario({...usuario, endereco: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Cidade'
-            value={usuario.cidade}
-            onChangeText={(text) => setUsuario({...usuario, cidade: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Senha'
-            value={usuario.senha}
-            onChangeText={(text) => setUsuario({...usuario, senha: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Peso'
-            value={usuario.peso}
-            onChangeText={(text) => setUsuario({...usuario, peso: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Altura'
-            value={usuario.altura}
-            onChangeText={(text) => setUsuario({...usuario, altura: text})}
+            <FlatList
+                data={usuario}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>descrição: {item.cpf}</Text>
+                        <Text style={styles.itemText}>descrição: {item.endereco}</Text>
+                        <Text style={styles.itemText}>descrição: {item.cidade}</Text>
+                        <Text style={styles.itemText}>descrição: {item.senha}</Text>
+                        <Text style={styles.itemText}>descrição: {item.peso}</Text>
+                        <Text style={styles.itemText}>descrição: {item.altura}</Text>
+                    </View>
+                )}
             />
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirUsuarios}> Pesquisar</Text>
+                <Text style={styles.txtbtn} onPress={PesquisarUsuarios}> Pesquisar</Text>
             </TouchableOpacity>
             </View>
         </View>
@@ -141,7 +73,13 @@ const styles = StyleSheet.create({
 
       },
 
-      inputs: {
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
+
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,

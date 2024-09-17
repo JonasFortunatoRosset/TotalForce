@@ -1,29 +1,23 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,FlatList } from 'react-native';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verExercicio(){
-    const [exercicio, setExercicio] = useState({
-        codigo: "",
-        nome: "",
-        descricao: "",
-        codtreino: ""
-        })
+    const [exercicio, setExercicio] = useState([])
     
-    function inserirExercicio(){
-    useEffect(() => {
-        axios.get('http://localhost:3000/alimentos')
+    function PesquisaExercicio(){
+      useEffect(() => {
+        axios.get('http://localhost:3000/exercicios')
             .then(response => {
-                setAlimentos(response.data.alimentos);
-                setLoading(false);
+              setExercicio(response.data.exercicio);
             })
             .catch(error => {
                 console.error(error);
-                setLoading(false);
             });
     }, []);
     }
+    
 
     return(
     
@@ -33,14 +27,26 @@ export  function verExercicio(){
             </View>
 
            <View style={styles.body}>
+           <FlatList
+                data={exercicio}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
+                        <Text style={styles.itemText}>CodTreino: {item.codtreino}</Text>
+                    </View>
+                )}
+            />
           
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirExercicio}> Pesquisar</Text>
+                <Text style={styles.txtbtn} onPress={PesquisaExercicio}> Pesquisar</Text>
             </TouchableOpacity>
           </View>
         </View>
     )
-}
+  }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -65,7 +71,13 @@ const styles = StyleSheet.create({
 
       },
 
-      inputs: {
+      itemContainer:{
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        padding: 5,
+      },
+
+      itemText: {
         color: '#000',
         size: 20,
         marginBottom: 20,
