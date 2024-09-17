@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verExercicio(){
@@ -11,24 +12,17 @@ export  function verExercicio(){
         })
     
     function inserirExercicio(){
-        axios.post("http://localhost:3000/exercicios",{
-            codigo:    exercicio.codigo,
-            nome:      exercicio.nome,
-            descricao: exercicio.descricao,
-            codtreino: exercicio.codtreino
-        }).then(response => {
-            alert.Alert("Sucesso", "exercício cadastrado")
-            console.response(response)
-            setExercicio({
-                codigo: "",
-                nome: "",
-                descricao: "",
-                codtreino: ""
+    useEffect(() => {
+        axios.get('http://localhost:3000/alimentos')
+            .then(response => {
+                setAlimentos(response.data.alimentos);
+                setLoading(false);
             })
-        }).catch(error => {
-            alert.Alert("Erro", "exercício não cadastrado")
-            console.error(error)
-        })
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
+    }, []);
     }
 
     return(
@@ -39,31 +33,7 @@ export  function verExercicio(){
             </View>
 
            <View style={styles.body}>
-            
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={exercicio.codigo}
-            onChangeText={(text) => setExercicio({...exercicio, codigo: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Nome'
-            value={exercicio.nome}
-            onChangeText={(text) => setExercicio({...exercicio, nome: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Descrição'
-            value={exercicio.descricao}
-            onChangeText={(text) => setExercicio({...exercicio, descricao: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código do treino'
-            value={exercicio.codtreino}
-            onChangeText={(text) => setExercicio({...exercicio, codtreino: text})}/>
-
+          
             <TouchableOpacity style={styles.btn}>
                 <Text style={styles.txtbtn} onPress={inserirExercicio}> Pesquisar</Text>
             </TouchableOpacity>

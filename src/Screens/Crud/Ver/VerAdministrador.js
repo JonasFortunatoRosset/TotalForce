@@ -11,7 +11,7 @@ export  function verAdministrador(){
         senha: ""
     })
 
-    function inserirAdministrador(){
+    function PesquisarAdministrador(){
         axios.post("http://localhost:3000/administradores", {
             codigo: administrador.codigo,
             nome: administrador.nome,
@@ -76,8 +76,8 @@ export  function verAdministrador(){
             value={administrador.senha}
             onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
 
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirAdministrador}> Pesquisar</Text>
+            <TouchableOpacity style={styles.btn} onPress={inserirAdministrador}>
+                <Text style={styles.txtbtn}> Pesquisar</Text>
             </TouchableOpacity>
 
 

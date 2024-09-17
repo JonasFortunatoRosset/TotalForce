@@ -1,31 +1,29 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,ActivityIndicator,FlatList } from 'react-native';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 export  function verModalidade(){
-    const [modalidade, setModalidade] = useState({
-        codigo: "",
-        nome: "",
-        descricao: ""
-    })
+    const [loading, setLoading] = useState(true);
+    const [modalidades, setModalidades] = useState([]);
 
-    function inserirModalidade(){
-        axios.post("http://localhost:3000/modalidades", {
-            codigo: modalidade.codigo,
-            nome: modalidade.nome,
-            descricao: modalidade.descricao
-        }).then(response => {
-            alert.Alert("Sucesso", "Modalidade cadastrada")
-            setModalidade({
-                codigo: "",
-                nome: "",
-                descricao: ""
-            }).catch(error => {
-                alert.Alert("Erro", "não foi possível realizar o cadastro")
-                console.error(error)
+
+    function PesquisaModalidade(){
+      useEffect(() => {
+        axios.get('http://localhost:3000/exercicios')
+            .then(response => {
+              setModalidades(response.data.modalidades);
+                setLoading(false);
             })
-        })
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
+    }, []);
     }
+
+
+
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
@@ -33,26 +31,21 @@ export  function verModalidade(){
             </View>
 
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={modalidade.codigo}
-            onChangeText={(text) => setModalidade({...modalidade, codigo: text})}/>
+            <FlatList
+                data={modalidades}
+                keyExtractor={(item) => item.codigo.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                        <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                        <Text style={styles.itemText}>descrição: {item.descricao}</Text>
+                    </View>
+                )}
+            />
 
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Nome'
-            value={modalidade.nome}
-            onChangeText={(text) => setModalidade({...modalidade, nome: text})}/>
 
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Descricao'
-            value={modalidade.descricao}
-            onChangeText={(text) => setModalidade({...modalidade, descricao: text})}/>
-
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirModalidade}> Pesquisar</Text>
+            <TouchableOpacity style={styles.btn} onPress={PesquisaModalidade}>  
+                <Text style={styles.txtbtn} > Pesquisar</Text>
             </TouchableOpacity>
 
             </View>
@@ -65,6 +58,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFB031',
       },
+      loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
       header:{
         backgroundColor: '#E49413',
         width: '100%',

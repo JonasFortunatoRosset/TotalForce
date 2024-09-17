@@ -34,8 +34,6 @@ export function CadastroGeral({ navigation }) {
                 <Text style={styles.txtbox}>Cadastro Usuários</Text>
              </TouchableHighlight>
 
-
-
             </View>
         </ScrollView>
   );
