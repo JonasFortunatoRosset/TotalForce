@@ -42,8 +42,8 @@ export function HomePage({navigation}) {
 
           <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'}>
           <View style={styles.box}>
-            <Text style={styles.boxText}>Pagamento</Text>
-            <Image source={pagamento} style={styles.boxImagePagamento} />
+            <Text style={styles.boxText}></Text>
+            <Image style={styles.boxImagePagamento} />
           </View>
           </TouchableHighlight>
         </View>

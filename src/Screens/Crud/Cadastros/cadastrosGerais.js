@@ -26,6 +26,10 @@ export function CadastroGeral({ navigation }) {
                 <Text style={styles.txtbox}>Cadastro Personais</Text>
              </TouchableHighlight>
 
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroTreino')}>
+                <Text style={styles.txtbox}>Cadastro Treinos</Text>
+             </TouchableHighlight>
+
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroUsuario')}>
                 <Text style={styles.txtbox}>Cadastro Usuários</Text>
              </TouchableHighlight>

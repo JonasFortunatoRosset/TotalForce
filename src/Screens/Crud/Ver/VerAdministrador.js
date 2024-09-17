@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function alteracaoAdministrador(){
+export  function verAdministrador(){
     const [administrador, setAdministrador] = useState({
         codigo: "",
         nome: "",
@@ -12,7 +12,7 @@ export  function alteracaoAdministrador(){
     })
 
     function inserirAdministrador(){
-        axios.post("http://localhost:3000/administrador", {
+        axios.post("http://localhost:3000/administradores", {
             codigo: administrador.codigo,
             nome: administrador.nome,
             cpf: administrador.cpf,
@@ -37,7 +37,7 @@ export  function alteracaoAdministrador(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Alteração de Administrador</Text>
+                <Text style={styles.txtheader}>Pesquisa de Administrador</Text>
             </View>
             
         <View style={styles.body}>
@@ -46,38 +46,38 @@ export  function alteracaoAdministrador(){
             style={styles.inputs}
             placeholder='Código'
             value={administrador.codigo}
-            onChangeText={(text) => setPersonal({...administrador, codigo: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, codigo: text})}/>
 
             <TextInput
 
             style={styles.inputs}
             placeholder='Nome'
             value={administrador.nome}
-            onChangeText={(text) => setPersonal({...administrador, nome: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, nome: text})}/>
 
             <TextInput
             
             style={styles.inputs}
             placeholder='CPF'
             value={administrador.cpf}
-            onChangeText={(text) => setPersonal({...administrador, cpf: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, cpf: text})}/>
 
             <TextInput
 
             style={styles.inputs}
             placeholder='Login'
             value={administrador.login}
-            onChangeText={(text) => setPersonal({...administrador, login: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, login: text})}/>
 
             <TextInput
 
             style={styles.inputs}
             placeholder='Senha'
             value={administrador.senha}
-            onChangeText={(text) => setPersonal({...administrador, senha: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Alterar</Text>
+                <Text style={styles.txtbtn} onPress={inserirAdministrador}> Pesquisar</Text>
             </TouchableOpacity>
 
 

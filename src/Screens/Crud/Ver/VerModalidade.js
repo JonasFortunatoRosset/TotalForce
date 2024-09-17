@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function alteracaoModalidade(){
+export  function verModalidade(){
     const [modalidade, setModalidade] = useState({
         codigo: "",
         nome: "",
@@ -29,7 +29,7 @@ export  function alteracaoModalidade(){
     return(
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Alteração de Modalidades</Text>
+                <Text style={styles.txtheader}>Pesquisa de Modalidades</Text>
             </View>
 
             <View style={styles.body}>
@@ -37,22 +37,22 @@ export  function alteracaoModalidade(){
             style={styles.inputs}
             placeholder='Código'
             value={modalidade.codigo}
-            onChangeText={(text) => setPersonal({...modalidade, codigo: text})}/>
+            onChangeText={(text) => setModalidade({...modalidade, codigo: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Nome'
             value={modalidade.nome}
-            onChangeText={(text) => setPersonal({...modalidade, nome: text})}/>
+            onChangeText={(text) => setModalidade({...modalidade, nome: text})}/>
 
             <TextInput 
             style={styles.inputs}
             placeholder='Descricao'
             value={modalidade.descricao}
-            onChangeText={(text) => setPersonal({...modalidade, descricao: text})}/>
+            onChangeText={(text) => setModalidade({...modalidade, descricao: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Alterar </Text>
+                <Text style={styles.txtbtn} onPress={inserirModalidade}> Pesquisar</Text>
             </TouchableOpacity>
 
             </View>

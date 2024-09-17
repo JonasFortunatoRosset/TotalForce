@@ -31,9 +31,21 @@ import { alteracaoUsuario } from './src/Screens/Crud/Alterar/AlterarUsuario';
 
 // importação de telas de ver
 import { VerGeral } from './src/Screens/Crud/Ver/VerGeral';
+import {verAdministrador} from './src/Screens/Crud/Ver/VerAdministrador';
+import {verExercicio} from './src/Screens/Crud/Ver/VerExercicio';
+import {verModalidade} from './src/Screens/Crud/Ver/VerModalidade';
+import {verPersonal} from './src/Screens/Crud/Ver/VerPersonal';
+import {verTreino} from './src/Screens/Crud/Ver/VerTreino';
+import {verUsuario} from './src/Screens/Crud/Ver/VerUsuario';
 
 // importação de telas de Excluir
 import { ExcluirGeral } from './src/Screens/Crud/Excluir/ExcluirGeral';
+import { excluirAdministrador } from './src/Screens/Crud/Excluir/ExcluirAdministrador';
+import {excluirExercicio} from './src/Screens/Crud/Excluir/ExcluirExercicio';
+import {excluirModalidade} from'./src/Screens/Crud/Excluir/ExcluirModalidade';
+import { excluirPersonal } from './src/Screens/Crud/Excluir/excluirPersonal';
+import {excluirTreino} from './src/Screens/Crud/Excluir/ExcluirTreino';
+import {excluirUsuario} from './src/Screens/Crud/Excluir/ExcluirUsuario';
 
 
 
@@ -72,6 +84,20 @@ export default function App() {
         <Stack.Screen name="AlteracaoPersonal"       component={alteracaoPersonal}></Stack.Screen>
         <Stack.Screen name="AlteracaoTreino"         component={alteracaoTreino}></Stack.Screen>
         <Stack.Screen name="AlteracaoUsuario"        component={alteracaoUsuario}></Stack.Screen>
+
+        <Stack.Screen name="ExclusãoAdministrador"  component={excluirAdministrador}></Stack.Screen>
+        <Stack.Screen name="ExclusãoExercicio"      component={excluirExercicio}></Stack.Screen>
+        <Stack.Screen name="ExclusãoModalidade"     component={excluirModalidade}></Stack.Screen>
+        <Stack.Screen name="ExclusãoPersonal"       component={excluirPersonal}></Stack.Screen>
+        <Stack.Screen name="ExclusãoTreino"         component={excluirTreino}></Stack.Screen>
+        <Stack.Screen name="ExclusãoUsuario"        component={excluirUsuario}></Stack.Screen>
+
+        <Stack.Screen name="VerAdministrador"  component={verAdministrador}></Stack.Screen>
+        <Stack.Screen name="VerExercicio"      component={verExercicio}></Stack.Screen>
+        <Stack.Screen name="VerModalidade"     component={verModalidade}></Stack.Screen>
+        <Stack.Screen name="VerPersonal"       component={verPersonal}></Stack.Screen>
+        <Stack.Screen name="VerTreino"         component={verTreino}></Stack.Screen>
+        <Stack.Screen name="VerUsuario"        component={verUsuario}></Stack.Screen>
 
 
       </Stack.Navigator>

@@ -2,64 +2,75 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function alteracaoModalidade(){
-    const [modalidade, setModalidade] = useState({
+export  function verExercicio(){
+    const [exercicio, setExercicio] = useState({
         codigo: "",
         nome: "",
-        descricao: ""
-    })
-
-    function inserirModalidade(){
-        axios.post("http://localhost:3000/modalidades", {
-            codigo: modalidade.codigo,
-            nome: modalidade.nome,
-            descricao: modalidade.descricao
+        descricao: "",
+        codtreino: ""
+        })
+    
+    function inserirExercicio(){
+        axios.post("http://localhost:3000/exercicios",{
+            codigo:    exercicio.codigo,
+            nome:      exercicio.nome,
+            descricao: exercicio.descricao,
+            codtreino: exercicio.codtreino
         }).then(response => {
-            alert.Alert("Sucesso", "Modalidade cadastrada")
-            setModalidade({
+            alert.Alert("Sucesso", "exercício cadastrado")
+            console.response(response)
+            setExercicio({
                 codigo: "",
                 nome: "",
-                descricao: ""
-            }).catch(error => {
-                alert.Alert("Erro", "não foi possível realizar o cadastro")
-                console.error(error)
+                descricao: "",
+                codtreino: ""
             })
+        }).catch(error => {
+            alert.Alert("Erro", "exercício não cadastrado")
+            console.error(error)
         })
     }
+
     return(
+    
         <View style={styles.container}>
             <View style={styles.header}> 
-                <Text style={styles.txtheader}>Alteração de Modalidades</Text>
+                <Text style={styles.txtheader}>Pesquisa de Exercícios</Text>
             </View>
 
-            <View style={styles.body}>
+           <View style={styles.body}>
+            
             <TextInput 
             style={styles.inputs}
             placeholder='Código'
-            value={modalidade.codigo}
-            onChangeText={(text) => setPersonal({...modalidade, codigo: text})}/>
+            value={exercicio.codigo}
+            onChangeText={(text) => setExercicio({...exercicio, codigo: text})}/>
 
-            <TextInput 
+            <TextInput
             style={styles.inputs}
             placeholder='Nome'
-            value={modalidade.nome}
-            onChangeText={(text) => setPersonal({...modalidade, nome: text})}/>
+            value={exercicio.nome}
+            onChangeText={(text) => setExercicio({...exercicio, nome: text})}/>
 
             <TextInput 
             style={styles.inputs}
-            placeholder='Descricao'
-            value={modalidade.descricao}
-            onChangeText={(text) => setPersonal({...modalidade, descricao: text})}/>
+            placeholder='Descrição'
+            value={exercicio.descricao}
+            onChangeText={(text) => setExercicio({...exercicio, descricao: text})}/>
+
+            <TextInput 
+            style={styles.inputs}
+            placeholder='Código do treino'
+            value={exercicio.codtreino}
+            onChangeText={(text) => setExercicio({...exercicio, codtreino: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn}> Alterar </Text>
+                <Text style={styles.txtbtn} onPress={inserirExercicio}> Pesquisar</Text>
             </TouchableOpacity>
-
-            </View>
+          </View>
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

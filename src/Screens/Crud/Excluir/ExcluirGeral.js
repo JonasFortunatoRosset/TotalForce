@@ -10,25 +10,30 @@ export function ExcluirGeral({ navigation }) {
             </View>
             <View style={styles.body}>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoAdministrador')}>
                 <Text style={styles.txtbox}>Excluir Admin</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoExercicio')}>
                 <Text style={styles.txtbox}>Excluir Exercícios</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoModalidade')}>
                 <Text style={styles.txtbox}>Excluir Modalidades</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoPersonal')}>
                 <Text style={styles.txtbox}>Excluir Personais</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('')}>
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoTreino')}>
+                <Text style={styles.txtbox}>Excluir Treinos</Text>
+             </TouchableHighlight>
+
+             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('ExclusãoUsuario')}>
                 <Text style={styles.txtbox}>Excluir Usuários</Text>
              </TouchableHighlight>
+
 
 
 
@@ -64,6 +69,7 @@ const styles = StyleSheet.create({
         margin: 25,
         borderRadius: 14,
         alignItems: 'center',
+        justifyContent: 'center',
         
     },
     txtbox: {

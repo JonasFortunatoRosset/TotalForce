@@ -11,7 +11,7 @@ export  function alteracaoExercicio(){
         })
     
     function inserirExercicio(){
-        axios.post("http//localhost:3000/exercicios",{
+        axios.post("http://localhost:3000/exercicios",{
             codigo:    exercicio.codigo,
             nome:      exercicio.nome,
             descricao: exercicio.descricao,

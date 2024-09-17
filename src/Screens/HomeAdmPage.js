@@ -41,7 +41,7 @@ export function HomeAdmPage({navigation}) {
 
           <TouchableHighlight onPress={() => navigation.navigate('ExcluirGeral')} underlayColor={'#855200'}>
           <View style={styles.box}>
-            <Text style={styles.boxText}>Deletar</Text>
+            <Text style={styles.boxText}>Excluir</Text>
              <AntDesign name="delete" size={120} color="black" />   
           </View>
           </TouchableHighlight>
