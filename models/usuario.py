@@ -16,7 +16,7 @@ class Usuario(db.Model):
 
     codigo   = db.Column(db.Integer, primary_key=True, nullable=True, unique=True)
     nome     = db.Column(db.String(100))
-    cpf      = db.Column(db.String(11))
+    cpf      = db.Column(db.Integer)
     endereco = db.Column(db.String(100))
     cidade   = db.Column(db.String(100))
     senha    = db.Column(db.String(100))
@@ -24,7 +24,7 @@ class Usuario(db.Model):
     altura   = db.Column(db.Integer)
 
 
-    def __init__(codigo,nome,cpf,endereco,cidade,senha,peso,altura,self):
+    def __init__(self, codigo,nome,cpf,endereco,cidade,senha,peso,altura):
         self.codigo   = codigo
         self.nome     = nome
         self.cpf      = cpf

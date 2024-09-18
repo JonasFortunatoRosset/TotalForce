@@ -6,7 +6,8 @@ def usuariosController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=['senha'],peso=data['peso'],altura=data['altura'])
+            print(data)
+            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=data['senha'],peso=data['peso'],altura=data['altura'])
             db.session.add(usuario)
             db.session.commit()
             return jsonify({'message': 'Usuario cadastrado'}),200
