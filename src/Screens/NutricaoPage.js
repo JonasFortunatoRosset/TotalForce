@@ -1,73 +1,74 @@
-import { StyleSheet, Text, TextInput, View,TouchableHighlight,ScrollView,TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, TextInput, View, ScrollView, TouchableHighlight } from 'react-native';
+import { useState, useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 
-export  function NutricaoPage() {
+export function NutricaoPage({ navigation }) {
 
-  const[peso,setPeso] = useState('')
-  const[resultadoC,setResultadoC] = useState(0)
-  const[resultadoP,setResultadoP] = useState(0)
-  const[resultadoCa,setResultadoCa] = useState(0)
-  const[resultadoD,setResultadoD] = useState(0) 
-  
-  function calc(){
-    
-    const vlr = parseInt(peso)
+  const [peso, setPeso] = useState('');
+  const [resultadoC, setResultadoC] = useState(0);
+  const [resultadoP, setResultadoP] = useState(0);
+  const [resultadoCa, setResultadoCa] = useState(0);
+  const [resultadoD, setResultadoD] = useState(0);
 
-    if (!isNaN(vlr)){
-      const resultC = (vlr * 0.07).toFixed(1)
-      setResultadoC(resultC)
 
-      const resultP = (vlr * 2).toFixed(1)
-      setResultadoP(resultP)
+  function calc(vlr) {
+    if (!isNaN(vlr)) {
+      const resultC = (vlr * 0.03).toFixed(1);
+      setResultadoC(resultC);
 
-      const resultCa = (vlr * 4).toFixed(1)
-      setResultadoCa(resultCa)
+      const resultP = (vlr * 2).toFixed(1);
+      setResultadoP(resultP);
 
-      const resultD = (vlr * 0.02).toFixed(1)
-      setResultadoD(resultD)
-    }
+      const resultCa = (vlr * 4).toFixed(1);
+      setResultadoCa(resultCa);
 
-    else {
-      setResultadoC(0)
-      setResultadoP(0)
-      setResultadoCa(0)
-      setResultadoD(0)
+      const resultD = (vlr * 0.02).toFixed(1);
+      setResultadoD(resultD);
+    } else {
+      setResultadoC(0);
+      setResultadoP(0);
+      setResultadoCa(0);
+      setResultadoD(0);
     }
   }
+
+  
+  useEffect(() => {
+    const vlr = parseFloat(peso);
+    calc(vlr);
+  }, [peso]);
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <TouchableHighlight style={styles.seta}  onPress={() => navigation.navigate('HomePage')} >
-          <AntDesign  name="arrowleft" size={30} color="black"/>
-       </TouchableHighlight>
-       <View>
-        <Text style={styles.txtheader}>Nutrição</Text>
-      </View>
+        <TouchableHighlight style={styles.seta} onPress={() => navigation.navigate('HomePage')}>
+          <AntDesign name="arrowleft" size={30} color="black" />
+        </TouchableHighlight>
+        <View>
+          <Text style={styles.txtheader}>Nutrição</Text>
+        </View>
       </View>
       <View style={styles.body}>
         <View style={styles.pesquisa}>
           <Text>Pesquisar</Text>
-          <FontAwesome name="search" size={24} color="black" /> 
+          <FontAwesome name="search" size={24} color="black" />
         </View>
-        <TouchableOpacity onPress={calc} style={styles.boxbtn}>
-         <Text> Calcular </Text>
-       </TouchableOpacity>
-        <View style={styles.boxinputpeso}>
-    
-         <TextInput style={styles.inputpeso} 
-         placeholder='Digite seu Peso'
-         value={peso}
-         onChangeText={setPeso}
-         />
 
+        <View style={styles.boxinputpeso}>
+          <TextInput
+            style={styles.inputpeso}
+            placeholder="Digite seu Peso"
+            value={peso}
+            onChangeText={setPeso}
+            keyboardType="numeric" 
+          />
         </View>
+
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Creatina</Text>
-          <Text style={styles.txtbox}>Peso x 0,07 = C</Text>
+          <Text style={styles.txtbox}>Peso x 0,03 = C</Text>
           <Text style={styles.txtbox}>{resultadoC}g</Text>
         </View>
 
@@ -97,23 +98,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFB031',
-
   },
   header: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent:'flex-start',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#E49413',
     width: '100%',
-
+    height: '20%',
   },
   seta: {
-    marginRight: 130
+    marginRight: 130,
   },
   txtheader: {
     fontSize: 25,
-    fontFamily: '#',
   },
   pesquisa: {
     backgroundColor: '#E49413',
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 20,
-    padding: 5
+    padding: 5,
   },
   body: {
     display: 'flex',
@@ -131,12 +130,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-
-  boxinputpeso: {
-
-  },
+  boxinputpeso: {},
   inputpeso: {
     backgroundColor: '#E49413',
+    color: '#000',
     height: 25,
     width: 130,
     borderRadius: 6,
@@ -149,21 +146,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     marginBottom: 20,
+    padding: 5,
     backgroundColor: '#E49413',
     width: 220,
     height: 140,
-
   },
   txtbox: {
-      fontSize: 18,
+    fontSize: 18,
   },
-  boxbtn:{
-    backgroundColor: '#E49413',
-    width: 80,
-    height: 30,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 14,
-  }
 });

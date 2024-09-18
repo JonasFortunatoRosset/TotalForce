@@ -2,10 +2,10 @@ import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity, FlatList } f
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export  function verUsuario(){
+export  function VerUsuario(){
     const [usuario, setUsuario] = useState([])
 
-    function PesquisarUsuarios(){
+
       useEffect(() => {
         axios.get('http://localhost:3000/usuarios')
             .then(response => {
@@ -15,7 +15,7 @@ export  function verUsuario(){
                 console.error(error);
             });
     }, []);
-    }
+
 
     return(
         <View style={styles.container}>

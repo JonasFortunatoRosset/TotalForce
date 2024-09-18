@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-export  function verExercicio(){
+export  function VerExercicio(){
     const [exercicio, setExercicio] = useState([])
     
-    function PesquisaExercicio(){
+ 
       useEffect(() => {
         axios.get('http://localhost:3000/exercicios')
             .then(response => {
@@ -16,7 +16,7 @@ export  function verExercicio(){
                 console.error(error);
             });
     }, []);
-    }
+
     
 
     return(
@@ -39,10 +39,7 @@ export  function verExercicio(){
                     </View>
                 )}
             />
-          
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={PesquisaExercicio}> Pesquisar</Text>
-            </TouchableOpacity>
+      
           </View>
         </View>
     )

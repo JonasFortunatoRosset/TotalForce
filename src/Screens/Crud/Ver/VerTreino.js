@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-export  function verTreino(){
+export  function VerTreino(){
     const [treino, setTreino] = useState([])
 
-    function PesquisaTreino(){
+
       useEffect(() => {
         axios.get('http://localhost:3000/treinos')
             .then(response => {
@@ -16,7 +16,7 @@ export  function verTreino(){
                 console.error(error);
             });
     }, []);
-    }
+
 
     return(
         <View style={styles.container}>

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroAdministrador(){
+export  function CadastroAdministrador(){
     const [administrador, setAdministrador] = useState({
         codigo: "",
         nome: "",
@@ -19,7 +19,7 @@ export  function cadastroAdministrador(){
             login: administrador.login,
             senha: administrador.senha
         }).then(response => {
-            alert.Alert("Sucesso", "administrador cadastrado!")
+            Alert.alert("Sucesso", "administrador cadastrado!")
             console.response(response)
             setAdministrador({
                 codigo: "",
@@ -29,7 +29,7 @@ export  function cadastroAdministrador(){
                 senha: ""
             })
         }).catch(error => {
-            alert.Alert("Erro", "não foi possível cadastrar o administrador")
+            Alert.alert("Erro", "não foi possível cadastrar o administrador")
             console.error(error)
         })
     }
@@ -74,7 +74,8 @@ export  function cadastroAdministrador(){
             style={styles.inputs}
             placeholder='Senha'
             value={administrador.senha}
-            onChangeText={(text) => setAdministrador({...administrador, senha: text})}/>
+            onChangeText={(text) => setAdministrador({...administrador, senha: text})}
+            secureTextEntry={true}/>
 
             <TouchableOpacity style={styles.btn}>
                 <Text style={styles.txtbtn} onPress={inserirAdministrador}> Cadastrar</Text>

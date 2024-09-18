@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroModalidade(){
+export  function CadastroModalidade(){
     const [modalidade, setModalidade] = useState({
         codigo: "",
         nome: "",

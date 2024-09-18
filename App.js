@@ -12,43 +12,24 @@ import { PaymentPage } from './src/Screens/PaymentPage';
 import {NutricaoPage}  from './src/Screens/NutricaoPage';
 
 // importação de telas de cadastro
-import {CadastroGeral} from './src/Screens/Crud/Cadastros/cadastrosGerais';
-import {cadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
-import {cadastroExercicio}     from './src/Screens/Crud/Cadastros/cadastroExercicio'
-import {cadastroModalidade}    from './src/Screens/Crud/Cadastros/cadastroModalidade'
-import {cadastroPersonal}      from './src/Screens/Crud/Cadastros/cadastroPersonal'
-import {cadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
-import {cadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
+import {CadastroGeral}         from './src/Screens/Crud/Cadastros/cadastrosGerais';
+import {CadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
+import {CadastroExercicio}     from './src/Screens/Crud/Cadastros/cadastroExercicio'
+import {CadastroModalidade}    from './src/Screens/Crud/Cadastros/cadastroModalidade'
+import {CadastroPersonal}      from './src/Screens/Crud/Cadastros/cadastroPersonal'
+import {CadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
+import {CadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
 
-// importação de telas de alteração
-import { alterarGeral } from './src/Screens/Crud/Alterar/AlterarGeral';
-import { alteracaoAdministrador } from './src/Screens/Crud/Alterar/AlterarAdministrador';
-import { alteracaoExercicio } from './src/Screens/Crud/Alterar/AlterarExercicio';
-import { alteracaoModalidade } from './src/Screens/Crud/Alterar/AlterarModalidade';
-import { alteracaoPersonal } from './src/Screens/Crud/Alterar/AlterarPersonal';
-import { alteracaoTreino} from './src/Screens/Crud/Alterar/AlterarTreino';
-import { alteracaoUsuario } from './src/Screens/Crud/Alterar/AlterarUsuario';
+// importação de telas de Pesquisa
+import { VerGeral }       from './src/Screens/Crud/Ver/VerGeral';
+import {VerAdministrador} from './src/Screens/Crud/Ver/VerAdministrador';
+import {VerExercicio}     from './src/Screens/Crud/Ver/VerExercicio';
+import {VerModalidade}    from './src/Screens/Crud/Ver/VerModalidade';
+import {VerPersonal}      from './src/Screens/Crud/Ver/VerPersonal';
+import {VerTreino}        from './src/Screens/Crud/Ver/VerTreino';
+import {VerUsuario}       from './src/Screens/Crud/Ver/VerUsuario';
 
-// importação de telas de ver
-import { VerGeral } from './src/Screens/Crud/Ver/VerGeral';
-import {verAdministrador} from './src/Screens/Crud/Ver/VerAdministrador';
-import {verExercicio} from './src/Screens/Crud/Ver/VerExercicio';
-import {verModalidade} from './src/Screens/Crud/Ver/VerModalidade';
-import {verPersonal} from './src/Screens/Crud/Ver/VerPersonal';
-import {verTreino} from './src/Screens/Crud/Ver/VerTreino';
-import {verUsuario} from './src/Screens/Crud/Ver/VerUsuario';
-
-// importação de telas de Excluir
-import { ExcluirGeral } from './src/Screens/Crud/Excluir/ExcluirGeral';
-import { excluirAdministrador } from './src/Screens/Crud/Excluir/ExcluirAdministrador';
-import {excluirExercicio} from './src/Screens/Crud/Excluir/ExcluirExercicio';
-import {excluirModalidade} from'./src/Screens/Crud/Excluir/ExcluirModalidade';
-import { excluirPersonal } from './src/Screens/Crud/Excluir/excluirPersonal';
-import {excluirTreino} from './src/Screens/Crud/Excluir/ExcluirTreino';
-import {excluirUsuario} from './src/Screens/Crud/Excluir/ExcluirUsuario';
-
-
-
+import { Teste } from './src/Screens/tst';
 
 
 export default function App() {
@@ -66,38 +47,27 @@ export default function App() {
         <Stack.Screen name="PaymentPage"   component={PaymentPage}></Stack.Screen>
         <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
-        <Stack.Screen name="AlterarGeral"  component={alterarGeral}></Stack.Screen>
         <Stack.Screen name="VerGeral"      component={VerGeral}></Stack.Screen>
-        <Stack.Screen name="ExcluirGeral"  component={ExcluirGeral}></Stack.Screen>
+
+        <Stack.Screen name="Teste"  component={Teste}></Stack.Screen>
         
 
-        <Stack.Screen name="cadastroAdministrador" component={cadastroAdministrador}></Stack.Screen>
-        <Stack.Screen name="cadastroExercicio"     component={cadastroExercicio}></Stack.Screen>
-        <Stack.Screen name="cadastroModalidade"    component={cadastroModalidade}></Stack.Screen>
-        <Stack.Screen name="cadastroPersonal"      component={cadastroPersonal}></Stack.Screen>
-        <Stack.Screen name="cadastroTreino"        component={cadastroTreino}></Stack.Screen>
-        <Stack.Screen name="cadastroUsuario"       component={cadastroUsuario}></Stack.Screen>
+        <Stack.Screen name="cadastroAdministrador" component={CadastroAdministrador}></Stack.Screen>
+        <Stack.Screen name="cadastroExercicio"     component={CadastroExercicio}></Stack.Screen>
+        <Stack.Screen name="cadastroModalidade"    component={CadastroModalidade}></Stack.Screen>
+        <Stack.Screen name="cadastroPersonal"      component={CadastroPersonal}></Stack.Screen>
+        <Stack.Screen name="cadastroTreino"        component={CadastroTreino}></Stack.Screen>
+        <Stack.Screen name="cadastroUsuario"       component={CadastroUsuario}></Stack.Screen>
 
-        <Stack.Screen name="AlteracaoAdministrador"  component={alteracaoAdministrador}></Stack.Screen>
-        <Stack.Screen name="AlteracaoExercicio"      component={alteracaoExercicio}></Stack.Screen>
-        <Stack.Screen name="AlteracaoModalidade"     component={alteracaoModalidade}></Stack.Screen>
-        <Stack.Screen name="AlteracaoPersonal"       component={alteracaoPersonal}></Stack.Screen>
-        <Stack.Screen name="AlteracaoTreino"         component={alteracaoTreino}></Stack.Screen>
-        <Stack.Screen name="AlteracaoUsuario"        component={alteracaoUsuario}></Stack.Screen>
 
-        <Stack.Screen name="ExclusãoAdministrador"  component={excluirAdministrador}></Stack.Screen>
-        <Stack.Screen name="ExclusãoExercicio"      component={excluirExercicio}></Stack.Screen>
-        <Stack.Screen name="ExclusãoModalidade"     component={excluirModalidade}></Stack.Screen>
-        <Stack.Screen name="ExclusãoPersonal"       component={excluirPersonal}></Stack.Screen>
-        <Stack.Screen name="ExclusãoTreino"         component={excluirTreino}></Stack.Screen>
-        <Stack.Screen name="ExclusãoUsuario"        component={excluirUsuario}></Stack.Screen>
 
-        <Stack.Screen name="VerAdministrador"  component={verAdministrador}></Stack.Screen>
-        <Stack.Screen name="VerExercicio"      component={verExercicio}></Stack.Screen>
-        <Stack.Screen name="VerModalidade"     component={verModalidade}></Stack.Screen>
-        <Stack.Screen name="VerPersonal"       component={verPersonal}></Stack.Screen>
-        <Stack.Screen name="VerTreino"         component={verTreino}></Stack.Screen>
-        <Stack.Screen name="VerUsuario"        component={verUsuario}></Stack.Screen>
+
+        <Stack.Screen name="VerAdministrador"  component={VerAdministrador}></Stack.Screen>
+        <Stack.Screen name="VerExercicio"      component={VerExercicio}></Stack.Screen>
+        <Stack.Screen name="VerModalidade"     component={VerModalidade}></Stack.Screen>
+        <Stack.Screen name="VerPersonal"       component={VerPersonal}></Stack.Screen>
+        <Stack.Screen name="VerTreino"         component={VerTreino}></Stack.Screen>
+        <Stack.Screen name="VerUsuario"        component={VerUsuario}></Stack.Screen>
 
 
       </Stack.Navigator>

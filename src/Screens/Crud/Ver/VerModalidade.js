@@ -2,11 +2,11 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,ActivityIndi
 import { useState,useEffect } from 'react';
 import axios from 'axios';
 
-export  function verModalidade(){
+export  function VerModalidade(){
     const [modalidades, setModalidades] = useState([]);
 
 
-    function PesquisaModalidade(){
+ 
       useEffect(() => {
         axios.get('http://localhost:3000/modalidades')
             .then(response => {
@@ -16,7 +16,7 @@ export  function verModalidade(){
                 console.error(error);
             });
     }, []);
-    }
+     
 
 
 

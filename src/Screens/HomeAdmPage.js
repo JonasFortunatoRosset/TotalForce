@@ -30,22 +30,6 @@ export function HomeAdmPage({navigation}) {
           </View>
           </TouchableHighlight>
         </View>
-
-        <View style={styles.line2}>
-          <TouchableHighlight onPress={() => navigation.navigate('AlterarGeral')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Alterar</Text>
-            <Entypo name="pencil" size={120} color="black" />
-          </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => navigation.navigate('ExcluirGeral')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Excluir</Text>
-             <AntDesign name="delete" size={120} color="black" />   
-          </View>
-          </TouchableHighlight>
-        </View>
       </View>
       <View style={styles.footer}>
         <Image style={styles.imgfooter} source={totalforcelogo}/>

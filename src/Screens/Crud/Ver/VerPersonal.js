@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-export  function verPersonal(){
+export  function VerPersonal(){
     const [personal, setPersonal] = useState([])
 
-    function PesquisarPersonal(){
+
       useEffect(() => {
         axios.get('http://localhost:3000/colaboradores')
             .then(response => {
@@ -16,7 +16,7 @@ export  function verPersonal(){
                 console.error(error);
             });
     }, []);
-    }
+
 
     return(
         <View style={styles.container}>

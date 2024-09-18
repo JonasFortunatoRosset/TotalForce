@@ -1,22 +1,10 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity } from 'react-native';
+import { useState } from 'react';
 import axios from 'axios';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-export function VerAdministrador() {
-    const [administrador, setAdministrador] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:3000/administradores')
-            .then(response => {
-                setAdministrador(response.data.administrador);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
-
+export  function Teste(){
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -24,21 +12,16 @@ export function VerAdministrador() {
             </View>
 
             <View style={styles.body}>
-                <FlatList
-                    data={administrador}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                           <View style={styles.dados}>
-                            <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                            <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                            <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
-                            <Text style={styles.itemText}>Login: {item.login}</Text>
-                            <Text style={styles.itemText}>Senha: {item.senha}</Text>
+                            <Text style={styles.itemText}>Código: </Text>
+                            <Text style={styles.itemText}>Nome: </Text>
+                            <Text style={styles.itemText}>Cpf: </Text>
+                            <Text style={styles.itemText}>Login: </Text>
+                            <Text style={styles.itemText}>Senha: </Text>
                           </View>
-
                             <View style={styles.icons}> 
-                            <TouchableOpacity onPress={''}>
+                                <TouchableOpacity onPress={''}>
                                     <Feather name="trash-2" size={40} color="black" />
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={''}>
@@ -46,9 +29,6 @@ export function VerAdministrador() {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
-                />
             </View>
         </View>
     );
@@ -68,7 +48,7 @@ const styles = StyleSheet.create({
     },
     txtheader: {
         fontSize: 20,
-        color: '#fff',
+        color: '#000',
     },
     body: {
         backgroundColor: '#E49413',
@@ -76,14 +56,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     icons: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-around',
     },
     dados: {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         padding: 5,
         height: '100%',
-    
+        
     },
     itemContainer: {
         flexDirection: 'row',
@@ -94,7 +74,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     itemText: {
-        color: '#fff',
+        color: '#000',
         fontSize: 16,
         marginBottom: 5,
     },

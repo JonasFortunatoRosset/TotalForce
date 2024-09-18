@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'reac
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroExercicio(){
+export  function CadastroExercicio(){
     const [exercicio, setExercicio] = useState({
         codigo: "",
         nome: "",

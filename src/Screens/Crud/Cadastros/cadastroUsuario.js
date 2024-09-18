@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity } from 'react
 import { useState } from 'react';
 import axios from 'axios';
 
-export  function cadastroUsuario(){
+export  function CadastroUsuario(){
     const [usuario, setUsuario] = useState({
         codigo: "",
         nome: "",
