@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Feather from '@expo/vector-icons/Feather';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function VerAdministrador() {
     const [administrador, setAdministrador] = useState([]);
@@ -29,19 +27,20 @@ export function VerAdministrador() {
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
-                          <View style={styles.dados}>
+                           <View style={styles.dados}>
                             <Text style={styles.itemText}>Código: {item.codigo}</Text>
                             <Text style={styles.itemText}>Nome: {item.nome}</Text>
                             <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                             <Text style={styles.itemText}>Login: {item.login}</Text>
                             <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                          </View>
+                           </View>
 
-                            <View style={styles.icons}> 
-                            <TouchableOpacity onPress={''}>
+                           <View style={styles.icons}> 
+                                <TouchableOpacity> 
                                     <Feather name="trash-2" size={40} color="black" />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={''}>
+
+                                <TouchableOpacity>
                                     <FontAwesome name="pencil" size={40} color="black" />
                                 </TouchableOpacity>
                             </View>

@@ -6,81 +6,93 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export  function Teste(){
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.txtheader}>Pesquisa de Administrador</Text>
-            </View>
+        <View style={styles.ModalConteiner}>
+                  <View style={styles.ModalHeader}>
+                    <Text style={styles.ModalTitle}>  Editar Usuário  </Text>
 
-            <View style={styles.body}>
-                        <View style={styles.itemContainer}>
-                          <View style={styles.dados}>
-                            <Text style={styles.itemText}>Código: </Text>
-                            <Text style={styles.itemText}>Nome: </Text>
-                            <Text style={styles.itemText}>Cpf: </Text>
-                            <Text style={styles.itemText}>Login: </Text>
-                            <Text style={styles.itemText}>Senha: </Text>
-                          </View>
-                            <View style={styles.icons}> 
-                                <TouchableOpacity onPress={''}>
-                                    <Feather name="trash-2" size={40} color="black" />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={''}>
-                                    <FontAwesome name="pencil" size={40} color="black" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-            </View>
-        </View>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Nome"
+                    />
+
+                   <TextInput
+                      style={styles.input}
+                      placeholder="Cpf"
+                    />
+
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Endereço"
+                    />
+
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Cidade"
+                    />
+
+                   <TextInput
+                      style={styles.input}
+                      placeholder="Senha"
+                    />
+
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Peso"
+
+                    />
+
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Altura"
+                    
+                    />
+
+                    <TouchableOpacity 
+                    style={[styles.btns , styles.btnSave]}>  
+                      <Text style={styles.txtbtns}> Salvar </Text> 
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.btns, styles.btnCancel]}>
+                            <Text style={styles.txtbtns}>Cancelar</Text>
+                    </TouchableOpacity>
+
+
+                  </View>
+                </View>
+
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    ModalConteiner: {
         flex: 1,
         backgroundColor: '#FFB031',
     },
-    header: {
+    ModalHeader: {
         backgroundColor: '#E49413',
         width: '100%',
         height: '8%',
         justifyContent: 'center',
         alignItems: 'center',
+
     },
-    txtheader: {
+    ModalTitle:{
         fontSize: 20,
-        color: '#000',
+        color: '#fff',
     },
-    body: {
-        backgroundColor: '#E49413',
-        flex: 1,
-        padding: 20,
+    input:{
+
     },
-    icons: {
-        justifyContent: 'space-around',
+    btns: {
+
     },
-    dados: {
-        justifyContent: 'flex-start',
-        flexDirection: 'column',
-        padding: 5,
-        height: '100%',
-        
+    txtbtns: {
+
     },
-    itemContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        backgroundColor: '#FFB031',
-        borderRadius: 8,
+    btnSave: {
+
     },
-    itemText: {
-        color: '#000',
-        fontSize: 16,
-        marginBottom: 5,
-    },
-    separator: {
-        height: 1,
-        backgroundColor: '#E49413',
-        marginVertical: 10,
+    btnCancel: {
+
     },
 });
