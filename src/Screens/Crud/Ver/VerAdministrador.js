@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList,TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList,Alert,TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -26,25 +26,36 @@ export function VerAdministrador() {
             });
     }, []);
 
-    const handleEdit = (administrador) => {
-        setDataAdministrador(administrador);
+    const handleEdit = (adm) => {
+        setDataAdministrador(adm);
         setAdministrador(administrador.codigo);
         setModalVisible(true);
     };
 
     const handleUpdate = () => {
-        axios.put(`http://localhost:3000/administradores`, dataAdministrador, {
-            params: { codigo: dataAdministrador.codigo }
-        })
-        .then(response => {
-            setAdministrador(administrador.map(administrador => administrador.codigo === dataAdministrador.codigo ? dataAdministrador : administrador));
-            setDataAdministrador({ codigo: "",nome: "",cpf: "",login: "",senha: "" });
-            setModalVisible(false);
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar administrador:', error);
-        });
-    };
+      axios.put('http://localhost:3000/administradores', dataAdministrador, {
+          params: { codigo: dataAdministrador.codigo }
+      })
+      .then(response => {
+          axios.get('http://localhost:3000/administradores')
+              .then(response => {
+                  setAdministrador(response.data.administrador); 
+
+                  setModalVisible(false);
+                  Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+              })
+              .catch(error => {
+                  console.error('Erro ao buscar dados atualizados:', error);
+              });
+  
+ 
+          setDataAdministrador({ codigo: "", nome: "", cpf: "", login: "", senha: "" });
+      })
+      .catch(error => {
+          console.error('Erro ao atualizar administrador:', error);
+      });
+  };
+  
 
     const handleDelete = (codigo) => {
         axios.delete('http://localhost:3000/administradores', { params: { codigo } })
@@ -99,7 +110,7 @@ export function VerAdministrador() {
                  setModalVisible(false);
                  setEditingAdministrador(null);
              }}>
-                    <View style={styles.modalOverlay}>
+      <View style={styles.modalOverlay}>
       <View style={styles.modalContent}>
         <View style={styles.ModalHeader}>
           <Text style={styles.ModalTitle}>Editar Administrador</Text>
@@ -110,31 +121,31 @@ export function VerAdministrador() {
              style={styles.input}
               placeholder="Código"
               value={dataAdministrador.codigo}
-              onChangeText={(text) => setFormData({ ...dataAdministrador, codigo: text })}/>
+              onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, codigo: text })}/>
 
             <TextInput 
             style={styles.input} 
             placeholder="Nome"
             value={dataAdministrador.nome}
-            onChangeText={(text) => setFormData({ ...dataAdministrador, nome: text })} />
+            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, nome: text })} />
 
             <TextInput 
             style={styles.input} 
             placeholder="CPF"
             value={dataAdministrador.cpf}
-            onChangeText={(text) => setFormData({ ...dataAdministrador, cpf: text })} />
+            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })} />
 
             <TextInput 
             style={styles.input} 
-            placeholder="LOgin"
+            placeholder="Login"
             value={dataAdministrador.login}
-            onChangeText={(text) => setFormData({ ...dataAdministrador, login: text })} />
+            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, login: text })} />
 
             <TextInput 
             style={styles.input} 
             placeholder="Senha"
             value={dataAdministrador.senha}
-            onChangeText={(text) => setFormData({ ...dataAdministrador, senha: text })} />
+            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, senha: text })} />
 
 
           </View>
@@ -146,8 +157,7 @@ export function VerAdministrador() {
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
-            onPress={() => {setModalVisible(false);
-                            setEditingAlimento(null);}}>
+            onPress={() => {setModalVisible(false)}}>
               <Text style={styles.txtbtns}>Cancelar</Text>
             </TouchableOpacity>
             

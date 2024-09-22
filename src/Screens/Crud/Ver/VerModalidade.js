@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert,TouchableOpacity,TextInput,Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -6,6 +6,13 @@ import axios from 'axios';
 
 export function VerModalidade() {
     const [modalidade, setModalidade] = useState([]);
+    const [editingModalidade, setEditingModalidade] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [dataModalidades, setDataModalidades] = useState({
+        codigo: "",
+        nome: "",
+        descricao: ""
+    })
 
     useEffect(() => {
         axios.get('http://localhost:3000/modalidades')
@@ -16,6 +23,36 @@ export function VerModalidade() {
                 console.error(error);
             });
     }, []);
+
+    const handleEdit = (mod) => {
+        setDataModalidades(mod);
+        setModalidade(modalidade.codigo);
+        setModalVisible(true);
+    };
+
+    const handleUpdate = () => {
+        axios.put('http://localhost:3000/modalidades', dataModalidades, {
+            params: { codigo: dataModalidades.codigo }
+        })
+        .then(response => {
+          axios.get('http://localhost:3000/modalidades')
+          .then(response => {
+              setModalidade(response.data.Modalidades);
+  
+                    setModalVisible(false);
+                    Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados atualizados:', error);
+                });
+    
+   
+            setDataModalidades({codigo: "",nome: "",descricao: "" });
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar modalidades:', error);
+        });
+    };
 
     const handleDelete = (codigo) => {
         axios.delete('http://localhost:3000/modalidades', { params: { codigo } })
@@ -50,7 +87,7 @@ export function VerModalidade() {
                                  <Feather name="trash-2" size={40} color="black" />
                              </TouchableOpacity>
 
-                             <TouchableOpacity>
+                             <TouchableOpacity onPress={() => handleEdit(item)}>
                                  <FontAwesome name="pencil" size={40} color="black" />
                              </TouchableOpacity>
                         </View>
@@ -59,6 +96,59 @@ export function VerModalidade() {
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+             animationType="slide"
+             transparent={true}
+             visible={modalVisible}
+             onRequestClose={() => {
+                 setModalVisible(false);
+                 setEditingModalidade(null);
+             }}>
+      <View style={styles.modalOverlay}>
+      <View style={styles.modalContent}>
+        <View style={styles.ModalHeader}>
+          <Text style={styles.ModalTitle}>Editar Modalidades</Text>
+        </View>
+        <View style={styles.modalBody}>
+          <View style={styles.BoxInputs}>
+            <TextInput
+             style={styles.input}
+              placeholder="Código"
+              value={dataModalidades.codigo}
+              onChangeText={(text) => setDataModalidades({ ...dataModalidades, codigo: text })}/>
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Nome"
+            value={dataModalidades.nome}
+            onChangeText={(text) => setDataModalidades({ ...dataModalidades, nome: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Descrição"
+            value={dataModalidades.descricao}
+            onChangeText={(text) => setDataModalidades({ ...dataModalidades, descricao: text })} />
+
+          </View>
+
+          <View style={styles.btnContainer}>
+
+            <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+              <Text style={styles.txtbtns}>Salvar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
+            onPress={() => {setModalVisible(false)}}>
+              <Text style={styles.txtbtns}>Cancelar</Text>
+            </TouchableOpacity>
+            
+          </View>
+        </View>
+      </View>
+    </View>
+
+            </Modal>
         </View>
     );
 }
@@ -112,4 +202,72 @@ const styles = StyleSheet.create({
         backgroundColor: '#E49413',
         marginVertical: 10,
     },
-});
+    modalOverlay: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+      width: '80%',
+      backgroundColor: '#FFB031',
+      borderRadius: 8,
+      padding: 20,
+      shadowColor: '#000',
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    ModalHeader: {
+      backgroundColor: '#E49413',
+      padding: 15,
+      alignItems: 'center',
+    },
+    modalBody: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    ModalTitle: {
+      fontSize: 20,
+      color: '#000',
+    },
+    BoxInputs: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    input: {
+      width: 250,
+      height: 40,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      backgroundColor: '#E49413',
+      borderRadius: 8,
+      marginVertical: 5,
+      color: '#000',
+    },
+    btnContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: 250,
+    },
+    btns: {
+      width: '48%',
+      padding: 10,
+      borderRadius: 8,
+      marginVertical: 5,
+      alignItems: 'center',
+    },
+    txtbtns: {
+      color: '#000',
+      fontSize: 16,
+    },
+    btnSave: {
+      backgroundColor: '#E49413',
+    },
+    btnCancel: {
+      backgroundColor: '#E49413',
+    },
+  });
+  

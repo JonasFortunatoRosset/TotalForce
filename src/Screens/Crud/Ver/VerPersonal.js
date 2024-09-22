@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList,Alert,TouchableOpacity,Modal,TextInput } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -6,6 +6,16 @@ import axios from 'axios';
 
 export function VerPersonal() {
     const [colaborador, setColaborador] = useState([]);
+    const [editingColaborador, setEditingColaborador] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [dataColaborador, setDataColaborador] = useState({
+        codigo: "",
+        nome: "",
+        cpf: "",
+        endereco: "",
+        cidade: "",
+        senha: ""
+    })
 
     useEffect(() => {
         axios.get('http://localhost:3000/colaboradores')
@@ -16,6 +26,36 @@ export function VerPersonal() {
                 console.error(error);
             });
     }, []);
+
+    const handleEdit = (col) => {
+        setDataColaborador(col);
+        setColaborador(colaborador.codigo);
+        setModalVisible(true);
+    };
+
+    const handleUpdate = () => {
+      axios.put('http://localhost:3000/colaboradores', dataColaborador, {
+          params: { codigo: dataColaborador.codigo }
+      })
+      .then(response => {
+          axios.get('http://localhost:3000/colaboradores')
+              .then(response => {
+                  setColaborador(response.data.colaborador); 
+
+                  setModalVisible(false);
+                  Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+              })
+              .catch(error => {
+                  console.error('Erro ao buscar dados atualizados:', error);
+              });
+  
+ 
+          setDataColaborador({codigo: "",nome: "",cpf: "",endereco: "",cidade: "",senha: "" });
+      })
+      .catch(error => {
+          console.error('Erro ao atualizar colaboradores:', error);
+      });
+  };
 
     const handleDelete = (codigo) => {
         axios.delete('http://localhost:3000/colaboradores', { params: { codigo } })
@@ -53,7 +93,7 @@ export function VerPersonal() {
                                  <Feather name="trash-2" size={40} color="black" />
                              </TouchableOpacity>
 
-                             <TouchableOpacity>
+                             <TouchableOpacity onPress={() => handleEdit(item)}>
                                  <FontAwesome name="pencil" size={40} color="black" />
                              </TouchableOpacity>
                         </View>
@@ -62,6 +102,78 @@ export function VerPersonal() {
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+             animationType="slide"
+             transparent={true}
+             visible={modalVisible}
+             onRequestClose={() => {
+                 setModalVisible(false);
+                 setEditingColaborador(null);
+             }}>
+      <View style={styles.modalOverlay}>
+      <View style={styles.modalContent}>
+        <View style={styles.ModalHeader}>
+          <Text style={styles.ModalTitle}>Editar Colaborador</Text>
+        </View>
+        <View style={styles.modalBody}>
+          <View style={styles.BoxInputs}>
+            <TextInput
+             style={styles.input}
+              placeholder="Código"
+              value={dataColaborador.codigo}
+              onChangeText={(text) => setDataColaborador({ ...dataColaborador, codigo: text })}/>
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Nome"
+            value={dataColaborador.nome}
+            onChangeText={(text) => setDataColaborador({ ...dataColaborador, nome: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="CPF"
+            value={dataColaborador.cpf}
+            onChangeText={(text) => setDataColaborador({ ...dataColaborador, cpf: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Endereço"
+            value={dataColaborador.endereco}
+            onChangeText={(text) => setDataColaborador({ ...dataColaborador, endereco: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Cidade"
+            value={dataColaborador.cidade}
+            onChangeText={(text) => setDataColaborador({ ...dataColaborador, cidade: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Senha"
+            value={dataColaborador.senha}
+            onChangeText={(text) => setDataColaborador({ ...dataColaborador, senha: text })} />
+
+
+          </View>
+
+          <View style={styles.btnContainer}>
+
+            <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+              <Text style={styles.txtbtns}>Salvar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
+            onPress={() => {setModalVisible(false)}}>
+              <Text style={styles.txtbtns}>Cancelar</Text>
+            </TouchableOpacity>
+            
+          </View>
+        </View>
+      </View>
+    </View>
+
+            </Modal>
         </View>
     );
 }
@@ -115,4 +227,71 @@ const styles = StyleSheet.create({
         backgroundColor: '#E49413',
         marginVertical: 10,
     },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        width: '80%',
+        backgroundColor: '#FFB031',
+        borderRadius: 8,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      ModalHeader: {
+        backgroundColor: '#E49413',
+        padding: 15,
+        alignItems: 'center', 
+      },
+      modalBody: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+      },
+      ModalTitle: {
+        fontSize: 20,
+        color: '#000',
+      },
+      BoxInputs: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      input: {
+        width: 250,
+        height: 40,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#E49413',
+        borderRadius: 8,
+        marginVertical: 5,
+        color: '#000',
+      },
+      btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 250, 
+      },
+      btns: {
+        width: '48%', 
+        padding: 10,
+        borderRadius: 8,
+        marginVertical: 5,
+        alignItems: 'center',
+      },
+      txtbtns: {
+        color: '#000',
+        fontSize: 16,
+      },
+      btnSave: {
+        backgroundColor: '#E49413',
+      },
+      btnCancel: {
+        backgroundColor: '#E49413',
+      },
 });

@@ -29,7 +29,7 @@ export function LoginPage({navigation}) {
       navigation.navigate('HomePage')
     }
     else if(entrar === 'adm' && password === '123' && Click === 3){
-      navigation.navigate('LoginAdmPage')
+      navigation.navigate('HomeAdmPage')
     }
 
     else{

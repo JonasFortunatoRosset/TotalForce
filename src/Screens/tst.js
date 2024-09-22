@@ -22,35 +22,41 @@ export function Teste() {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.ModalHeader}>
-              <Text style={styles.ModalTitle}>Editar Administrador</Text>
-            </View>
-            <View style={styles.modalBody}>
-              <View style={styles.BoxInputs}>
-                <TextInput style={styles.input} placeholder="Nome" />
-                <TextInput style={styles.input} placeholder="Nome" />
-                <TextInput style={styles.input} placeholder="Nome" />
-                <TextInput style={styles.input} placeholder="Nome" />
-                <TextInput style={styles.input} placeholder="Nome" />
-                <TextInput style={styles.input} placeholder="Nome" />
-              </View>
+      <View style={styles.modalContent}>
+        <View style={styles.ModalHeader}>
+          <Text style={styles.ModalTitle}>Editar Modalidades</Text>
+        </View>
+        <View style={styles.modalBody}>
+          <View style={styles.BoxInputs}>
+            <TextInput
+             style={styles.input}
+              placeholder="Código"/>
 
-              {/* Botões do modal */}
-              <View style={styles.btnContainer}>
-                <TouchableOpacity style={[styles.btns, styles.btnSave]}>
-                  <Text style={styles.txtbtns}>Salvar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.btns, styles.btnCancel]}
-                  onPress={() => setModalVisible(false)} // Fecha o modal
-                >
-                  <Text style={styles.txtbtns}>Cancelar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <TextInput 
+            style={styles.input} 
+            placeholder="Nome" />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Descrição"
+ />
+
+          </View>
+
+          <View style={styles.btnContainer}>
+
+            <TouchableOpacity style={[styles.btns, styles.btnSave]} >
+              <Text style={styles.txtbtns}>Salvar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.btns, styles.btnCancel]}>
+              <Text style={styles.txtbtns}>Cancelar</Text>
+            </TouchableOpacity>
+            
           </View>
         </View>
+      </View>
+    </View>
       </Modal>
     </View>
   );
