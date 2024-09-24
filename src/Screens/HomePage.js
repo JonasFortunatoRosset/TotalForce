@@ -1,19 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import totalforcelogo from './Images/totalforcelogo.png'
 import dumbel from './Images/dumbel.png';
 import nutricao from './Images/nutricao.png';
 import configuracao from './Images/configuracao.png';
-import pagamento from './Images/pagamento.png';
 
 export function HomePage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <EvilIcons name="user" size={60} color="black" />
+        <EvilIcons name="user" size={60} color="black"/>
       </View>
       <View style={styles.body}>
         <View style={styles.line1}>
@@ -40,10 +40,10 @@ export function HomePage({navigation}) {
           </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'}>
+          <TouchableHighlight onPress={() => navigation.navigate('GoalsPage')} underlayColor={'#855200'}>
           <View style={styles.box}>
-            <Text style={styles.boxText}></Text>
-            <Image style={styles.boxImagePagamento} />
+            <Text style={styles.boxText}>Metas</Text>
+            <MaterialCommunityIcons name="checkbox-multiple-marked-outline" size={125} color="black" />
           </View>
           </TouchableHighlight>
         </View>

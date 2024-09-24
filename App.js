@@ -8,7 +8,7 @@ import { HomePage }    from './src/Screens/HomePage';
 import { HomeAdmPage } from './src/Screens/HomeAdmPage';
 import { TrainPage }   from './src/Screens/TrainPage';
 import { ConfigPage }  from './src/Screens/ConfigPage';
-import { PaymentPage } from './src/Screens/PaymentPage';
+import { GoalsPage } from './src/Screens/GoalsPage';
 import {NutricaoPage}  from './src/Screens/NutricaoPage';
 
 // importação de telas de cadastro
@@ -38,13 +38,13 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Teste'>
+      <Stack.Navigator initialRouteName='GoalsPage'>
         <Stack.Screen name="LoginPage"     component={LoginPage}></Stack.Screen>
-        <Stack.Screen name="HomeAdmPage"  component={HomeAdmPage}></Stack.Screen>
+        <Stack.Screen name="HomeAdmPage"   component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomePage"      component={HomePage}></Stack.Screen>
         <Stack.Screen name="TrainPage"     component={TrainPage}></Stack.Screen>
         <Stack.Screen name="ConfigPage"    component={ConfigPage}></Stack.Screen>
-        <Stack.Screen name="PaymentPage"   component={PaymentPage}></Stack.Screen>
+        <Stack.Screen name="GoalsPage"     component={GoalsPage}></Stack.Screen>
         <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
         <Stack.Screen name="VerGeral"      component={VerGeral}></Stack.Screen>

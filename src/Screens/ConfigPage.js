@@ -6,7 +6,7 @@ export  function ConfigPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-       <TouchableHighlight style={styles.seta} onPress={() => navigation.navigate('HomePage')} underlayColor={false}>
+       <TouchableHighlight style={styles.seta}  onPress={() => navigation.navigate('HomePage')} underlayColor={null}>
         <AntDesign name="arrowleft" size={30} color="black"/>
        </TouchableHighlight>  
       

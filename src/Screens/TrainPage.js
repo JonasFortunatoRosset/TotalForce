@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export function TrainPage(navigation) {
+export function TrainPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableHighlight style={styles.seta}  onPress={() => navigation.navigate('HomePage')} >
+        <TouchableHighlight style={styles.seta}  underlayColor={null}  onPress={() => navigation.navigate('HomePage')} >
           <AntDesign  name="arrowleft" size={30} color="black"/>
        </TouchableHighlight>
        <View>
@@ -14,35 +14,28 @@ export function TrainPage(navigation) {
       </View>
       <View style={styles.body}>
         <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+          <Text style={styles.txtnovotreino}> Costas </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        <TouchableOpacity  style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}> Peito </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        <TouchableOpacity  style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}> Triceps </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        <TouchableOpacity  style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}> Biceps </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        <TouchableOpacity  style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}> Ombro </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
+        <TouchableOpacity  style={styles.boxnovotreino}>
+          <Text style={styles.txtnovotreino}> Perna </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.boxnovotreino}>
-          <Text style={styles.txtnovotreino}>Novo Treino</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.txtfooter}> Navegação entre telas </Text>
       </View>
     </View>
   );
