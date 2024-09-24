@@ -1,6 +1,7 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert, Pressable } from 'react-native';
 import axios from 'axios';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import personal from        './Images/personal.png';
 import user from            './Images/user.png';
@@ -8,9 +9,6 @@ import adm from             './Images/adm.png';
 import totalforcelogo from  './Images/totalforcelogo.png';
 
 export function LoginPage({navigation}) {
-
-  const[entrar,setEntrar] = useState('')
-  const[password,setPassword] = useState('')
   
   const [Click, setClick] = useState(null); 
 
@@ -19,17 +17,94 @@ export function LoginPage({navigation}) {
   };
 
 
+  const loginUsuario = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/loginusuarios', {
+        cpf: dados.cpf,
+        senha: dados.senha
+      });
+      
+      setDados({
+        cpf: "",
+        senha: "",
+      });
+      if (response) {
+        const token  = response.data.token;
+        console.log(response)
+        await AsyncStorage.setItem('token', token);
+
+        Alert.alert("Login efetuado com sucesso")
+        navigation.navigate('HomePage');      
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Credenciais incorretas!");
+      console.error(error);
+    }
+  };
+
+
+  const loginAdministrador = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/loginadministradores', {
+        cpf: dados.cpf,
+        senha: dados.senha
+      });
+      
+      setDados({
+        cpf: "",
+        senha: "",
+      });
+      if (response) {
+        const token  = response.data.token;
+        console.log(response)
+        await AsyncStorage.setItem('token', token);
+
+        Alert.alert("Login efetuado com sucesso")
+        navigation.navigate('LoginAdmPage')
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Credenciais incorretas!");
+      console.error(error);
+    }
+  };
+
+
+  const loginColaborador = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/logincolaboradores', {
+        cpf: dados.cpf,
+        senha: dados.senha
+      });
+      
+      setDados({
+        cpf: "",
+        senha: "",
+      });
+      if (response) {
+        const token  = response.data.token;
+        console.log(response)
+        await AsyncStorage.setItem('token', token);
+
+        Alert.alert("Login efetuado com sucesso")
+        navigation.navigate('LoginAdmPage')
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Credenciais incorretas!");
+      console.error(error);
+    }
+  };
+
 
   function Acess(){
 
-    if(entrar === 'user' && password === '123' && Click === 1){
-      navigation.navigate('HomePage')
+    if(Click === 1){
+      loginUsuario()
     }
-     else if(entrar === 'personal' && password === '123' && Click === 2){
-      navigation.navigate('HomePage')
+     else if(Click === 2){
+      loginColaborador()
     }
-    else if(entrar === 'adm' && password === '123' && Click === 3){
-      navigation.navigate('HomeAdmPage')
+    else if(Click === 3){
+      loginAdministrador()
     }
 
     else{
@@ -37,37 +112,10 @@ export function LoginPage({navigation}) {
     }
   }
 
-  const [usuario, setUsuario] = useState({
+  const [dados, setDados] = useState({
     cpf: "",
     senha: ""
   });
-  
-  const login = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/loginusuarios', {
-        cpf: usuario.cpf,
-        senha: usuario.senha
-      });
-      
-      setUsuario({
-        cpf: "",
-        senha: "",
-      });
-  
-      if (response.data && response.data.token) {
-        const { token } = response.data;
-        
-        await AsyncStorage.setItem('token', token);
-  
-        navigation.navigate('HomePage');
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Credenciais incorretas!");
-      console.error(error);
-    }
-  };
-  
-      
     
 
   return(
@@ -114,15 +162,15 @@ export function LoginPage({navigation}) {
           style={styles.inputs} 
           placeholder='Login' 
           placeholderTextColor={'#000'} 
-          value={entrar}
-          onChangeText={setEntrar}/>
+          value={dados.cpf}
+            onChangeText={(text) => setDados({...dados, cpf: text})}/>
 
          <TextInput 
          style={styles.inputs}
           placeholder='Senha' 
           placeholderTextColor={'#000'} 
-          value={password}
-          onChangeText={setPassword}
+          value={dados.senha}
+          onChangeText={(text) => setDados({...dados, senha: text})}
           secureTextEntry={true}/>
 
          <TouchableOpacity onPress={Acess} style={styles.boxbtnacess}>
@@ -223,4 +271,3 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
 });
- 
