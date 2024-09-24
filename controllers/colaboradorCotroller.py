@@ -28,9 +28,23 @@ def colaboradorController():
             return 'Não foi possível buscar colaboradores. Error: {}'.format(str(e)), 405
     
     elif request.method == 'PUT':
+        def verify_password(dados, colaborador_banco):
+            senha = dados['senha']
+            senha_banco = colaborador_banco.senha
+            if bcrypt.checkpw(senha.encode(), senha_banco.encode()) or dados['senha'] == colaborador_banco.senha:
+                return
+            else:
+                senha_byte = senha.encode('utf-8')
+                sal = bcrypt.gensalt()
+                senha_hash = bcrypt.hashpw(senha_byte, sal)
+                colaborador_banco.senha    = senha_hash
+                return
+            
+
         try:
             data = request.get_json() # coletar os dados novos
             put_colaborador_id = data.get('codigo')
+            senha = data['senha']
             put_colaborador = Colaborador.query.get(put_colaborador_id)
             if put_colaborador is None:
                 return {'error': 'Colaborador não encontrado'}, 404
@@ -38,7 +52,7 @@ def colaboradorController():
             put_colaborador.cpf = data.get('cpf', put_colaborador.cpf)
             put_colaborador.endereco = data.get('endereco', put_colaborador.endereco)
             put_colaborador.cidade = data.get('cidade', put_colaborador.cidade)
-            put_colaborador.senha = data.get('senha', put_colaborador.senha)
+            verify_password(data, put_colaborador)
             db.session.commit()
             return 'Colaborador alterado com sucesso', 200
         except Exception as e:

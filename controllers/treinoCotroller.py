@@ -2,6 +2,7 @@ from flask import request, jsonify
 from database.db import db
 from models.treino import Treino
 
+
 def treinoController():
     if request.method == 'POST':
         try:

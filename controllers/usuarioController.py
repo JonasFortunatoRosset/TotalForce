@@ -28,6 +28,19 @@ def usuariosController():
     
     
     elif request.method == 'PUT':
+        def verify_password(dados, usuario_banco):
+            senha = dados['senha']
+            senha_banco = usuario_banco.senha
+            if bcrypt.checkpw(senha.encode(), senha_banco.encode()) or dados['senha'] == usuario_banco.senha:
+                return
+            else:
+                senha_byte = senha.encode('utf-8')
+                sal = bcrypt.gensalt()
+                senha_hash = bcrypt.hashpw(senha_byte, sal)
+                usuario_banco.senha    = senha_hash
+                return
+
+
         try:
             data           = request.get_json() # Resposta enviada do front
             print(data)
@@ -39,7 +52,7 @@ def usuariosController():
             put_usuario.cpf      = data.get('cpf', put_usuario.cpf)
             put_usuario.endereco = data.get('endereco', put_usuario.endereco)
             put_usuario.cidade   = data.get('cidade', put_usuario.cidade)
-            put_usuario.senha    = data.get('senha', put_usuario.senha)
+            verify_password(data, put_usuario)
             put_usuario.peso     = data.get('peso', put_usuario.peso)
             put_usuario.altura   = data.get('altura', put_usuario.altura)
             db.session.commit()
