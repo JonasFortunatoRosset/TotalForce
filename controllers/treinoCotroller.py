@@ -24,23 +24,24 @@ def treinoController():
     elif request.method == 'PUT':
         try:
             data = request.get_json()
+            print(data)
             put_treino_id = data['codigo']
             put_treino = Treino.query.get(put_treino_id)
             if put_treino is None:
-                return {'Treino não encontrado'}
-            put_treino.nome          = data('nome', put_treino.nome)
-            put_treino.descricao     = data('descricao', put_treino.descricao)
-            put_treino.codusuario    = data('codusuario', put_treino.codusuario)
-            put_treino.propriedade   = data('propriedade', put_treino.propriedade)
-            put_treino.codmodalidade = data('codmodalidade', put_treino.codmodalidade)
+                return jsonify({'error': 'Treino não encontrado'}), 404
+            put_treino.nome          = data.get('nome', put_treino.nome)
+            put_treino.descricao     = data.get('descricao', put_treino.descricao)
+            put_treino.codusuario    = data.get('codusuario', put_treino.codusuario)
+            put_treino.propriedade   = data.get('propriedade', put_treino.propriedade)
+            put_treino.codmodalidade = data.get('codmodalidade', put_treino.codmodalidade)
             db.session.commit()
-            return {'Treino alterado com sucesso'}, 200
+            return jsonify({'message': 'Treino alterado com sucesso'}), 200
         except Exception as e:
-            return {'error': 'Erro ao alterar treino'.format(e)}, 400
+            return jsonify({'error': f'Erro ao alterar treino: {str(e)}'}), 400
     
     elif request.method == 'DELETE':
         try:
-            codigo = request.get.args('codigo')
+            codigo = request.args.get('codigo')
             delete_treino = Treino.query.get(codigo)
             if delete_treino is None:
                 return {'error': 'Treino inexistente'}, 404

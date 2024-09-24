@@ -4,8 +4,24 @@ meta {
   seq: 2
 }
 
-post {
+delete {
   url: http://localhost:3000/usuarios
   body: none
   auth: none
+}
+
+script:pre-request {
+  [
+      {
+        "codigo": 2
+      }, 
+  ]
+}
+
+tests {
+  [
+      {
+        "codigo": 2
+      }
+  ]
 }

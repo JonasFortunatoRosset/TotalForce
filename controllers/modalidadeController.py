@@ -32,7 +32,7 @@ def modalidadeController():
             put_modalidade.nome      = data.get('nome', put_modalidade.nome)
             put_modalidade.descricao = data.get('descricao', put_modalidade.descricao)
             db.session.commit()
-            return {'Modalidade alterada com sucesso'}, 200
+            return {'message': 'Modalidade alterada com sucesso'}, 200
         except Exception as e:
             return {'error': 'Erro ao alterar modalidade. Errror{}'.format(e)}, 400
 

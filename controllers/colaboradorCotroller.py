@@ -8,7 +8,11 @@ def colaboradorController():
     if request.method == 'POST':
         try:
             data = request.get_json() # Converte os dados enviados pelo cliente em formato json para um dicionário python NOME CPF ENDERECO CIDADE SENHA
-            colaborador = Colaborador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=data['senha'])
+            senha = data['senha']
+            senha_byte = senha.encode('utf-8')
+            sal = bcrypt.gensalt()
+            senha_hash = bcrypt.hashpw(senha_byte, sal)
+            colaborador = Colaborador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=senha_hash)
             db.session.add(colaborador) # Executa o código sql no banco
             db.session.commit()
             return ({'message': 'Colaborador novo inserido com sucesso'}), 200
@@ -26,7 +30,7 @@ def colaboradorController():
     elif request.method == 'PUT':
         try:
             data = request.get_json() # coletar os dados novos
-            put_colaborador_id = data['codigo']
+            put_colaborador_id = data.get('codigo')
             put_colaborador = Colaborador.query.get(put_colaborador_id)
             if put_colaborador is None:
                 return {'error': 'Colaborador não encontrado'}, 404

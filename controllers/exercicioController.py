@@ -18,6 +18,7 @@ def exercicioController():
         try:
             data = Exercicio.query.all()
             exercicios = {'Exercicio': [exercicio.to_dict() for exercicio in data]}
+            print(exercicios)
             return exercicios
         except Exception as e:
             return 'Não foi possível buscar usuários. Error: {}'.format(str(e)), 405

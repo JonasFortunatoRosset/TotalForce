@@ -8,7 +8,11 @@ def administradorController():
     if request.method == 'POST':
         try:
             data = request.get_json() # nome cpf login senha
-            administrador = Administrador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],login=data['login'],senha=data['senha'])
+            senha = data['senha']
+            senha_byte = senha.encode('utf-8')
+            sal = bcrypt.gensalt()
+            senha_hash = bcrypt.hashpw(senha_byte, sal)
+            administrador = Administrador(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],login=data['login'],senha=senha_hash)
             db.session.add(administrador)
             db.session.commit()
             return ({'message' : 'Administrador inserido com sucesso'})
@@ -45,7 +49,7 @@ def administradorController():
             delete_administrador = Administrador.query.get(codigo)
             if delete_administrador is None:
                 return {'Administrador': 'Administrador inexistente'}, 404
-            db.session.delete(codigo)
+            db.session.delete(delete_administrador)
             db.session.commit()
             return 'Administrador deletado com sucesso'
         except Exception as e:
