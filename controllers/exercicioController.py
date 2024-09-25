@@ -7,7 +7,7 @@ def exercicioController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],codtreino=data['codtreino'])
+            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],gif=data['gif'],codtreino=data['codtreino'])
             db.session.add(exercicio)
             db.session.commit()
             return ({'message': 'Exercio novo inserido com sucesso'}), 200
@@ -21,7 +21,7 @@ def exercicioController():
             print(exercicios)
             return exercicios
         except Exception as e:
-            return 'Não foi possível buscar usuários. Error: {}'.format(str(e)), 405
+            return 'Não foi possível buscar exercício. Error: {}'.format(str(e)), 405
         
     elif request.method == 'PUT':
         try:
@@ -32,9 +32,10 @@ def exercicioController():
                 return {'error': 'Exercicio não encontrado'}
             put_exercicio.nome = data.get('nome', put_exercicio.nome)
             put_exercicio.descricao = data.get('descricao', put_exercicio.descricao)
+            put_exercicio.gif = data.get('gif', put_exercicio.gif)
             put_exercicio.codtreino = data.get('codtreino', put_exercicio.codtreino)
             db.session.commit()
-            return 'Colaborador alterado com sucesso', 200
+            return 'Exercício alterado com sucesso', 200
         except Exception as e:
             return {'error': 'Erro ao atualizar os dados do exercicio. Erro{}'.format(e)}, 400
 

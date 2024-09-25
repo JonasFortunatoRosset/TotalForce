@@ -12,7 +12,7 @@ def treinoController():
             db.session.commit()
             return jsonify({'message': 'Treino cadastrado com sucesso'}),200
         except Exception as e:
-            return jsonify({'error': 'Erro ao inserir nova modalidade. Erro: {}'.format(str(e))}), 400
+            return jsonify({'error': 'Erro ao inserir novo treino. Erro: {}'.format(str(e))}), 400
     
     elif request.method == 'GET':
         try:
@@ -20,7 +20,7 @@ def treinoController():
             treinos = {'Treino' : [treino.to_dict() for treino in data]}
             return treinos
         except Exception as e:
-                return 'Não foi possível buscar algum treino. Error: {}'.format(str(e)), 405
+                return 'Não foi possível buscar treino. Error: {}'.format(str(e)), 405
     
     elif request.method == 'PUT':
         try:

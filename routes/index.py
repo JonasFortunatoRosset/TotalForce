@@ -9,6 +9,10 @@ from routes.loginAdministradorRoute import loginadministradores
 from routes.loginColaboradorRoute import logincolaboradores
 from routes.loginAdministradorRoute import loginadministradores
 from routes.loginColaboradorRoute import logincolaboradores
+from routes.pesquisartreinos import pesquisartreinos
+from routes.validarTokenRoute import validartokens
+from routes.invalidartoken import invalidartokens
+
 
 def default_routes(app):
     usuarios(app)
@@ -20,3 +24,6 @@ def default_routes(app):
     loginusuarios(app)
     loginadministradores(app)
     logincolaboradores(app)
+    pesquisartreinos(app)
+    validartokens(app)
+    invalidartokens(app)

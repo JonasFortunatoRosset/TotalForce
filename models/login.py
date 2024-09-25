@@ -5,18 +5,15 @@ class Login(db.Model):
     def to_dict(self):
 
         return{
-            'codigo':    self.codigo,
             'token':      self.token,
             'chave_secreta': self.chave_secreta
         }
-    
-    codigo    = db.Column(db.Integer, primary_key=True, unique=True, nullable=True) 
-    token      = db.Column(db.String(512))
+
+
+    token      = db.Column(db.String(512), primary_key=True, unique=True, nullable=True)
     chave_secreta = db.Column(db.String(100))
 
 
-
-    def __init__(self,codigo,token,chave_secreta):
-        self.codigo    = codigo
+    def __init__(self,token,chave_secreta):
         self.token      = token
         self.chave_secreta = chave_secreta

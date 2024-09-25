@@ -41,7 +41,7 @@ def modalidadeController():
             codigo = request.args.get('codigo')
             delete_modalidade = Modalidade.query.get(codigo)
             if delete_modalidade is None:
-                return {'Treino': 'treino inexistente'}, 404
+                return jsonify({'Modalidade': 'modalidade inexistente'}), 404
             db.session.delete(delete_modalidade)
             db.session.commit()
             return 'Modalidade deletada com sucesso'

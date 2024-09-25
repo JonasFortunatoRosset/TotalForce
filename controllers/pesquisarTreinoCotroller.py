@@ -11,5 +11,5 @@ def pesquisarTreinoController():
         treinos_dict = {'Treinos': [treino.to_dict() for treino in treino]}
         return treinos_dict
     except Exception as e:
-        return 'Não foi possível buscar algum treino. Error: {}'.format(str(e)), 405
+        return 'Não foi possível buscar treino. Error: {}'.format(str(e)), 405
     
