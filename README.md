@@ -1,7 +1,7 @@
 # Front end
 Trabalho de conclusão de curso(TCC) - curso técnico em informática
 
-# executar o código
+# Executar o código
 npx expo start
 
 # Baixar Stack navigation
