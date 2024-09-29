@@ -86,7 +86,7 @@ export function LoginPage({navigation}) {
         await AsyncStorage.setItem('token', token);
 
         Alert.alert("Login efetuado com sucesso")
-        navigation.navigate('LoginAdmPage')
+        navigation.navigate('HomeColaboradorPage')
       }
     } catch (error) {
       Alert.alert("Erro", "Credenciais incorretas!");

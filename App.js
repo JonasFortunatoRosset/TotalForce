@@ -3,13 +3,14 @@ import { createStackNavigator }   from '@react-navigation/stack';
 import { NavigationContainer }    from '@react-navigation/native';
   
 // Importação das páginas
-import { LoginPage }   from './src/Screens/LoginPage';
-import { HomePage }    from './src/Screens/HomePage';
-import { HomeAdmPage } from './src/Screens/HomeAdmPage';
-import { TrainPage }   from './src/Screens/TrainPage';
-import { ConfigPage }  from './src/Screens/ConfigPage';
-import { GoalsPage } from './src/Screens/GoalsPage';
-import {NutricaoPage}  from './src/Screens/NutricaoPage';
+import { LoginPage }           from './src/Screens/LoginPage';
+import { HomePage }            from './src/Screens/HomePage';
+import { HomeColaboradorPage } from './src/Screens/HomeColaboradorPage';
+import { HomeAdmPage }         from './src/Screens/HomeAdmPage';
+import { TrainPage }           from './src/Screens/TrainPage';
+import { ConfigPage }          from './src/Screens/ConfigPage';
+import { GoalsPage }           from './src/Screens/GoalsPage';
+import {NutricaoPage}          from './src/Screens/NutricaoPage';
 
 // importação de telas de cadastro
 import {CadastroGeral}         from './src/Screens/Crud/Cadastros/cadastrosGerais';
@@ -38,16 +39,17 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='LoginPage'>
-        <Stack.Screen name="LoginPage"     component={LoginPage}></Stack.Screen>
-        <Stack.Screen name="HomeAdmPage"   component={HomeAdmPage}></Stack.Screen>
-        <Stack.Screen name="HomePage"      component={HomePage}></Stack.Screen>
-        <Stack.Screen name="TrainPage"     component={TrainPage}></Stack.Screen>
-        <Stack.Screen name="ConfigPage"    component={ConfigPage}></Stack.Screen>
-        <Stack.Screen name="GoalsPage"     component={GoalsPage}></Stack.Screen>
-        <Stack.Screen name="NutricaoPage"  component={NutricaoPage}></Stack.Screen>
-        <Stack.Screen name="CadastroGeral" component={CadastroGeral}></Stack.Screen>
-        <Stack.Screen name="VerGeral"      component={VerGeral}></Stack.Screen>
+      <Stack.Navigator initialRouteName='HomeColaboradorPage'>
+        <Stack.Screen name="LoginPage"            component={LoginPage}></Stack.Screen>
+        <Stack.Screen name="HomeAdmPage"          component={HomeAdmPage}></Stack.Screen>
+        <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>
+        <Stack.Screen name="HomePage"             component={HomePage}></Stack.Screen>
+        <Stack.Screen name="TrainPage"            component={TrainPage}></Stack.Screen>
+        <Stack.Screen name="ConfigPage"           component={ConfigPage}></Stack.Screen>
+        <Stack.Screen name="GoalsPage"            component={GoalsPage}></Stack.Screen>
+        <Stack.Screen name="NutricaoPage"         component={NutricaoPage}></Stack.Screen>
+        <Stack.Screen name="CadastroGeral"        component={CadastroGeral}></Stack.Screen>
+        <Stack.Screen name="VerGeral"             component={VerGeral}></Stack.Screen>
 
         <Stack.Screen name="Teste"  component={Teste}></Stack.Screen>
         
