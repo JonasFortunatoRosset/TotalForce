@@ -1,47 +1,95 @@
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, TouchableHighlight, Modal, Platform } from 'react-native';
+import { useState, useEffect } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from '@expo/vector-icons/Feather';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export function GoalsPage({ navigation }) {
-
   const [modalVisible, setModalVisible] = useState(false);
   const [goals, setGoals] = useState([]);
   const [newTitle, setNewTitle] = useState('');
   const [newLoad, setNewLoad] = useState('');
-  const [newStartDate, setNewStartDate] = useState('');
-  const [newEndDate, setNewEndDate] = useState('');
+  const [newStartDate, setNewStartDate] = useState(new Date());
+  const [newEndDate, setNewEndDate] = useState(new Date());
+
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
+  const saveGoalsToStorage = async (goals) => {
+    try {
+      const jsonValue = JSON.stringify(goals);
+      await AsyncStorage.setItem('@goals', jsonValue);
+    } catch (e) {
+      console.error('Erro ao salvar as metas:', e);
+    }
+  };
+
+  const loadGoalsFromStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@goals');
+      if (jsonValue != null) {
+        setGoals(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      console.error('Erro ao carregar as metas:', e);
+    }
+  };
+
+  useEffect(() => {
+    loadGoalsFromStorage();
+  }, []);
+
+  const onChangeStartDate = (event, selectedDate) => {
+    const currentDate = selectedDate || newStartDate;
+    setShowStartPicker(false);
+    setNewStartDate(currentDate);
+  };
+
+  const onChangeEndDate = (event, selectedDate) => {
+    const currentDate = selectedDate || newEndDate;
+    setShowEndPicker(false);
+    setNewEndDate(currentDate);
+  };
 
   const toggleCompleted = (id) => {
-    setGoals(prevGoals =>
-      prevGoals.map(goal =>
-        goal.id === id ? { ...goal, completed: !goal.completed } : goal
-      )
+    const updatedGoals = goals.map(goal =>
+      goal.id === id ? { ...goal, completed: !goal.completed } : goal
     );
+    setGoals(updatedGoals);
+    saveGoalsToStorage(updatedGoals); 
   };
 
   const addNewGoal = () => {
     if (newTitle && newLoad && newStartDate && newEndDate) {
+
+      const formattedStartDate = newStartDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+      const formattedEndDate = newEndDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+
       const newGoal = {
         id: goals.length + 1,
         title: `${newLoad} Kg ${newTitle}`,
-        date: `${newStartDate} até ${newEndDate}`,
+        date: `${formattedStartDate} até ${formattedEndDate}`,
         completed: false,
       };
-      setGoals([...goals, newGoal]);
+      const updatedGoals = [...goals, newGoal];
+      setGoals(updatedGoals);
+      saveGoalsToStorage(updatedGoals); 
       setModalVisible(false);
       setNewTitle('');
       setNewLoad('');
-      setNewStartDate('');
-      setNewEndDate('');
+      setNewStartDate(new Date());
+      setNewEndDate(new Date());
     } else {
       alert("Preencha todos os campos");
     }
   };
 
   const deleteGoal = (id) => {
-    setGoals(prevGoals => prevGoals.filter(goal => goal.id !== id));
+    const updatedGoals = goals.filter(goal => goal.id !== id);
+    setGoals(updatedGoals);
+    saveGoalsToStorage(updatedGoals); 
   };
 
   return (
@@ -108,18 +156,46 @@ export function GoalsPage({ navigation }) {
                   value={newLoad}
                   onChangeText={setNewLoad}
                 />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Data inicial"
-                  value={newStartDate}
-                  onChangeText={setNewStartDate}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Data final"
-                  value={newEndDate}
-                  onChangeText={setNewEndDate}
-                />
+
+                <View style={styles.dateInputContainer}>
+                  <TextInput
+                    style={styles.inputText}
+                    value={newStartDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                    editable={false}
+                  />
+                  <TouchableOpacity onPress={() => setShowStartPicker(true)} style={styles.calendarButton}>
+                    <Feather name="calendar" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+
+                {showStartPicker && (
+                  <DateTimePicker
+                    value={newStartDate}
+                    mode="date"
+                    display="default"
+                    onChange={onChangeStartDate}
+                  />
+                )}
+
+                <View style={styles.dateInputContainer}>
+                  <TextInput
+                    style={styles.inputText}
+                    value={newEndDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                    editable={false}
+                  />
+                  <TouchableOpacity onPress={() => setShowEndPicker(true)} style={styles.calendarButton}>
+                    <Feather name="calendar" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+
+                {showEndPicker && (
+                  <DateTimePicker
+                    value={newEndDate}
+                    mode="date"
+                    display="default"
+                    onChange={onChangeEndDate}
+                  />
+                )}
               </View>
 
               <View style={styles.btnContainer}>
@@ -127,7 +203,13 @@ export function GoalsPage({ navigation }) {
                   <Text style={styles.txtbtns}>Salvar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => setModalVisible(false)}>
+                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => {
+                  setModalVisible(false);
+                  setNewTitle('');       
+                  setNewLoad('');        
+                  setNewStartDate(new Date());    
+                  setNewEndDate(new Date());     
+                }}>
                   <Text style={styles.txtbtns}>Cancelar</Text>
                 </TouchableOpacity>
               </View>
@@ -135,7 +217,6 @@ export function GoalsPage({ navigation }) {
           </View>
         </View>
       </Modal>
-
     </ScrollView>
   );
 }
@@ -264,4 +345,22 @@ const styles = StyleSheet.create({
   btnCancel: {
     backgroundColor: '#E49413',
   },
+   dateInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E49413',
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 5,
+    justifyContent: 'space-between',
+    width: 250,
+  },
+  inputText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  calendarButton: {
+    marginLeft: 10,
+  },
 });
+
