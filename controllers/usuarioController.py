@@ -11,7 +11,7 @@ def usuariosController():
             senha_byte = senha.encode('utf-8')
             sal = bcrypt.gensalt()
             senha_hash = bcrypt.hashpw(senha_byte,sal) 
-            usuario = Usuario(codigo=data['codigo'],nome=data['nome'],cpf=data['cpf'],endereco=data['endereco'],cidade=data['cidade'],senha=senha_hash,peso=data['peso'],altura=data['altura'])
+            usuario = Usuario(cpf=data['cpf'],nome=data['nome'],endereco=data['endereco'],senha=senha_hash,peso=data['peso'],altura=data['altura'],status=data['status'])
             db.session.add(usuario)
             db.session.commit()
             return jsonify({'message': 'Usuario cadastrado'}),200
@@ -43,9 +43,8 @@ def usuariosController():
 
         try:
             data           = request.get_json() # Resposta enviada do front
-            print(data)
-            put_usuario_id = data['codigo'] # Pega o codigo dela
-            put_usuario    = Usuario.query.get(put_usuario_id) # Encontra o usuario a ter seus dados alterados
+            put_usuario_cpf = data['cpf'] # Pega o codigo dela
+            put_usuario    = Usuario.query.get(put_usuario_cpf) # Encontra o usuario a ter seus dados alterados
             if put_usuario is None:
                 return {'Usuario nao encontrado'}
             put_usuario.nome     = data.get('nome', put_usuario.nome)
@@ -55,6 +54,7 @@ def usuariosController():
             verify_password(data, put_usuario)
             put_usuario.peso     = data.get('peso', put_usuario.peso)
             put_usuario.altura   = data.get('altura', put_usuario.altura)
+            put_usuario.status   = data.get('status', put_usuario.status)
             db.session.commit()
             return jsonify({'message': 'Usuario alterado com sucesso'}), 200
         except Exception as e:
@@ -62,8 +62,8 @@ def usuariosController():
     
     elif request.method == 'DELETE':
         try:
-            codigo = request.args.get('codigo')
-            delete_usuario = Usuario.query.get(codigo)
+            cpf = request.args.get('cpf')
+            delete_usuario = Usuario.query.get(cpf)
             if delete_usuario is None:
                 return {'error': 'Usuário inexistente'}, 404
             db.session.delete(delete_usuario)

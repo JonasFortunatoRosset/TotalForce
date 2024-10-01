@@ -32,8 +32,8 @@ def treinoController():
                 return jsonify({'error': 'Treino não encontrado'}), 404
             put_treino.nome          = data.get('nome', put_treino.nome)
             put_treino.descricao     = data.get('descricao', put_treino.descricao)
-            put_treino.codusuario    = data.get('codusuario', put_treino.codusuario)
-            put_treino.propriedade   = data.get('propriedade', put_treino.propriedade)
+            put_treino.codusuario    = data.get('cpfusuario', put_treino.codusuario)
+            put_treino.propriedade   = data.get('cpfpropriedade', put_treino.cpfpropriedade)
             put_treino.codmodalidade = data.get('codmodalidade', put_treino.codmodalidade)
             db.session.commit()
             return jsonify({'message': 'Treino alterado com sucesso'}), 200

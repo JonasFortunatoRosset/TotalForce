@@ -10,7 +10,7 @@ class Modalidade(db.Model):
         'descricao': self.descricao
         }
     
-    codigo    = db.Column(db.Integer, primary_key=True, nullable=True, unique=True)
+    codigo    = db.Column(db.Integer, primary_key=True, nullable=True, unique=True, autoincrement=True)
     nome      = db.Column(db.String(100))
     descricao = db.Column(db.String(100))
 

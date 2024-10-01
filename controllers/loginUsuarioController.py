@@ -1,6 +1,6 @@
 from flask import request
 from models.usuario import Usuario
-import jwt, bcrypt, base64, json, secrets, os
+import jwt, bcrypt, base64, json, secrets, os, jsonify
 
 
 def loginUsuarioController():
@@ -43,6 +43,8 @@ def loginUsuarioController():
         print(data)
         get_usuario_cpf = data['cpf'] # Pega o cpf do usuário do data/front
         usuario = Usuario.query.get(get_usuario_cpf) # Pega todos os dados do banco do usuario
+        if usuario['status'] == 'pendente' or usuario['status'] == 'recusado' or usuario['status'] == 'invalido':
+            return jsonify({'message': 'Status inválido para login'})
         if usuario is None: # Verifica se retornou um resultado
             return {'Dados não existentes no banco'}
         

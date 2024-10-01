@@ -12,7 +12,7 @@ class Exercicio(db.Model):
             'codtreino': self.codtreino
         }
     
-    codigo    = db.Column(db.Integer, primary_key=True, unique=True, nullable=True) 
+    codigo    = db.Column(db.Integer, primary_key=True, unique=True, nullable=True, autoincrement=True) 
     nome      = db.Column(db.String(100))
     descricao = db.Column(db.String(100))
     gif       = db.Column(db.String(512))
