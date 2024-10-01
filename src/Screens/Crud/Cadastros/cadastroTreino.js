@@ -6,8 +6,7 @@ export  function CadastroTreino(){
     const [treino, setTreino] = useState({
         nome: "",
         descricao: "",
-        codusuario: "",
-        propriedade: "",
+        cpfusuario: "",
         codmodalidade: ""
     })
 
@@ -15,8 +14,7 @@ export  function CadastroTreino(){
         axios.post("http://localhost:3000/treinos", {
             nome: treino.nome,
             descricao: treino.descricao,
-            codusuario: treino.codusuario,
-            propriedade: treino.propriedade,
+            cpfusuario: treino.cpfusuario,
             codmodalidade: treino.codmodalidade
         }, {
             headers: {
@@ -27,8 +25,7 @@ export  function CadastroTreino(){
             setTreino({
                 nome: "",
                 descricao: "",
-                codusuario: "",
-                propriedade: "",
+                cpfusuario: "",
                 codmodalidade: ""
             })
         }).catch(error => {
@@ -58,15 +55,9 @@ export  function CadastroTreino(){
 
             <TextInput
             style={styles.inputs}
-            placeholder='Código do usuário'
-            value={treino.codusuario}
-            onChangeText={(text) => setTreino({...treino, codusuario: text})}/>
-
-            <TextInput
-            style={styles.inputs}
-            placeholder='Propriedade'
-            value={treino.propriedade}
-            onChangeText={(text) => setTreino({...treino, propriedade: text})}/>
+            placeholder='Cpf do usuário'
+            value={treino.cpfusuario}
+            onChangeText={(text) => setTreino({...treino, cpfusuario: text})}/>
 
             <TextInput
             style={styles.inputs}

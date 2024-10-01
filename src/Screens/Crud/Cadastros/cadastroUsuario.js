@@ -7,10 +7,10 @@ export  function CadastroUsuario(){
         nome: "",
         cpf: "",
         endereco: "",
-        cidade: "",
         senha: "",
         peso: "",
-        altura: ""
+        altura: "",
+        status: ""
     })
 
     function inserirUsuarios(){
@@ -18,10 +18,10 @@ export  function CadastroUsuario(){
             nome:     usuario.nome,
             cpf:      usuario.cpf,
             endereco: usuario.endereco,
-            cidade:   usuario.cidade,
             senha:    usuario.senha,
             peso:     usuario.peso,
-            altura:   usuario.altura
+            altura:   usuario.altura,
+            status:   usuario.status
 
         }, {
             Headers: {
@@ -30,13 +30,13 @@ export  function CadastroUsuario(){
         }).then(response => {
             Alert.alert("Sucesso", "Usuário foi cadastrado");
             setUsuario({
-                nome: "",
-                cpf: "",
-                endereco: "",
-                cidade: "",
-                senha: "",
-                peso: "",
-                altura: ""    
+              nome: "",
+              cpf: "",
+              endereco: "",
+              senha: "",
+              peso: "",
+              altura: "",
+              status: ""   
             })
         }).catch(error => {
             Alert.alert("Erro", "Não foi possível cadastrar o usuário")
@@ -75,13 +75,6 @@ export  function CadastroUsuario(){
 
             <TextInput
             style={styles.inputs}
-            placeholder='Cidade'
-            value={usuario.cidade}
-            onChangeText={(text) => setUsuario({...usuario, cidade: text})}
-            />
-
-            <TextInput
-            style={styles.inputs}
             placeholder='Senha'
             value={usuario.senha}
             onChangeText={(text) => setUsuario({...usuario, senha: text})}
@@ -99,6 +92,13 @@ export  function CadastroUsuario(){
             placeholder='Altura'
             value={usuario.altura}
             onChangeText={(text) => setUsuario({...usuario, altura: text})}
+            />
+
+            <TextInput
+            style={styles.inputs}
+            placeholder='Status'
+            value={usuario.status}
+            onChangeText={(text) => setUsuario({...usuario, status: text})}
             />
 
             <TouchableOpacity style={styles.btn}>

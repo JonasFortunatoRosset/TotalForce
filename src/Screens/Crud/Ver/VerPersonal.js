@@ -9,7 +9,6 @@ export function VerPersonal() {
     const [editingColaborador, setEditingColaborador] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataColaborador, setDataColaborador] = useState({
-        codigo: "",
         nome: "",
         cpf: "",
         endereco: "",
@@ -29,13 +28,13 @@ export function VerPersonal() {
 
     const handleEdit = (col) => {
         setDataColaborador(col);
-        setColaborador(colaborador.codigo);
+        setColaborador(colaborador.cpf);
         setModalVisible(true);
     };
 
     const handleUpdate = () => {
       axios.put('http://localhost:3000/colaboradores', dataColaborador, {
-          params: { codigo: dataColaborador.codigo }
+          params: { cpf: dataColaborador.cpf }
       })
       .then(response => {
           axios.get('http://localhost:3000/colaboradores')
@@ -50,17 +49,17 @@ export function VerPersonal() {
               });
   
  
-          setDataColaborador({codigo: "",nome: "",cpf: "",endereco: "",cidade: "",senha: "" });
+          setDataColaborador({nome: "",cpf: "",endereco: "",cidade: "",senha: "" });
       })
       .catch(error => {
           console.error('Erro ao atualizar colaboradores:', error);
       });
   };
 
-    const handleDelete = (codigo) => {
-        axios.delete('http://localhost:3000/colaboradores', { params: { codigo } })
+    const handleDelete = (cpf) => {
+        axios.delete('http://localhost:3000/colaboradores', { params: { cpf } })
             .then(response => {
-                setColaborador(colaborador.filter(colaborador => colaborador.codigo !== codigo));
+                setColaborador(colaborador.filter(colaborador => colaborador.cpf !== cpf));
             })
             .catch(error => {
                 console.error('Erro ao deletar colaborador:', error);
@@ -76,11 +75,10 @@ export function VerPersonal() {
             <View style={styles.body}>
                 <FlatList
                     data={colaborador}
-                    keyExtractor={(item) => item.codigo.toString()}
+                    keyExtractor={(item) => item.cpf.toString()}
                     renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
                         <View style={styles.dados}>
-                         <Text style={styles.itemText}>Código: {item.codigo}</Text>
                          <Text style={styles.itemText}>Nome: {item.nome}</Text>
                          <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                          <Text style={styles.itemText}>Login: {item.endereco}</Text>
@@ -89,7 +87,7 @@ export function VerPersonal() {
                         </View>
 
                         <View style={styles.icons}> 
-                             <TouchableOpacity onPress={() => handleDelete(item.codigo)}> 
+                             <TouchableOpacity onPress={() => handleDelete(item.cpf)}> 
                                  <Feather name="trash-2" size={40} color="black" />
                              </TouchableOpacity>
 
@@ -118,11 +116,7 @@ export function VerPersonal() {
         </View>
         <View style={styles.modalBody}>
           <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"
-              value={dataColaborador.codigo}
-              onChangeText={(text) => setDataColaborador({ ...dataColaborador, codigo: text })}/>
+            
 
             <TextInput 
             style={styles.input} 
