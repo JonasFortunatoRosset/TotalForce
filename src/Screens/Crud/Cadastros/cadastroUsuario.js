@@ -4,7 +4,6 @@ import axios from 'axios';
 
 export  function CadastroUsuario(){
     const [usuario, setUsuario] = useState({
-        codigo: "",
         nome: "",
         cpf: "",
         endereco: "",
@@ -16,7 +15,6 @@ export  function CadastroUsuario(){
 
     function inserirUsuarios(){
         axios.post("http://localhost:3000/usuarios", {
-            codigo:   usuario.codigo,
             nome:     usuario.nome,
             cpf:      usuario.cpf,
             endereco: usuario.endereco,
@@ -32,7 +30,6 @@ export  function CadastroUsuario(){
         }).then(response => {
             Alert.alert("Sucesso", "Usuário foi cadastrado");
             setUsuario({
-                codigo: "",
                 nome: "",
                 cpf: "",
                 endereco: "",
@@ -54,11 +51,6 @@ export  function CadastroUsuario(){
          </View>
 
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={usuario.codigo}
-            onChangeText={(text) => setUsuario({...usuario, codigo: text})}/>
 
             <TextInput
             style={styles.inputs}

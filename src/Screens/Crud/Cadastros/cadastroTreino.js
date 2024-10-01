@@ -4,7 +4,6 @@ import axios from 'axios';
 
 export  function CadastroTreino(){
     const [treino, setTreino] = useState({
-        codigo: "",
         nome: "",
         descricao: "",
         codusuario: "",
@@ -14,7 +13,6 @@ export  function CadastroTreino(){
 
     function inserirTreino(){
         axios.post("http://localhost:3000/treinos", {
-            codigo: treino.codigo,
             nome: treino.nome,
             descricao: treino.descricao,
             codusuario: treino.codusuario,
@@ -27,7 +25,6 @@ export  function CadastroTreino(){
         }).then(response => {
             alert.Alert("Sucesso", "O treino foi cadastrado")
             setTreino({
-                codigo: "",
                 nome: "",
                 descricao: "",
                 codusuario: "",
@@ -46,11 +43,6 @@ export  function CadastroTreino(){
             <Text style={styles.txtheader}>Cadastro de Treino</Text>
          </View>
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={treino.codigo}
-            onChangeText={(text) => setTreino({...treino, codigo: text})}/>
         
             <TextInput
             style={styles.inputs}

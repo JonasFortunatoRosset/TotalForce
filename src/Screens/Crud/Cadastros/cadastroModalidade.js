@@ -4,20 +4,17 @@ import axios from 'axios';
 
 export  function CadastroModalidade(){
     const [modalidade, setModalidade] = useState({
-        codigo: "",
         nome: "",
         descricao: ""
     })
 
     function inserirModalidade(){
         axios.post("http://localhost:3000/modalidades", {
-            codigo: modalidade.codigo,
             nome: modalidade.nome,
             descricao: modalidade.descricao
         }).then(response => {
             alert.Alert("Sucesso", "Modalidade cadastrada")
             setModalidade({
-                codigo: "",
                 nome: "",
                 descricao: ""
             }).catch(error => {
@@ -33,11 +30,6 @@ export  function CadastroModalidade(){
             </View>
 
             <View style={styles.body}>
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Código'
-            value={modalidade.codigo}
-            onChangeText={(text) => setModalidade({...modalidade, codigo: text})}/>
 
             <TextInput 
             style={styles.inputs}

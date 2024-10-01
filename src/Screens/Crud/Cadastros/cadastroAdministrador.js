@@ -4,7 +4,6 @@ import axios from 'axios';
 
 export  function CadastroAdministrador(){
     const [administrador, setAdministrador] = useState({
-        codigo: "",
         nome: "",
         cpf: "",
         login: "",
@@ -13,7 +12,6 @@ export  function CadastroAdministrador(){
 
     function inserirAdministrador(){
         axios.post("http://localhost:3000/administradores", {
-            codigo: administrador.codigo,
             nome: administrador.nome,
             cpf: administrador.cpf,
             login: administrador.login,
@@ -22,7 +20,6 @@ export  function CadastroAdministrador(){
             Alert.alert("Sucesso", "administrador cadastrado!")
             console.response(response)
             setAdministrador({
-                codigo: "",
                 nome: "",
                 cpf: "",
                 login: "",
@@ -41,12 +38,6 @@ export  function CadastroAdministrador(){
             </View>
             
         <View style={styles.body}>
-            <TextInput
-            
-            style={styles.inputs}
-            placeholder='Código'
-            value={administrador.codigo}
-            onChangeText={(text) => setAdministrador({...administrador, codigo: text})}/>
 
             <TextInput
 

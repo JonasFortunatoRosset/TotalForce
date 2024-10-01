@@ -1,148 +1,63 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, Text, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 export function Teste() {
-  // Estado para controlar a visibilidade do modal
-  const [modalVisible, setModalVisible] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+
+  // Função para solicitar permissão ao abrir a galeria
+  const requestPermission = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos da permissão da galeria para isso funcionar!');
+      }
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  const pickImage = async () => {
+    // Selecionar a imagem da galeria
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const selectedImageUri = result.assets[0].uri;
+      setImageUri(selectedImageUri);
+      // Converter a imagem selecionada para Base64 e atualizar o estado
+      convertImageToBase64(selectedImageUri);
+    }
+  };
+
+  const convertImageToBase64 = async (uri) => {
+    try {
+      // Ler o arquivo como Base64
+      const base64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      setBase64Image(base64);
+    } catch (error) {
+      console.error('Erro ao converter imagem para base64:', error);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Botão para abrir o modal */}
-      <TouchableOpacity 
-        style={styles.openButton} 
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.txtOpenButton}>Abrir Modal</Text>
-      </TouchableOpacity>
-
-      {/* Modal */}
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <View style={styles.ModalHeader}>
-          <Text style={styles.ModalTitle}>Editar Modalidades</Text>
-        </View>
-        <View style={styles.modalBody}>
-          <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"/>
-
-            <TextInput 
-            style={styles.input} 
-            placeholder="Nome" />
-
-            <TextInput 
-            style={styles.input} 
-            placeholder="Descrição"
- />
-
-          </View>
-
-          <View style={styles.btnContainer}>
-
-            <TouchableOpacity style={[styles.btns, styles.btnSave]} >
-              <Text style={styles.txtbtns}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.btns, styles.btnCancel]}>
-              <Text style={styles.txtbtns}>Cancelar</Text>
-            </TouchableOpacity>
-            
-          </View>
-        </View>
-      </View>
-    </View>
-      </Modal>
+    <View style={{ padding: 20 }}>
+      <Button title="Selecionar Imagem" onPress={pickImage} />
+      {imageUri && (
+        <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />
+      )}
+      {base64Image && (
+        <Text style={{ marginTop: 20 }}>Base64: {base64Image.substring()}...</Text> // Mostrar os primeiros 100 caracteres
+      )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  openButton: {
-    backgroundColor: '#E49413',
-    padding: 15,
-    borderRadius: 8,
-  },
-  txtOpenButton: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#FFB031',
-    borderRadius: 8,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  ModalHeader: {
-    backgroundColor: '#E49413',
-    padding: 15,
-    alignItems: 'center',
-  },
-  modalBody: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  ModalTitle: {
-    fontSize: 20,
-    color: '#000',
-  },
-  BoxInputs: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    width: 250,
-    height: 40,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: '#E49413',
-    borderRadius: 8,
-    marginVertical: 5,
-    color: '#000',
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 250,
-  },
-  btns: {
-    width: '48%',
-    padding: 10,
-    borderRadius: 8,
-    marginVertical: 5,
-    alignItems: 'center',
-  },
-  txtbtns: {
-    color: '#000',
-    fontSize: 16,
-  },
-  btnSave: {
-    backgroundColor: '#E49413',
-  },
-  btnCancel: {
-    backgroundColor: '#E49413',
-  },
-});

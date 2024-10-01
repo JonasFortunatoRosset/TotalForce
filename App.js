@@ -39,10 +39,10 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='HomeColaboradorPage'>
+      <Stack.Navigator initialRouteName='Teste'>
         <Stack.Screen name="LoginPage"            component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"          component={HomeAdmPage}></Stack.Screen>
-        <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>
+        <Stack.Screen name="HomeColaboradorPage"  component={HomeColaboradorPage}></Stack.Screen>
         <Stack.Screen name="HomePage"             component={HomePage}></Stack.Screen>
         <Stack.Screen name="TrainPage"            component={TrainPage}></Stack.Screen>
         <Stack.Screen name="ConfigPage"           component={ConfigPage}></Stack.Screen>
