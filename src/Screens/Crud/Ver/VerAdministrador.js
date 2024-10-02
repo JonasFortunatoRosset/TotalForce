@@ -9,7 +9,6 @@ export function VerAdministrador() {
     const [editingAdministrador, setEditingAdministrador] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataAdministrador, setDataAdministrador] = useState({
-        codigo: "",
         nome: "",
         cpf: "",
         login: "",
@@ -28,13 +27,13 @@ export function VerAdministrador() {
 
     const handleEdit = (adm) => {
         setDataAdministrador(adm);
-        setAdministrador(administrador.codigo);
+        setAdministrador(administrador.cpf);
         setModalVisible(true);
     };
 
     const handleUpdate = () => {
       axios.put('http://localhost:3000/administradores', dataAdministrador, {
-          params: { codigo: dataAdministrador.codigo }
+          params: { cpf: dataAdministrador.cpf }
       })
       .then(response => {
           axios.get('http://localhost:3000/administradores')
@@ -49,7 +48,7 @@ export function VerAdministrador() {
               });
   
  
-          setDataAdministrador({ codigo: "", nome: "", cpf: "", login: "", senha: "" });
+          setDataAdministrador({ nome: "", cpf: "", login: "", senha: "" });
       })
       .catch(error => {
           console.error('Erro ao atualizar administrador:', error);
@@ -57,10 +56,10 @@ export function VerAdministrador() {
   };
   
 
-    const handleDelete = (codigo) => {
-        axios.delete('http://localhost:3000/administradores', { params: { codigo } })
+    const handleDelete = (cpf) => {
+        axios.delete('http://localhost:3000/administradores', { params: { cpf } })
             .then(response => {
-                setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
+                setAdministrador(administrador.filter(administrador => administrador.cpf !== cpf));
             })
             .catch(error => {
                 console.error('Erro ao deletar administrador:', error);
@@ -80,7 +79,6 @@ export function VerAdministrador() {
                     renderItem={({ item }) => (
                     <View style={styles.itemContainer}>
                         <View style={styles.dados}>
-                         <Text style={styles.itemText}>Código: {item.codigo}</Text>
                          <Text style={styles.itemText}>Nome: {item.nome}</Text>
                          <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                          <Text style={styles.itemText}>Login: {item.login}</Text>
@@ -88,7 +86,7 @@ export function VerAdministrador() {
                         </View>
 
                         <View style={styles.icons}> 
-                             <TouchableOpacity onPress={() => handleDelete(item.codigo)}> 
+                             <TouchableOpacity onPress={() => handleDelete(item.cpf)}> 
                                  <Feather name="trash-2" size={40} color="black" />
                              </TouchableOpacity>
 
@@ -117,12 +115,7 @@ export function VerAdministrador() {
         </View>
         <View style={styles.modalBody}>
           <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"
-              value={dataAdministrador.codigo}
-              onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, codigo: text })}/>
-
+           
             <TextInput 
             style={styles.input} 
             placeholder="Nome"
