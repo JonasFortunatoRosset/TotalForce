@@ -16,7 +16,6 @@ export  function CadastroPersonal(){
             nome: personal.nome,
             cpf: personal.cpf,
             endereco: personal.endereco,
-            cidade: personal.cidade,
             senha: personal.senha
         }).then(response => {
             alert.Alert("Sucesso", "Personal cadastrado com exito")
@@ -58,12 +57,6 @@ export  function CadastroPersonal(){
             placeholder='Endereço'
             value={personal.endereco}
             onChangeText={(text) => setPersonal({...personal, endereco: text})}/>
-
-            <TextInput 
-            style={styles.inputs}
-            placeholder='Cidade'
-            value={personal.cidade}
-            onChangeText={(text) => setPersonal({...personal, cidade: text})}/>
 
             <TextInput 
             style={styles.inputs}

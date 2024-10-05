@@ -13,10 +13,10 @@ export function VerUsuario() {
         nome: "",
         cpf: "",
         endereco: "",
-        cidade: "",
         senha: "",
         peso: "",
-        altura: ""
+        altura: "",
+        status: ""
     })
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export function VerUsuario() {
 
     const handleEdit = (use) => {
         setDataUsuario(use);
-        setUsuario(usuario.codigo);
+        //setUsuario(usuario.codigo);
         setModalVisible(true);
     };
 
@@ -44,7 +44,7 @@ export function VerUsuario() {
         .then(response => {
           setUsuario(response.data.usuario);
 
-          setDataUsuario({ codigo: "", nome: "", cpf: "", endereco: "", cidade: "", senha: "", peso: "", altura: "" });
+          setDataUsuario({ codigo: "", nome: "", cpf: "", endereco: "", senha: "", peso: "", altura: "", status: "" });
           setModalVisible(false); 
           Alert.alert("Sucesso", "Alterações salvas com sucesso!");
             })
@@ -87,10 +87,10 @@ export function VerUsuario() {
                             <Text style={styles.itemText}>Nome: {item.nome}</Text>
                             <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                             <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
-                            <Text style={styles.itemText}>Cidade: {item.cidade}</Text>
                             <Text style={styles.itemText}>Senha: {item.senha}</Text>
                             <Text style={styles.itemText}>Peso: {item.peso}</Text>
                             <Text style={styles.itemText}>Altura: {item.altura}</Text>
+                            <Text style={styles.itemText}>Status: {item.status}</Text>
                           </View>
 
                           <View style={styles.icons}> 
@@ -123,11 +123,6 @@ export function VerUsuario() {
         </View>
         <View style={styles.modalBody}>
           <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"
-              value={dataUsuario.codigo}
-              onChangeText={(text) => setDataUsuario({ ...dataUsuario, codigo: text })}/>
 
             <TextInput 
             style={styles.input} 
@@ -149,12 +144,6 @@ export function VerUsuario() {
 
             <TextInput 
             style={styles.input} 
-            placeholder="Cidade"
-            value={dataUsuario.cidade}
-            onChangeText={(text) => setDataUsuario({ ...dataUsuario, cidade: text })} />
-
-            <TextInput 
-            style={styles.input} 
             placeholder="Senha"
             value={dataUsuario.senha}
             onChangeText={(text) => setDataUsuario({ ...dataUsuario, senha: text })} />
@@ -170,6 +159,12 @@ export function VerUsuario() {
             placeholder="Altura"
             value={dataUsuario.altura}
             onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })} />
+
+            <TextInput 
+            style={styles.input} 
+            placeholder="Status"
+            value={dataUsuario.status}
+            onChangeText={(text) => setDataUsuario({ ...dataUsuario, status: text })} />
 
 
           </View>

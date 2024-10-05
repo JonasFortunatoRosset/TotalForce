@@ -13,12 +13,12 @@ export  function CadastroModalidade(){
             nome: modalidade.nome,
             descricao: modalidade.descricao
         }).then(response => {
-            alert.Alert("Sucesso", "Modalidade cadastrada")
+            Alert.alert("Sucesso", "Modalidade cadastrada")
             setModalidade({
                 nome: "",
                 descricao: ""
             }).catch(error => {
-                alert.Alert("Erro", "não foi possível realizar o cadastro")
+                Alert.alert("Erro", "não foi possível realizar o cadastro")
                 console.error(error)
             })
         })

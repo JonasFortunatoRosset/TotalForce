@@ -14,7 +14,6 @@ export  function CadastroAdministrador(){
         axios.post("http://localhost:3000/administradores", {
             nome: administrador.nome,
             cpf: administrador.cpf,
-            login: administrador.login,
             senha: administrador.senha
         }).then(response => {
             Alert.alert("Sucesso", "administrador cadastrado!")
@@ -52,13 +51,6 @@ export  function CadastroAdministrador(){
             placeholder='CPF'
             value={administrador.cpf}
             onChangeText={(text) => setAdministrador({...administrador, cpf: text})}/>
-
-            <TextInput
-
-            style={styles.inputs}
-            placeholder='Login'
-            value={administrador.login}
-            onChangeText={(text) => setAdministrador({...administrador, login: text})}/>
 
             <TextInput
 

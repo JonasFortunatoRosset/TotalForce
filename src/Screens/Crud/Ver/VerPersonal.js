@@ -12,7 +12,6 @@ export function VerPersonal() {
         nome: "",
         cpf: "",
         endereco: "",
-        cidade: "",
         senha: ""
     })
 
@@ -28,13 +27,12 @@ export function VerPersonal() {
 
     const handleEdit = (col) => {
         setDataColaborador(col);
-        setColaborador(colaborador.cpf);
         setModalVisible(true);
     };
 
     const handleUpdate = () => {
       axios.put('http://localhost:3000/colaboradores', dataColaborador, {
-          params: { cpf: dataColaborador.cpf }
+          params: { codigo: dataColaborador.codigo }
       })
       .then(response => {
           axios.get('http://localhost:3000/colaboradores')
@@ -49,7 +47,7 @@ export function VerPersonal() {
               });
   
  
-          setDataColaborador({nome: "",cpf: "",endereco: "",cidade: "",senha: "" });
+          setDataColaborador({nome: "",cpf: "",endereco: "",senha: "" });
       })
       .catch(error => {
           console.error('Erro ao atualizar colaboradores:', error);
@@ -57,9 +55,9 @@ export function VerPersonal() {
   };
 
     const handleDelete = (cpf) => {
-        axios.delete('http://localhost:3000/colaboradores', { params: { cpf } })
+        axios.delete('http://localhost:3000/colaboradores', { params: { codigo } })
             .then(response => {
-                setColaborador(colaborador.filter(colaborador => colaborador.cpf !== cpf));
+                setColaborador(colaborador.filter(colaborador => colaborador.codigo !== codigo));
             })
             .catch(error => {
                 console.error('Erro ao deletar colaborador:', error);
@@ -81,8 +79,7 @@ export function VerPersonal() {
                         <View style={styles.dados}>
                          <Text style={styles.itemText}>Nome: {item.nome}</Text>
                          <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
-                         <Text style={styles.itemText}>Login: {item.endereco}</Text>
-                         <Text style={styles.itemText}>Senha: {item.cidade}</Text>
+                         <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
                          <Text style={styles.itemText}>Senha: {item.senha}</Text>
                         </View>
 
@@ -135,12 +132,6 @@ export function VerPersonal() {
             placeholder="Endereço"
             value={dataColaborador.endereco}
             onChangeText={(text) => setDataColaborador({ ...dataColaborador, endereco: text })} />
-
-            <TextInput 
-            style={styles.input} 
-            placeholder="Cidade"
-            value={dataColaborador.cidade}
-            onChangeText={(text) => setDataColaborador({ ...dataColaborador, cidade: text })} />
 
             <TextInput 
             style={styles.input} 
