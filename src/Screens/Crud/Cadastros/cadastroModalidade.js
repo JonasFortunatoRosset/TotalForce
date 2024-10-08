@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export  function CadastroModalidade(){
     const [modalidade, setModalidade] = useState({
@@ -8,10 +9,33 @@ export  function CadastroModalidade(){
         descricao: ""
     })
 
-    function inserirModalidade(){
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        return token;
+      } catch (error) {
+        console.error('Erro ao recuperar o token:', error);
+        return null;
+      }
+    };    
+
+    const inserirModalidade = async() => {
+
+      const token = await getToken();  
+
+      if (!token) {
+        Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+        return;
+      }
+  
         axios.post("http://localhost:3000/modalidades", {
             nome: modalidade.nome,
-            descricao: modalidade.descricao
+            descricao: modalidade.descricao,
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`,  
+              'Content-Type': 'application/json',
+            }
         }).then(response => {
             Alert.alert("Sucesso", "Modalidade cadastrada")
             setModalidade({

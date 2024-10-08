@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, FlatList,TouchableOpacity, Alert,TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function VerTreino() {
     const [treino, setTreino] = useState([]);
-    const [editingTreino, setEditingTreino] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataTreino, setDataTreino] = useState({
         codigo: "",
@@ -15,56 +15,93 @@ export function VerTreino() {
         codusuario: "",
         propriedade: "",
         codmodalidade: ""
-    })
+    });
+
+    const getToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            return token;
+        } catch (error) {
+            console.error('Erro ao recuperar o token:', error);
+            return null;
+        }
+    };
+
+    const carregarTreinos = async () => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.get('http://localhost:3000/treinos', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setTreino(response.data.Treino);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar treinos:', error);
+        });
+    };
 
     useEffect(() => {
-        axios.get('http://localhost:3000/treinos')
-            .then(response => {
-                setTreino(response.data.Treino);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        carregarTreinos();
     }, []);
 
     const handleEdit = (tre) => {
         setDataTreino(tre);
-        setTreino(treino.codigo);
         setModalVisible(true);
     };
 
-    const handleUpdate = () => {
-      axios.put('http://localhost:3000/treinos', dataTreino, {
-          params: { codigo: dataTreino.codigo }
-      })
-      .then(response => {
-        axios.get('http://localhost:3000/treinos')
-            .then(response => {
-                setTreino(response.data.Treino);
+    const handleUpdate = async () => {
+        const token = await getToken();
 
-                  setModalVisible(false);
-                  Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-              })
-              .catch(error => {
-                  console.error('Erro ao buscar dados atualizados:', error);
-              });
-  
- 
-          setDataTreino({codigo: "",nome: "",descricao: "",codusuario: "",propriedade: "",codmodalidade: "" });
-      })
-      .catch(error => {
-          console.error('Erro ao atualizar treino:', error);
-      });
-  };
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
 
-    const handleDelete = (codigo) => {
-        axios.delete('http://localhost:3000/treinos', { params: { codigo } })
-            .then(response => {
-                setTreino(treino.filter(treino => treino.codigo !== codigo));
-            })
-            .catch(error => {
-                console.error('Erro ao deletar treino:', error);
-            });
+        axios.put('http://localhost:3000/treinos', dataTreino, {
+            params: { codigo: dataTreino.codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            carregarTreinos();
+            setModalVisible(false);
+            Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+            setDataTreino({ codigo: "", nome: "", descricao: "", codusuario: "", propriedade: "", codmodalidade: "" });
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar treino:', error);
+        });
+    };
+
+    const handleDelete = async (codigo) => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.delete('http://localhost:3000/treinos', {
+            params: { codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setTreino(treino.filter(t => t.codigo !== codigo));
+        })
+        .catch(error => {
+            console.error('Erro ao deletar treino:', error);
+        });
     };
 
     return (
@@ -78,103 +115,100 @@ export function VerTreino() {
                     data={treino}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <View style={styles.dados}>
-                         <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                         <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                         <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
-                         <Text style={styles.itemText}>Código do usuário: {item.codusuario}</Text>
-                         <Text style={styles.itemText}>Propriedade: {item.propriedade}</Text>
-                         <Text style={styles.itemText}>Código da modalidade: {item.codmodalidade}</Text>
-                        </View>
+                        <View style={styles.itemContainer}>
+                            <View style={styles.dados}>
+                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                                <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
+                                <Text style={styles.itemText}>Código do usuário: {item.codusuario}</Text>
+                                <Text style={styles.itemText}>Propriedade: {item.propriedade}</Text>
+                                <Text style={styles.itemText}>Código da modalidade: {item.codmodalidade}</Text>
+                            </View>
 
-                        <View style={styles.icons}> 
-                             <TouchableOpacity onPress={() => handleDelete(item.codigo)}> 
-                                 <Feather name="trash-2" size={40} color="black" />
-                             </TouchableOpacity>
+                            <View style={styles.icons}>
+                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                    <Feather name="trash-2" size={40} color="black" />
+                                </TouchableOpacity>
 
-                             <TouchableOpacity onPress={() => handleEdit(item)}>
-                                 <FontAwesome name="pencil" size={40} color="black" />
-                             </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEdit(item)}>
+                                    <FontAwesome name="pencil" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
             <Modal
-             animationType="slide"
-             transparent={true}
-             visible={modalVisible}
-             onRequestClose={() => {
-                 setModalVisible(false);
-                 setEditingTreino(null);
-             }}>
-      <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <View style={styles.ModalHeader}>
-          <Text style={styles.ModalTitle}>Editar Treino</Text>
-        </View>
-        <View style={styles.modalBody}>
-          <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"
-              value={dataTreino.codigo}
-              onChangeText={(text) => setDataTreino({ ...dataTreino, codigo: text })}/>
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                }}>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.ModalHeader}>
+                            <Text style={styles.ModalTitle}>Editar Treino</Text>
+                        </View>
+                        <View style={styles.modalBody}>
+                            <View style={styles.BoxInputs}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Código"
+                                    value={dataTreino.codigo}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codigo: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Nome"
-            value={dataTreino.nome}
-            onChangeText={(text) => setDataTreino({ ...dataTreino, nome: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Nome"
+                                    value={dataTreino.nome}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, nome: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Descrição"
-            value={dataTreino.descricao}
-            onChangeText={(text) => setDataTreino({ ...dataTreino, descricao: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Descrição"
+                                    value={dataTreino.descricao}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, descricao: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="CodUsuario"
-            value={dataTreino.codusuario}
-            onChangeText={(text) => setDataTreino({ ...dataTreino, codusuario: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="CodUsuario"
+                                    value={dataTreino.codusuario}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codusuario: text })}
+                                />
 
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Propriedade"
+                                    value={dataTreino.propriedade}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, propriedade: text })}
+                                />
 
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="CodModalidade"
+                                    value={dataTreino.codmodalidade}
+                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codmodalidade: text })}
+                                />
+                            </View>
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Propriedade"
-            value={dataTreino.propriedade}
-            onChangeText={(text) => setDataTreino({ ...dataTreino, propriedade: text })} />
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+                                    <Text style={styles.txtbtns}>Salvar</Text>
+                                </TouchableOpacity>
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="CodModalidade"
-            value={dataTreino.codmodalidade}
-            onChangeText={(text) => setDataTreino({ ...dataTreino, codmodalidade: text })} />
-
-
-          </View>
-
-          <View style={styles.btnContainer}>
-
-            <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
-              <Text style={styles.txtbtns}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
-            onPress={() => {setModalVisible(false)}}>
-              <Text style={styles.txtbtns}>Cancelar</Text>
-            </TouchableOpacity>
-            
-          </View>
-        </View>
-      </View>
-    </View>
-
+                                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => { setModalVisible(false); }}>
+                                    <Text style={styles.txtbtns}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
             </Modal>
         </View>
     );
@@ -209,7 +243,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         padding: 5,
         height: '100%',
-    
     },
     itemContainer: {
         flexDirection: 'row',
@@ -234,8 +267,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      },
-      modalContent: {
+    },
+    modalContent: {
         width: '80%',
         backgroundColor: '#FFB031',
         borderRadius: 8,
@@ -244,27 +277,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-      },
-      ModalHeader: {
+    },
+    ModalHeader: {
         backgroundColor: '#E49413',
         padding: 15,
-        alignItems: 'center', 
-      },
-      modalBody: {
+        alignItems: 'center',
+    },
+    modalBody: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-      },
-      ModalTitle: {
+    },
+    ModalTitle: {
         fontSize: 20,
         color: '#000',
-      },
-      BoxInputs: {
+    },
+    BoxInputs: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-      },
-      input: {
+    },
+    input: {
         width: 250,
         height: 40,
         paddingVertical: 10,
@@ -273,27 +306,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
-      },
-      btnContainer: {
+    },
+    btnContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: 250, 
-      },
-      btns: {
-        width: '48%', 
+        width: 250,
+    },
+    btns: {
+        width: '48%',
         padding: 10,
         borderRadius: 8,
         marginVertical: 5,
         alignItems: 'center',
-      },
-      txtbtns: {
+    },
+    txtbtns: {
         color: '#000',
         fontSize: 16,
-      },
-      btnSave: {
+    },
+    btnSave: {
         backgroundColor: '#E49413',
-      },
-      btnCancel: {
+    },
+    btnCancel: {
         backgroundColor: '#E49413',
-      },
+    },
 });

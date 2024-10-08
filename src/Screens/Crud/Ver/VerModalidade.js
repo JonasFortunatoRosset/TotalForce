@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, FlatList, Alert,TouchableOpacity,TextInput,Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export function VerModalidade() {
     const [modalidade, setModalidade] = useState([]);
@@ -12,16 +14,41 @@ export function VerModalidade() {
         codigo: "",
         nome: "",
         descricao: ""
-    })
+    });
+
+    const getToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            return token;
+        } catch (error) {
+            console.error('Erro ao recuperar o token:', error);
+            return null;
+        }
+    };
+
+    const carregarModalidades = async () => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.get('http://localhost:3000/modalidades', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setModalidade(response.data.Modalidades);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar modalidades:', error);
+        });
+    };
 
     useEffect(() => {
-        axios.get('http://localhost:3000/modalidades')
-            .then(response => {
-                setModalidade(response.data.Modalidades);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        carregarModalidades();
     }, []);
 
     const handleEdit = (mod) => {
@@ -30,38 +57,51 @@ export function VerModalidade() {
         setModalVisible(true);
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
         axios.put('http://localhost:3000/modalidades', dataModalidades, {
-            params: { codigo: dataModalidades.codigo }
+            params: { codigo: dataModalidades.codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
         })
         .then(response => {
-          axios.get('http://localhost:3000/modalidades')
-          .then(response => {
-              setModalidade(response.data.Modalidades);
-  
-                    setModalVisible(false);
-                    Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dados atualizados:', error);
-                });
-    
-   
-            setDataModalidades({codigo: "",nome: "",descricao: "" });
+            carregarModalidades();
+            setModalVisible(false);
+            Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+            setDataModalidades({ codigo: "", nome: "", descricao: "" });
         })
         .catch(error => {
             console.error('Erro ao atualizar modalidades:', error);
         });
     };
 
-    const handleDelete = (codigo) => {
-        axios.delete('http://localhost:3000/modalidades', { params: { codigo } })
-            .then(response => {
-                setModalidade(modalidade.filter(modalidade => modalidade.codigo !== codigo));
-            })
-            .catch(error => {
-                console.error('Erro ao deletar modalidade:', error);
-            });
+    const handleDelete = async (codigo) => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.delete('http://localhost:3000/modalidades', {
+            params: { codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setModalidade(modalidade.filter(modalidade => modalidade.codigo !== codigo));
+        })
+        .catch(error => {
+            console.error('Erro ao deletar modalidade:', error);
+        });
     };
 
     return (
@@ -75,79 +115,77 @@ export function VerModalidade() {
                     data={modalidade}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <View style={styles.dados}>
-                         <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                         <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                         <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
-                        </View>
+                        <View style={styles.itemContainer}>
+                            <View style={styles.dados}>
+                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                                <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
+                            </View>
 
-                        <View style={styles.icons}> 
-                             <TouchableOpacity onPress={() => handleDelete(item.codigo)}> 
-                                 <Feather name="trash-2" size={40} color="black" />
-                             </TouchableOpacity>
+                            <View style={styles.icons}>
+                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                    <Feather name="trash-2" size={40} color="black" />
+                                </TouchableOpacity>
 
-                             <TouchableOpacity onPress={() => handleEdit(item)}>
-                                 <FontAwesome name="pencil" size={40} color="black" />
-                             </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEdit(item)}>
+                                    <FontAwesome name="pencil" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
             <Modal
-             animationType="slide"
-             transparent={true}
-             visible={modalVisible}
-             onRequestClose={() => {
-                 setModalVisible(false);
-                 setEditingModalidade(null);
-             }}>
-      <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <View style={styles.ModalHeader}>
-          <Text style={styles.ModalTitle}>Editar Modalidades</Text>
-        </View>
-        <View style={styles.modalBody}>
-          <View style={styles.BoxInputs}>
-            <TextInput
-             style={styles.input}
-              placeholder="Código"
-              value={dataModalidades.codigo}
-              onChangeText={(text) => setDataModalidades({ ...dataModalidades, codigo: text })}/>
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                    setEditingModalidade(null);
+                }}>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.ModalHeader}>
+                            <Text style={styles.ModalTitle}>Editar Modalidades</Text>
+                        </View>
+                        <View style={styles.modalBody}>
+                            <View style={styles.BoxInputs}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Código"
+                                    value={dataModalidades.codigo}
+                                    onChangeText={(text) => setDataModalidades({ ...dataModalidades, codigo: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Nome"
-            value={dataModalidades.nome}
-            onChangeText={(text) => setDataModalidades({ ...dataModalidades, nome: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Nome"
+                                    value={dataModalidades.nome}
+                                    onChangeText={(text) => setDataModalidades({ ...dataModalidades, nome: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Descrição"
-            value={dataModalidades.descricao}
-            onChangeText={(text) => setDataModalidades({ ...dataModalidades, descricao: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Descrição"
+                                    value={dataModalidades.descricao}
+                                    onChangeText={(text) => setDataModalidades({ ...dataModalidades, descricao: text })}
+                                />
+                            </View>
 
-          </View>
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+                                    <Text style={styles.txtbtns}>Salvar</Text>
+                                </TouchableOpacity>
 
-          <View style={styles.btnContainer}>
-
-            <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
-              <Text style={styles.txtbtns}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
-            onPress={() => {setModalVisible(false)}}>
-              <Text style={styles.txtbtns}>Cancelar</Text>
-            </TouchableOpacity>
-            
-          </View>
-        </View>
-      </View>
-    </View>
-
+                                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => { setModalVisible(false); }}>
+                                    <Text style={styles.txtbtns}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
             </Modal>
         </View>
     );
@@ -182,7 +220,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         padding: 5,
         height: '100%',
-    
     },
     itemContainer: {
         flexDirection: 'row',
@@ -203,71 +240,70 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     modalOverlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-      width: '80%',
-      backgroundColor: '#FFB031',
-      borderRadius: 8,
-      padding: 20,
-      shadowColor: '#000',
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
+        width: '80%',
+        backgroundColor: '#FFB031',
+        borderRadius: 8,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     ModalHeader: {
-      backgroundColor: '#E49413',
-      padding: 15,
-      alignItems: 'center',
+        backgroundColor: '#E49413',
+        padding: 15,
+        alignItems: 'center',
     },
     modalBody: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
     },
     ModalTitle: {
-      fontSize: 20,
-      color: '#000',
+        fontSize: 20,
+        color: '#000',
     },
     BoxInputs: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     input: {
-      width: 250,
-      height: 40,
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      backgroundColor: '#E49413',
-      borderRadius: 8,
-      marginVertical: 5,
-      color: '#000',
+        width: 250,
+        height: 40,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#E49413',
+        borderRadius: 8,
+        marginVertical: 5,
+        color: '#000',
     },
     btnContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: 250,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 250,
     },
     btns: {
-      width: '48%',
-      padding: 10,
-      borderRadius: 8,
-      marginVertical: 5,
-      alignItems: 'center',
+        width: '48%',
+        padding: 10,
+        borderRadius: 8,
+        marginVertical: 5,
+        alignItems: 'center',
     },
     txtbtns: {
-      color: '#000',
-      fontSize: 16,
+        color: '#000',
+        fontSize: 16,
     },
     btnSave: {
-      backgroundColor: '#E49413',
+        backgroundColor: '#E49413',
     },
     btnCancel: {
-      backgroundColor: '#E49413',
+        backgroundColor: '#E49413',
     },
-  });
-  
+});

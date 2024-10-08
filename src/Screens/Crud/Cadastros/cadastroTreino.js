@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export  function CadastroTreino(){
     const [treino, setTreino] = useState({
@@ -10,7 +11,24 @@ export  function CadastroTreino(){
         codmodalidade: ""
     })
 
-    function inserirTreino(){
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        return token;
+      } catch (error) {
+        console.error('Erro ao recuperar o token:', error);
+        return null;
+      }
+    };    
+
+    const inserirTreino = async() => {
+
+      const token = await getToken();  
+
+    if (!token) {
+      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+      return;
+    }
         axios.post("http://localhost:3000/treinos", {
             nome: treino.nome,
             descricao: treino.descricao,
@@ -18,10 +36,11 @@ export  function CadastroTreino(){
             codmodalidade: treino.codmodalidade
         }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${token}`,  
+                'Content-Type': 'application/json',
             }
         }).then(response => {
-            alert.Alert("Sucesso", "O treino foi cadastrado")
+            Alert.alert("Sucesso", "O treino foi cadastrado")
             setTreino({
                 nome: "",
                 descricao: "",

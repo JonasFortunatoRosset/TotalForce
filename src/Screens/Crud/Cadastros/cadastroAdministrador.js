@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export  function CadastroAdministrador(){
@@ -10,11 +11,35 @@ export  function CadastroAdministrador(){
         senha: ""
     })
 
-    function inserirAdministrador(){
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        return token;
+      } catch (error) {
+        console.error('Erro ao recuperar o token:', error);
+        return null;
+      }
+    };    
+
+    
+    const inserirAdministrador = async() => {
+
+      const token = await getToken();  
+
+      if (!token) {
+        Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+        return;
+      }
         axios.post("http://localhost:3000/administradores", {
             nome: administrador.nome,
             cpf: administrador.cpf,
-            senha: administrador.senha
+            senha: administrador.senha,
+        },{
+          headers: {
+          'Authorization': `Bearer ${token}`,  
+          'Content-Type': 'application/json',
+        }
+
         }).then(response => {
             Alert.alert("Sucesso", "administrador cadastrado!")
             console.response(response)

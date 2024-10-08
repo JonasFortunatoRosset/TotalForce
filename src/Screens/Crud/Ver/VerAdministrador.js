@@ -1,28 +1,54 @@
-import { StyleSheet, Text, View, FlatList,Alert,TouchableOpacity, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';  
 
 export function VerAdministrador() {
     const [administrador, setAdministrador] = useState([]);
-    const [editingAdministrador, setEditingAdministrador] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataAdministrador, setDataAdministrador] = useState({
         codigo: "",
         nome: "",
         cpf: "",
         senha: ""
-    })
+    });
+
+
+    const getToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');  
+            return token;
+        } catch (error) {
+            console.error('Erro ao recuperar o token:', error);
+            return null;
+        }
+    };
+
+    const carregarAdministradores = async () => {
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.get('http://localhost:3000/administradores', {
+            headers: {
+                'Authorization': `Bearer ${token}`,  
+            }
+        })
+        .then(response => {
+            setAdministrador(response.data.administrador);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar administradores:', error);
+        });
+    };
 
     useEffect(() => {
-        axios.get('http://localhost:3000/administradores')
-            .then(response => {
-                setAdministrador(response.data.administrador);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        carregarAdministradores();
     }, []);
 
     const handleEdit = (adm) => {
@@ -30,39 +56,51 @@ export function VerAdministrador() {
         setModalVisible(true);
     };
 
-    const handleUpdate = () => {
-      axios.put('http://localhost:3000/administradores', dataAdministrador, {
-          params: { codigo: dataAdministrador.codigo }
-      })
-      .then(response => {
-          axios.get('http://localhost:3000/administradores')
-              .then(response => {
-                  setAdministrador(response.data.administrador); 
+    const handleUpdate = async () => {
+        const token = await getToken();
 
-                  setModalVisible(false);
-                  Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-              })
-              .catch(error => {
-                  console.error('Erro ao buscar dados atualizados:', error);
-              });
-  
- 
-          setDataAdministrador({ codigo: "", nome: "", cpf: "", senha: "" });
-      })
-      .catch(error => {
-          console.error('Erro ao atualizar administrador:', error);
-      });
-  };
-  
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
 
-    const handleDelete = (codigo) => {
-        axios.delete('http://localhost:3000/administradores', { params: { codigo } })
-            .then(response => {
-                setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
-            })
-            .catch(error => {
-                console.error('Erro ao deletar administrador:', error);
-            });
+        axios.put('http://localhost:3000/administradores', dataAdministrador, {
+            params: { codigo: dataAdministrador.codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,  
+            }
+        })
+        .then(response => {
+            carregarAdministradores();
+            setModalVisible(false);
+            Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar administrador:', error);
+        });
+    };
+
+    const handleDelete = async (codigo) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+            return;
+        }
+
+        axios.delete('http://localhost:3000/administradores', {
+            params: { codigo },
+            headers: {
+                'Authorization': `Bearer ${token}`,  
+            }
+        })
+        .then(response => {
+            setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
+        })
+        .catch(error => {
+            console.error('Erro ao deletar administrador:', error);
+        });
     };
 
     return (
@@ -76,88 +114,86 @@ export function VerAdministrador() {
                     data={administrador}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <View style={styles.dados}>
-                         <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                         <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                         <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
-                         <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                        </View>
+                        <View style={styles.itemContainer}>
+                            <View style={styles.dados}>
+                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
+                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
+                                <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
+                                <Text style={styles.itemText}>Senha: {item.senha}</Text>
+                            </View>
 
-                        <View style={styles.icons}> 
-                             <TouchableOpacity onPress={() => handleDelete(item.codigo)}> 
-                                 <Feather name="trash-2" size={40} color="black" />
-                             </TouchableOpacity>
+                            <View style={styles.icons}>
+                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                    <Feather name="trash-2" size={40} color="black" />
+                                </TouchableOpacity>
 
-                             <TouchableOpacity onPress={() => handleEdit(item)}>
-                                 <FontAwesome name="pencil" size={40} color="black" />
-                             </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEdit(item)}>
+                                    <FontAwesome name="pencil" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
             <Modal
-             animationType="slide"
-             transparent={true}
-             visible={modalVisible}
-             onRequestClose={() => {
-                 setModalVisible(false);
-                 setEditingAdministrador(null);
-             }}>
-      <View style={styles.modalOverlay}>
-      <View style={styles.modalContent}>
-        <View style={styles.ModalHeader}>
-          <Text style={styles.ModalTitle}>Editar Administrador</Text>
-        </View>
-        <View style={styles.modalBody}>
-          <View style={styles.BoxInputs}>
-           
-            <TextInput 
-            style={styles.input} 
-            placeholder="Código"
-            value={dataAdministrador.codigo}
-            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, codigo: text })} />
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(false);
+                }}>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.ModalHeader}>
+                            <Text style={styles.ModalTitle}>Editar Administrador</Text>
+                        </View>
+                        <View style={styles.modalBody}>
+                            <View style={styles.BoxInputs}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Código"
+                                    value={dataAdministrador.codigo}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, codigo: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Nome"
-            value={dataAdministrador.nome}
-            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, nome: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Nome"
+                                    value={dataAdministrador.nome}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, nome: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="CPF"
-            value={dataAdministrador.cpf}
-            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="CPF"
+                                    value={dataAdministrador.cpf}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })}
+                                />
 
-            <TextInput 
-            style={styles.input} 
-            placeholder="Senha"
-            value={dataAdministrador.senha}
-            onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, senha: text })} />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Senha"
+                                    value={dataAdministrador.senha}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, senha: text })}
+                                />
+                            </View>
 
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+                                    <Text style={styles.txtbtns}>Salvar</Text>
+                                </TouchableOpacity>
 
-          </View>
-
-          <View style={styles.btnContainer}>
-
-            <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
-              <Text style={styles.txtbtns}>Salvar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.btns, styles.btnCancel]} 
-            onPress={() => {setModalVisible(false)}}>
-              <Text style={styles.txtbtns}>Cancelar</Text>
-            </TouchableOpacity>
-            
-          </View>
-        </View>
-      </View>
-    </View>
-
+                                <TouchableOpacity
+                                    style={[styles.btns, styles.btnCancel]}
+                                    onPress={() => { setModalVisible(false); }}>
+                                    <Text style={styles.txtbtns}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
             </Modal>
         </View>
     );

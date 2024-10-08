@@ -1,27 +1,24 @@
-import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';  
 
-export function VerUsuario() {
-    const [usuario, setUsuario] = useState([]);
+export function VerColaborador() {
+    const [colaborador, setColaborador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [dataUsuario, setDataUsuario] = useState({
-        codigo: "",
+    const [dataColaborador, setDataColaborador] = useState({
         nome: "",
         cpf: "",
         endereco: "",
-        senha: "",
-        peso: "",
-        altura: "",
-        status: ""
+        senha: ""
     });
 
+  
     const getToken = async () => {
         try {
-            const token = await AsyncStorage.getItem('token');
+            const token = await AsyncStorage.getItem('token');  
             return token;
         } catch (error) {
             console.error('Erro ao recuperar o token:', error);
@@ -29,7 +26,8 @@ export function VerUsuario() {
         }
     };
 
-    const carregarUsuarios = async () => {
+    
+    const carregarColaboradores = async () => {
         const token = await getToken();
 
         if (!token) {
@@ -37,25 +35,25 @@ export function VerUsuario() {
             return;
         }
 
-        axios.get('http://localhost:3000/usuarios', {
+        axios.get('http://localhost:3000/colaboradores', {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,  
             }
         })
         .then(response => {
-            setUsuario(response.data.usuario);
+            setColaborador(response.data.colaborador);
         })
         .catch(error => {
-            console.error('Erro ao carregar usuários:', error);
+            console.error('Erro ao carregar colaboradores:', error);
         });
     };
 
     useEffect(() => {
-        carregarUsuarios();
+        carregarColaboradores();
     }, []);
 
-    const handleEdit = (use) => {
-        setDataUsuario(use);
+    const handleEdit = (col) => {
+        setDataColaborador(col);
         setModalVisible(true);
     };
 
@@ -67,20 +65,19 @@ export function VerUsuario() {
             return;
         }
 
-        axios.put('http://localhost:3000/usuarios', dataUsuario, {
-            params: { codigo: dataUsuario.codigo },
+        axios.put('http://localhost:3000/colaboradores', dataColaborador, {
+            params: { codigo: dataColaborador.codigo },
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,  
             }
         })
         .then(response => {
-            carregarUsuarios();
-            setDataUsuario({ codigo: "", nome: "", cpf: "", endereco: "", senha: "", peso: "", altura: "", status: "" });
+            carregarColaboradores();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
         })
         .catch(error => {
-            console.error('Erro ao atualizar usuário:', error);
+            console.error('Erro ao atualizar colaborador:', error);
         });
     };
 
@@ -92,50 +89,46 @@ export function VerUsuario() {
             return;
         }
 
-        axios.delete('http://localhost:3000/usuarios', {
+        axios.delete('http://localhost:3000/colaboradores', {
             params: { codigo },
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`,  
             }
         })
         .then(response => {
-            setUsuario(usuario.filter(user => user.codigo !== codigo));
+            setColaborador(colaborador.filter(colaborador => colaborador.codigo !== codigo));
         })
         .catch(error => {
-            console.error('Erro ao deletar usuário:', error);
+            console.error('Erro ao deletar colaborador:', error);
         });
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.txtheader}>Pesquisa de Usuários</Text>
+                <Text style={styles.txtheader}>Pesquisa de Colaborador</Text>
             </View>
 
             <View style={styles.body}>
                 <FlatList
-                    data={usuario}
-                    keyExtractor={(item) => item.codigo.toString()}
+                    data={colaborador}
+                    keyExtractor={(item) => item.cpf.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                             <View style={styles.dados}>
-                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
                                 <Text style={styles.itemText}>Nome: {item.nome}</Text>
                                 <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                                 <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
                                 <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                                <Text style={styles.itemText}>Peso: {item.peso}</Text>
-                                <Text style={styles.itemText}>Altura: {item.altura}</Text>
-                                <Text style={styles.itemText}>Status: {item.status}</Text>
                             </View>
 
-                            <View style={styles.icons}> 
+                            <View style={styles.icons}>
                                 <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
                                     <Feather name="trash-2" size={40} color="black" />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={40} color="black"/>
+                                    <FontAwesome name="pencil" size={40} color="black" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -154,57 +147,36 @@ export function VerUsuario() {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
-                            <Text style={styles.ModalTitle}>Editar Usuário</Text>
+                            <Text style={styles.ModalTitle}>Editar Colaborador</Text>
                         </View>
                         <View style={styles.modalBody}>
                             <View style={styles.BoxInputs}>
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Nome"
-                                    value={dataUsuario.nome}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, nome: text })} 
+                                    value={dataColaborador.nome}
+                                    onChangeText={(text) => setDataColaborador({ ...dataColaborador, nome: text })}
                                 />
 
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="CPF"
-                                    value={dataUsuario.cpf}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, cpf: text })} 
+                                    value={dataColaborador.cpf}
+                                    onChangeText={(text) => setDataColaborador({ ...dataColaborador, cpf: text })}
                                 />
 
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Endereço"
-                                    value={dataUsuario.endereco}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, endereco: text })} 
+                                    value={dataColaborador.endereco}
+                                    onChangeText={(text) => setDataColaborador({ ...dataColaborador, endereco: text })}
                                 />
 
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Senha"
-                                    value={dataUsuario.senha}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, senha: text })} 
-                                />
-
-                                <TextInput 
-                                    style={styles.input} 
-                                    placeholder="Peso"
-                                    value={dataUsuario.peso}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, peso: text })} 
-                                />
-
-                                <TextInput 
-                                    style={styles.input} 
-                                    placeholder="Altura"
-                                    value={dataUsuario.altura}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })} 
-                                />
-
-                                <TextInput 
-                                    style={styles.input} 
-                                    placeholder="Status"
-                                    value={dataUsuario.status}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, status: text })} 
+                                    value={dataColaborador.senha}
+                                    onChangeText={(text) => setDataColaborador({ ...dataColaborador, senha: text })}
                                 />
                             </View>
 
@@ -213,7 +185,9 @@ export function VerUsuario() {
                                     <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => setModalVisible(false)}>
+                                <TouchableOpacity
+                                    style={[styles.btns, styles.btnCancel]}
+                                    onPress={() => { setModalVisible(false); }}>
                                     <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
@@ -254,6 +228,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         padding: 5,
         height: '100%',
+    
     },
     itemContainer: {
         flexDirection: 'row',
@@ -278,8 +253,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
+      },
+      modalContent: {
         width: '80%',
         backgroundColor: '#FFB031',
         borderRadius: 8,
@@ -288,27 +263,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-    },
-    ModalHeader: {
+      },
+      ModalHeader: {
         backgroundColor: '#E49413',
         padding: 15,
-        alignItems: 'center',
-    },
-    modalBody: {
+        alignItems: 'center', 
+      },
+      modalBody: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-    },
-    ModalTitle: {
+      },
+      ModalTitle: {
         fontSize: 20,
         color: '#000',
-    },
-    BoxInputs: {
+      },
+      BoxInputs: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    input: {
+      },
+      input: {
         width: 250,
         height: 40,
         paddingVertical: 10,
@@ -317,27 +292,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
-    },
-    btnContainer: {
+      },
+      btnContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: 250, 
-    },
-    btns: {
+      },
+      btns: {
         width: '48%', 
         padding: 10,
         borderRadius: 8,
         marginVertical: 5,
         alignItems: 'center',
-    },
-    txtbtns: {
+      },
+      txtbtns: {
         color: '#000',
         fontSize: 16,
-    },
-    btnSave: {
+      },
+      btnSave: {
         backgroundColor: '#E49413',
-    },
-    btnCancel: {
+      },
+      btnCancel: {
         backgroundColor: '#E49413',
-    },
+      },
 });

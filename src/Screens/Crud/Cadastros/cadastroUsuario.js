@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Alert,TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export  function CadastroUsuario(){
     const [usuario, setUsuario] = useState({
@@ -13,7 +14,24 @@ export  function CadastroUsuario(){
         status: ""
     })
 
-    function inserirUsuarios(){
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        return token;
+      } catch (error) {
+        console.error('Erro ao recuperar o token:', error);
+        return null;
+      }
+    };    
+
+    const inserirUsuarios = async() => {
+
+      const token = await getToken();  
+
+    if (!token) {
+      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+      return;
+    }
         axios.post("http://localhost:3000/usuarios", {
             nome:     usuario.nome,
             cpf:      usuario.cpf,
@@ -25,6 +43,7 @@ export  function CadastroUsuario(){
 
         }, {
             Headers: {
+                'Authorization': `Bearer ${token}`, 
                 'Content-Type': 'application/json'
             }
         }).then(response => {

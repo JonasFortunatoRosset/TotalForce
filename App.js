@@ -17,16 +17,16 @@ import {CadastroGeral}         from './src/Screens/Crud/Cadastros/cadastrosGerai
 import {CadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
 import {CadastroExercicio}     from './src/Screens/Crud/Cadastros/cadastroExercicio'
 import {CadastroModalidade}    from './src/Screens/Crud/Cadastros/cadastroModalidade'
-import {CadastroPersonal}      from './src/Screens/Crud/Cadastros/cadastroPersonal'
+import {CadastroColaborador}   from './src/Screens/Crud/Cadastros/cadastroColaborador'
 import {CadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
 import {CadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
 
 // importação de telas de Pesquisa
-import { VerGeral }       from './src/Screens/Crud/Ver/VerGeral';
+import {VerGeral}       from './src/Screens/Crud/Ver/VerGeral';
 import {VerAdministrador} from './src/Screens/Crud/Ver/VerAdministrador';
 import {VerExercicio}     from './src/Screens/Crud/Ver/VerExercicio';
 import {VerModalidade}    from './src/Screens/Crud/Ver/VerModalidade';
-import {VerPersonal}      from './src/Screens/Crud/Ver/VerPersonal';
+import {VerColaborador}      from './src/Screens/Crud/Ver/VerColaborador';
 import {VerTreino}        from './src/Screens/Crud/Ver/VerTreino';
 import {VerUsuario}       from './src/Screens/Crud/Ver/VerUsuario';
 
@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='HomeAdmPage'>
+      <Stack.Navigator initialRouteName='GoalsPage'>
         <Stack.Screen name="LoginPage"            component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"          component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"  component={HomeColaboradorPage}></Stack.Screen>
@@ -57,7 +57,7 @@ export default function App() {
         <Stack.Screen name="cadastroAdministrador" component={CadastroAdministrador}></Stack.Screen>
         <Stack.Screen name="cadastroExercicio"     component={CadastroExercicio}></Stack.Screen>
         <Stack.Screen name="cadastroModalidade"    component={CadastroModalidade}></Stack.Screen>
-        <Stack.Screen name="cadastroPersonal"      component={CadastroPersonal}></Stack.Screen>
+        <Stack.Screen name="cadastroColaborador"   component={CadastroColaborador}></Stack.Screen>
         <Stack.Screen name="cadastroTreino"        component={CadastroTreino}></Stack.Screen>
         <Stack.Screen name="cadastroUsuario"       component={CadastroUsuario}></Stack.Screen>
 
@@ -67,7 +67,7 @@ export default function App() {
         <Stack.Screen name="VerAdministrador"  component={VerAdministrador}></Stack.Screen>
         <Stack.Screen name="VerExercicio"      component={VerExercicio}></Stack.Screen>
         <Stack.Screen name="VerModalidade"     component={VerModalidade}></Stack.Screen>
-        <Stack.Screen name="VerPersonal"       component={VerPersonal}></Stack.Screen>
+        <Stack.Screen name="VerColaborador"    component={VerColaborador}></Stack.Screen>
         <Stack.Screen name="VerTreino"         component={VerTreino}></Stack.Screen>
         <Stack.Screen name="VerUsuario"        component={VerUsuario}></Stack.Screen>
 

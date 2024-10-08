@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export  function CadastroPersonal(){
+
+export  function CadastroColaborador(){
     const [personal, setPersonal] = useState({
         nome: "",
         cpf: "",
@@ -11,23 +13,47 @@ export  function CadastroPersonal(){
         senha: ""
     })
 
-    function inserirPersonal(){
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        return token;
+      } catch (error) {
+        console.error('Erro ao recuperar o token:', error);
+        return null;
+      }
+    };    
+
+    const inserirColaborador = async() => {
+
+      const token = await getToken();  
+
+    if (!token) {
+      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
+      return;
+    }
+
         axios.post("http://localhost:3000/colaboradores", {
             nome: personal.nome,
             cpf: personal.cpf,
             endereco: personal.endereco,
-            senha: personal.senha
+            senha: personal.senha,
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`,  
+              'Content-Type': 'application/json',
+            }
         }).then(response => {
-            alert.Alert("Sucesso", "Personal cadastrado com exito")
+            Alert.alert("Sucesso", "Personal cadastrado com exito")
             setPersonal({
                 nome: "",
                 cpf: "",
                 endereco: "",
                 cidade: "",
                 senha: ""
+                
             })
         }).catch(error => {
-            alert.Alert("Erro", "Personal não cadastrado")
+            Alert.alert("Erro", "Personal não cadastrado")
             console.error(error)
         })
     }
@@ -65,7 +91,7 @@ export  function CadastroPersonal(){
             onChangeText={(text) => setPersonal({...personal, senha: text})}/>
 
             <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirPersonal}> Cadastrar</Text>
+                <Text style={styles.txtbtn} onPress={inserirColaborador}> Cadastrar</Text>
             </TouchableOpacity>
             </View>
         </View>
