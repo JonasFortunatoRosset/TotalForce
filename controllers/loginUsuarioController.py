@@ -1,6 +1,6 @@
-from flask import request
+from flask import request, jsonify
 from models.usuario import Usuario
-import jwt, bcrypt, base64, json, secrets, os, jsonify
+import jwt, bcrypt, base64, json, secrets, os
 
 
 def loginUsuarioController():

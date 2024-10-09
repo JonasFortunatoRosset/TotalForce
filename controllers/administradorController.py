@@ -1,20 +1,23 @@
 from flask import jsonify, request
 from database.db import db
 from models.administrador import Administrador
+from cryptography.fernet import Fernet
 import bcrypt
 
+
 def encrypt_cpf(cpf):
-        key = '842$#@$@#fwefweFEWFfewf$#$2344DEWDWE'
+        key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
         cipher_suite = Fernet(key)
         cpf_byte = cpf.encode('utf-8')
         encrypted_cpf = cipher_suite.encrypt(cpf_byte)
-        return encrypted_cpf
+        print(encrypted_cpf)
+        return encrypted_cpf.decode('utf-8')
 
 def decrypt_cpf(encrypted_cpf):
-    key = '842$#@$@#fwefweFEWFfewf$#$2344DEWDWE'
+    key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
     cipher_suite = Fernet(key)
-    decrypted_cpf = cipher_suite.decrypt_cpf(encrypted_cpf)
-
+    decrypted_cpf = cipher_suite.decrypt(encrypted_cpf)
+    return decrypted_cpf
 
 def administradorController():
 
@@ -42,9 +45,6 @@ def administradorController():
     elif request.method == 'GET':
         try:
             data = Administrador.query.all()
-            cpf = data['cpf']
-            cpf_descriptografado = decrypt_cpf(cpf)
-            data['cpf'] = cpf_descriptografado
             administradores = {'administrador': [administrador.to_dict() for administrador in data]}
             return administradores
         except Exception as e:
@@ -66,22 +66,16 @@ def administradorController():
 
         try:
             data = request.get_json()
-            put_admistrador_cpf = data['cpf']
-            cpf_criptografado = encrypt_cpf(cpf)
-            put_administrador = Administrador.query.get(cpf_criptografado)
-            if put_administrador is None:
-                return {'error': 'Administrador não encontrado'}, 404
-            put_administrador.nome  = data.get('nome', put_administrador.nome)
-            put_administrador.senha = data.get('senha', put_administrador.senha)
-            put_admistrador_id = data['codigo']
-            put_administrador = Administrador.query.get(put_admistrador_id)
+            put_admistrador_codigo = data['codigo']
             senha = data['senha']
+            cpf_criptografado = encrypt_cpf(data['cpf'])
+            put_administrador = Administrador.query.get(put_admistrador_codigo)
             if put_administrador is None:
                 return {'error': 'Administrador não encontrado'}, 404
-            put_administrador.nome  = data.get('nome', put_administrador.nome)
-            put_administrador.cpf   = data.get('cpf', put_administrador.cpf)
-            put_administrador.login = data.get('login', put_administrador.login)
             verify_password(data, put_administrador)
+            if cpf_criptografado != put_administrador.cpf:
+                put_administrador.cpf  = cpf_criptografado
+            put_administrador.nome  = data.get('nome', put_administrador.nome)
             db.session.commit()
             return 'Admistrador atualizado com sucesso', 200
         except Exception as e:
@@ -89,9 +83,8 @@ def administradorController():
     
     elif request.method == 'DELETE':
         try:
-            cpf = request.args.get('cpf')
-            cpf_enc = ncrypt_cpf(cpf)
-            delete_administrador = Administrador.query.get(cpf_enc)
+            codigo = request.args.get('codigo')
+            delete_administrador = Administrador.query.get(codigo)
             if delete_administrador is None:
                 return {'Administrador': 'Administrador inexistente'}, 404
             db.session.delete(delete_administrador)

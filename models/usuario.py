@@ -4,6 +4,7 @@ class Usuario(db.Model):
     def to_dict(self):
     
         return{
+            'codigo':   self.codigo,
             'cpf':      self.cpf,
             'nome':     self.nome,
             'endereco': self.endereco,
@@ -13,13 +14,14 @@ class Usuario(db.Model):
             'status':   self.status,
         }
 
-    cpf   = db.Column(db.String(100), primary_key=True, nullable=True, unique=True)
+    codigo    = db.Column(db.Integer, primary_key=True, nullable=True, unique=True, autoincrement=True)
+    cpf      = db.Column(db.String(100))
     nome     = db.Column(db.String(100))
     endereco = db.Column(db.String(100))
     senha    = db.Column(db.String(100))
     peso     = db.Column(db.Float)
     altura   = db.Column(db.Integer)
-    status   = db.Column(db.String(50))
+    status   = db.Column(db.String(20))
 
 
     def __init__(self,cpf,nome,endereco,senha,peso,altura,status):
