@@ -38,8 +38,9 @@ def loginColaboradorController():
     if request.method == 'POST':
         data = request.get_json()
         get_colaborador_cpf = data['cpf']
-        colaborador = Colaborador.query.get(get_colaborador_cpf) 
-        if colaborador is None:
+        colaborador = Colaborador.query.get(get_colaborador_cpf)
+        status_colaborador = colaborador[0].status # Pega o status do colaborador
+        if colaborador is None or status_colaborador != 'ativo': # Verifica se tem dados e se status é válido
             return {'Dados inexistentes'}
         if verify_password(data, colaborador):
             token = create_token(get_colaborador_cpf, colaborador.nome)

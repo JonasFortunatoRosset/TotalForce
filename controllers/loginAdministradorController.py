@@ -7,7 +7,7 @@ def loginAdministradorController():
     
     def verify_password(dados, administrador_banco):
         senha = dados['senha']
-        senha_banco = administrador_banco.senha
+        senha_banco = administrador_banco.senha # Ver se ocorre corretamente a verificação
         return bcrypt.checkpw(senha.encode(), senha_banco.encode())
 
 
@@ -15,7 +15,8 @@ def loginAdministradorController():
         header = {"alg":"H256","type":"JWT"} # algoritimo e tipo de token 
         payload = {
             "sub": cpf,
-            "nome": nome
+            "nome": nome,
+            "exp": 60 # rever
         }
         secret_key = os.getenv("secret_key", secrets.token_hex(32))
 

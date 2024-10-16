@@ -7,7 +7,7 @@ def exercicioController():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],gif=data['gif'],codtreino=data['codtreino'])
+            exercicio = Exercicio(codigo=data['codigo'],nome=data['nome'],descricao=data['descricao'],gif=data['gif'],repeticoes=data['repeticoes'],carga=data['carga'],serie=data['serie'],codtreino=data['codtreino'],codmodalidade=data['codmodalidade'])
             db.session.add(exercicio)
             db.session.commit()
             return ({'message': 'Exercio novo inserido com sucesso'}), 200
@@ -30,10 +30,14 @@ def exercicioController():
             put_exercicio = Exercicio.query.get(put_exercicio_id)
             if put_exercicio is None:
                 return {'error': 'Exercicio não encontrado'}
-            put_exercicio.nome = data.get('nome', put_exercicio.nome)
-            put_exercicio.descricao = data.get('descricao', put_exercicio.descricao)
-            put_exercicio.gif = data.get('gif', put_exercicio.gif)
-            put_exercicio.codtreino = data.get('codtreino', put_exercicio.codtreino)
+            put_exercicio.nome          = data.get('nome', put_exercicio.nome)
+            put_exercicio.descricao     = data.get('descricao', put_exercicio.descricao)
+            put_exercicio.gif           = data.get('gif', put_exercicio.gif)
+            put_exercicio.repeticoes    = data.get('repeticoes', put_exercicio.repeticoes)
+            put_exercicio.carga         = data.get('carga', put_exercicio.carga)
+            put_exercicio.serie         = data.get('serie', put_exercicio.serie)
+            put_exercicio.codtreino     = data.get('codtreino', put_exercicio.codtreino)
+            put_exercicio.codmodalidade = data.get('codmodalidade', put_exercicio.codmodalidade)
             db.session.commit()
             return 'Exercício alterado com sucesso', 200
         except Exception as e:
