@@ -12,6 +12,9 @@ npx expo install @react-native-community/slider
 
 # Baixar AsyncStorage
  npx expo install @react-native-async-storage/async-storage
+
+# Baixar Picker
+ npx expo install @react-native-picker/picker
  
 # Baixar todas as dependências
 npm install
