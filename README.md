@@ -15,6 +15,10 @@ npx expo install @react-native-community/slider
 
 # Baixar Picker
  npx expo install @react-native-picker/picker
+
+ # Baixar Expo av
+npx expo install expo-av
  
 # Baixar todas as dependências
 npm install
+
