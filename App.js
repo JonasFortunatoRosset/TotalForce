@@ -13,20 +13,22 @@ import { GoalsPage }           from './src/Screens/GoalsPage';
 import {NutricaoPage}          from './src/Screens/NutricaoPage';
 
 // importação de telas de cadastro
-import {CadastroGeral}         from './src/Screens/Crud/Cadastros/cadastrosGerais';
-import {CadastroAdministrador} from './src/Screens/Crud/Cadastros/cadastroAdministrador'
-import {CadastroExercicio}     from './src/Screens/Crud/Cadastros/cadastroExercicio'
-import {CadastroModalidade}    from './src/Screens/Crud/Cadastros/cadastroModalidade'
-import {CadastroColaborador}   from './src/Screens/Crud/Cadastros/cadastroColaborador'
-import {CadastroTreino}        from './src/Screens/Crud/Cadastros/cadastroTreino'
-import {CadastroUsuario}       from './src/Screens/Crud/Cadastros/cadastroUsuario'
+import {CadastroGeral}            from './src/Screens/Crud/Cadastros/cadastrosGerais';
+import {CadastroAdministrador}    from './src/Screens/Crud/Cadastros/cadastroAdministrador'
+import {CadastroExercicio}        from './src/Screens/Crud/Cadastros/cadastroExercicio'
+import {CadastroModalidade}       from './src/Screens/Crud/Cadastros/cadastroModalidade'
+import {CadastroColaborador}      from './src/Screens/Crud/Cadastros/cadastroColaborador'
+import {CadastroTreino}           from './src/Screens/Crud/Cadastros/cadastroTreino'
+import {CadastroUsuario}          from './src/Screens/Crud/Cadastros/cadastroUsuario'
+import { CadastroPlano }          from './src/Screens/Crud/Cadastros/cadastroPlano';
+import { CadastroRegistroTreino } from './src/Screens/Crud/Cadastros/cadastroRegistroTreino';
 
 // importação de telas de Pesquisa
-import {VerGeral}       from './src/Screens/Crud/Ver/VerGeral';
+import {VerGeral}         from './src/Screens/Crud/Ver/VerGeral';
 import {VerAdministrador} from './src/Screens/Crud/Ver/VerAdministrador';
 import {VerExercicio}     from './src/Screens/Crud/Ver/VerExercicio';
 import {VerModalidade}    from './src/Screens/Crud/Ver/VerModalidade';
-import {VerColaborador}      from './src/Screens/Crud/Ver/VerColaborador';
+import {VerColaborador}   from './src/Screens/Crud/Ver/VerColaborador';
 import {VerTreino}        from './src/Screens/Crud/Ver/VerTreino';
 import {VerUsuario}       from './src/Screens/Crud/Ver/VerUsuario';
 
@@ -39,7 +41,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='GoalsPage'>
+      <Stack.Navigator initialRouteName='LoginPage'>
         <Stack.Screen name="LoginPage"            component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"          component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"  component={HomeColaboradorPage}></Stack.Screen>
@@ -60,6 +62,8 @@ export default function App() {
         <Stack.Screen name="cadastroColaborador"   component={CadastroColaborador}></Stack.Screen>
         <Stack.Screen name="cadastroTreino"        component={CadastroTreino}></Stack.Screen>
         <Stack.Screen name="cadastroUsuario"       component={CadastroUsuario}></Stack.Screen>
+        <Stack.Screen name="cadastroPlano"         component={CadastroPlano}></Stack.Screen>
+        <Stack.Screen name="cadastroRegistros"     component={CadastroRegistroTreino}></Stack.Screen>
 
 
 
