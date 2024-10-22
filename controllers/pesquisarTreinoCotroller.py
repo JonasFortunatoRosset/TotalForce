@@ -2,6 +2,7 @@ from flask import request, jsonify
 from models.treino import Treino
 from models.modalidade import Modalidade
 from models.exercicio import Exercicio
+from models.usuario import Usuario
 
 # Pesquisar pelo plano e depois treino
 
@@ -11,24 +12,30 @@ def pesquisarTreinoController():
             # Pega do front o treino do usuário
             data = request.get_json()
             codigo_usuario = data['codigo'] 
-            nome_treino = data['treino'] # peito, costa, perna etc...
             # Pequisa no back o treino do usuário
-            treino = Treino.query.filter_by(codigo=codigo_usuario, nome=nome_treino).all()
-            treinos_dict = {'Treinos': [treino.to_dict() for treino in treino]}
-            codmodalidade = treino[0].codmodalidade = # Pega o código da modalidade, sendo que retorna apenas 1 treino
-            # Pesquisa a modalidade filtrada pelo codmodalidade -> modalidade que o treino pertence
-            modalidade = Modalidade.query.filter_by(codigo=codmodalidade).all()
-            modalidades_dict = {'Modalidades': [modalidade.to_dict() for modalidade in modalidade]}
-            # Pesquisa o exercício que pertence a modalidade /// FAZER AO CONTRARIO 
-            exercicio = Exercicio.query.filter_by(codigo=codigo_usuario, codmodalidade=codmodalidade).all()
-            exercicios_dict = {'Exercicios': [exercicio.to_dict() for exercicio in exercicio]}
+            usuario = Usuario.query.filter_by(codigo=codigo_usuario).all()
+            plano_usuario = usuario[[0]].plano
+            treino = Treino.query.filter_by(codplano=plano_usuario).all() # treinos
+            treino1 = treino[0].codigo
+            treino2 = treino[1].codigo
+            treino3 = treino[2].codigo
+            # Pega do banco os exercícios de cada treino
+            exercicio1 = Exercicio.query.filter_by(codtreino=treino1).all()
+            exercicio2 = Exercicio.query.filter_by(codtreino=treino2).all()
+            exercicio3 = Exercicio.query.filter_by(codtreino=treino3).all()
+            #
+            exercicio_treino1_dict = {'Exercicios1': [exercicio1.to_dict() for exercicio1 in exercicio1]}
+            exercicio_treino2_dict = {'Exercicios2': [exercicio2.to_dict() for exercicio2 in exercicio2]}
+            exercicio_treino3_dict = {'Exercicios3': [exercicio3.to_dict() for exercicio3 in exercicio3]}
             response = {
                 'Treinos': treinos_dict,
-                'Modalidades': modalidades_dict,
-                'Exercicios': exercicios_dict
+                'Plano': plano_dict,
+                'Exercicios1': exercicio_treino1_dict,
+                'Exercicios2': exercicio_treino2_dict,
+                'Exercicios3': exercicio_treino3_dict,
             }
 
             return jsonify(response), 200
         except Exception as e:
-            return jsonify({'message': 'Não foi possível buscar treino. Error: {}'.format(str(e)), 500})
+            return jsonify({'error': 'Não foi possível buscar treino. Error: {}'.format(str(e))}), 500
     

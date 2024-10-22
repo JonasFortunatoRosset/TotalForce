@@ -4,20 +4,17 @@ from models.colaborador import Colaborador
 import bcrypt
 from cryptography.fernet import Fernet
 
-
 def encrypt_cpf(cpf):
-        key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
+        key = '842$#@$@#fwefweFEWFfewf$#$2344DEWDWE'
         cipher_suite = Fernet(key)
         cpf_byte = cpf.encode('utf-8')
         encrypted_cpf = cipher_suite.encrypt(cpf_byte)
-        print(encrypted_cpf)
-        return encrypted_cpf.decode('utf-8')
+        return encrypted_cpf
 
 def decrypt_cpf(encrypted_cpf):
-    key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
+    key = '842$#@$@#fwefweFEWFfewf$#$2344DEWDWE'
     cipher_suite = Fernet(key)
-    decrypted_cpf = cipher_suite.decrypt(encrypted_cpf)
-    return decrypted_cpf
+    decrypted_cpf = cipher_suite.decrypt_cpf(encrypted_cpf)
 
 
 def colaboradorController():
@@ -31,12 +28,11 @@ def colaboradorController():
 
     if request.method == 'POST':
         try:
-            data = request.get_json() # Converte os dados enviados pelo cliente em formato json para um dicionário python NOME CPF ENDERECO SENHA
-            print(data)
+            data = request.get_json() # Converte os dados enviados pelo cliente em formato json para um dicionário python NOME CPF ENDERECO CIDADE SENHA
             cpf = data['cpf']
             senha = data['senha']
             cpf_criptografado = encrypt_cpf(cpf)
-            senha_hasheada = hashSenha(senha)    
+            senha_hasheada = senha_hash(senha)    
             colaborador = Colaborador(cpf=cpf_criptografado,nome=data['nome'],endereco=data['endereco'],senha=senha_hasheada)
             db.session.add(colaborador) # Executa o código sql no banco
             db.session.commit()
@@ -47,10 +43,13 @@ def colaboradorController():
     elif request.method == 'GET': # TESTARRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
         try:
             data = Colaborador.query.all()
+            cpf = data['cpf']
+            cpf_descriptografado = decrypt_cpf(cpf)
+            data['cpf'] = cpf_descriptografado
             colaboradores = {'colaborador': [colaborador.to_dict() for colaborador in data]}
             return colaboradores
         except Exception as e:
-            return 'Não foi possível buscar colaboradores. Error: {}'.format(str(e)), 405
+            return jsonify({'Não foi possível buscar colaboradores. Error: {}'.format(str(e))}), 405
     
     elif request.method == 'PUT':
         def verify_password(dados, colaborador_banco):
@@ -67,33 +66,33 @@ def colaboradorController():
             
 
         try:
-            data = request.get_json()
-            put_colaborador_codigo = data['codigo']
-            print(data)
-            put_colaborador = Colaborador.query.get(put_colaborador_codigo)
+            put_colaborador_cpf = data.get('cpf')
+            cpf_criptografado = encrypt_cpf(put_colaborador_cpf)
+            put_colaborador = Colaborador.query.get(put_colaborador_cpf)
+            put_colaborador_id = data.get('codigo')
+            senha = data['senha']
+            put_colaborador = Colaborador.query.get(put_colaborador_id)
             if put_colaborador is None:
                 return {'error': 'Colaborador não encontrado'}, 404
-            senha = data['senha']
-            cpf = data['cpf']
-            cpf_criptografado = encrypt_cpf(cpf)
-            if cpf_criptografado != put_colaborador.cpf:
-                put_colaborador.cpf = cpf_criptografado
             put_colaborador.nome = data.get('nome', put_colaborador.nome)
             put_colaborador.endereco = data.get('endereco', put_colaborador.endereco)
+            put_colaborador.senha = data.get('senha', put_colaborador.senha)
+            put_colaborador.cidade = data.get('cidade', put_colaborador.cidade)
             verify_password(data, put_colaborador)
             db.session.commit()
-            return 'Colaborador alterado com sucesso', 200
+            return jsonify({'Colaborador alterado com sucesso'}), 200
         except Exception as e:
-            return {'error': 'Erro ao atualizar os dados do colaborador. Erro{}'.format(e)}, 400
+            return jsonify({'error': 'Erro ao atualizar os dados do colaborador. Erro{}'.format(e)}), 400
 
     elif request.method == 'DELETE':
         try:
-            codigo = request.args.get('codigo')
-            delete_colaborador = Colaborador.query.get(codigo) # delete_colaborador = Colaborador.query.filter_by(cpf=cpf_enc).first()
+            cpf = request.args.get('cpf')
+            cpf_enc = encrypt_cpf(cpf)
+            delete_colaborador = Colaborador.query.get(cpf_enc) # delete_colaborador = Colaborador.query.filter_by(cpf=cpf_enc).first()
             if delete_colaborador is None:
                 return {'Colaborador': 'Colaborador inexistente'}, 404
             db.session.delete(delete_colaborador)
             db.session.commit()
-            return 'Colaborador deletado com sucesso'
+            return jsonify({'Colaborador deletado com sucesso'})
         except Exception as e:
-            return 'Não foi possível deletar o colaborador. Error: {}'.format(str(e)), 405
+            return jsonify({'Não foi possível deletar o colaborador. Error: {}'.format(str(e))}), 405

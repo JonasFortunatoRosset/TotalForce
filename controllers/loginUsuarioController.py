@@ -4,11 +4,17 @@ import jwt, bcrypt, base64, json, secrets, os
 
 
 def loginUsuarioController():
-    
+        
+    def encrypt_cpf(cpf):
+        key = '842$#@$@#fwefweFEWFfewf$#$2344DEWDWE'
+        cipher_suite = Fernet(key)
+        cpf_byte = cpf.encode('utf-8')
+        encrypted_cpf = cipher_suite.encrypt(cpf_byte)
+        return encrypted_cpf
 
     def verify_password(dados, usuario_banco):
         senha = dados['senha']
-        senha_banco = usuario_banco.senha
+        senha_banco = usuario_banco[0].senha
         return bcrypt.checkpw(senha.encode(), senha_banco.encode())
 
 
@@ -27,8 +33,8 @@ def loginUsuarioController():
         token = f"{header_encoded.decode()}.{payload_encoded.decode()}.{base64.urlsafe_b64encode(assinatura.encode()).rstrip(b'=').decode()}"
         print(f"meu token: {token}")
         return token
+            
         
-    
 
     def verify_token(token, secret_key):
         try:
@@ -42,16 +48,16 @@ def loginUsuarioController():
         data = request.get_json() # Pega os dados do form front
         print(data)
         get_usuario_cpf = data['cpf'] # Pega o cpf do usuário do data/front
-        usuario = Usuario.query.get(get_usuario_cpf) # Pega todos os dados do banco do usuario
-        usuario_status = usuario[0].status
-        if status_usuario != 'ativo':
+        cpf_usuario = encrypt_cpf(get_usuario_cpf)
+        usuario = Usuario.query.filter_by(cpf=cpf_usuario) # Pega todos os dados do banco do usuario
+        if usuario[0].status != 'ativo':
             return jsonify({'message': 'Status inválido para login'})
         if usuario is None: # Verifica se retornou um resultado
-            return {'Dados não existentes no banco'}
-        
+            return jsonify({'message': 'Dados não existentes no banco'})
+            
         if verify_password(data, usuario): # Verifica se a senha do cpf é igual a do form
-            token = create_token(get_usuario_cpf, usuario.nome)
+            token = create_token(get_usuario_cpf, usuario[0].nome)
             return token
-        
+            
         else: 
-            return {'Senha incorreta'}
+            return jsonify({'message': 'Senha incorreta'})

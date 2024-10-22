@@ -14,7 +14,7 @@ class App():
         default_routes(self.app)
 
     def run(self):
-        return self.app.run(port=3000, host='localhost', debug=True)
+        return self.app.run(port=3000, host='0.0.0.0', debug=True)
 
 app = App()
 app.run()

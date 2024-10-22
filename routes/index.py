@@ -12,6 +12,7 @@ from routes.loginColaboradorRoute import logincolaboradores
 from routes.pesquisartreinos import pesquisartreinos
 from routes.validarTokenRoute import validartokens
 from routes.invalidartoken import invalidartokens
+from routes.planoRoute   import planos
 
 
 def default_routes(app):
@@ -27,3 +28,4 @@ def default_routes(app):
     pesquisartreinos(app)
     validartokens(app)
     invalidartokens(app)
+    planos(app)

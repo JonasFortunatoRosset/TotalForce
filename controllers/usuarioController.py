@@ -36,7 +36,7 @@ def usuariosController():
             senha_hasheada = hashSenha(senha)
             cpf_criptografado = encrypt_cpf(cpf)
             print(data)
-            usuario = Usuario(cpf=cpf_criptografado,nome=data['nome'],endereco=data['endereco'],senha=senha_hasheada,peso=data['peso'],altura=data['altura'],status=data['status'])
+            usuario = Usuario(cpf=cpf_criptografado,nome=data['nome'],endereco=data['endereco'],senha=senha_hasheada,peso=data['peso'],altura=data['altura'],codplano=data['codplano'],status=data['status'])
             db.session.add(usuario)
             db.session.commit()
             return jsonify({'message': 'Usuario cadastrado'}),200
@@ -81,6 +81,7 @@ def usuariosController():
             verify_password(data, put_usuario)
             put_usuario.peso     = data.get('peso', put_usuario.peso)
             put_usuario.altura   = data.get('altura', put_usuario.altura)
+            put_usuario.codplano   = data.get('codplano', put_usuario.codplano)
             put_usuario.status   = data.get('status', put_usuario.status)
             db.session.commit()
             return jsonify({'message': 'Usuario alterado com sucesso'}), 200

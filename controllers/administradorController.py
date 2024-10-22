@@ -1,47 +1,28 @@
 from flask import jsonify, request
 from database.db import db
 from models.administrador import Administrador
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet 
 import bcrypt
-
-
-def encrypt_cpf(cpf):
-        key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
-        cipher_suite = Fernet(key)
-        cpf_byte = cpf.encode('utf-8')
-        encrypted_cpf = cipher_suite.encrypt(cpf_byte)
-        print(encrypted_cpf)
-        return encrypted_cpf.decode('utf-8')
-
-def decrypt_cpf(encrypted_cpf):
-    key = b'W0uf9GslpYy9upNj7bWjYFgD7K2S5uOmbcV76vM5GF0='
-    cipher_suite = Fernet(key)
-    decrypted_cpf = cipher_suite.decrypt(encrypted_cpf)
-    return decrypted_cpf
+from hashes.funcoes import hash_cpf, verificar_cpf_cadastro, hashSenha
 
 def administradorController():
 
-    def hashSenha(senha):
-        senha_byte = senha.encode('utf-8')
-        sal = bcrypt.gensalt()
-        senha_hash = bcrypt.hashpw(senha_byte, sal)
-        return senha_hash
-
-
     if request.method == 'POST':
         try:
-            data = request.get_json() # nome cpf login senha
+            data = request.get_json()  # nome cpf login senha
+            if not all(key in data for key in ['nome', 'cpf', 'senha']):
+                return jsonify({'error': 'Nome, CPF e senha são obrigatórios'}), 400
             cpf = data['cpf']
             senha = data['senha']
-            cpf_criptografado = encrypt_cpf(cpf)
-            senha_hasheada = hashSenha(senha)
-            administrador = Administrador(cpf=cpf_criptografado,nome=data['nome'],senha=senha_hasheada)
+            cpf_hash = hash_cpf(cpf)
+            senha_hash = hashSenha(senha)
+            administrador = Administrador(cpf=cpf_hash, nome=data['nome'], senha=senha_hash)
             db.session.add(administrador)
             db.session.commit()
-            return ({'message' : 'Administrador inserido com sucesso'})
+            return {'message': 'Administrador inserido com sucesso'}
         except Exception as e:
             return jsonify({'error': 'Erro ao inserir novo administrador. Erro: {}'.format(str(e))}), 400
-        
+
     elif request.method == 'GET':
         try:
             data = Administrador.query.all()
@@ -49,8 +30,8 @@ def administradorController():
             return administradores
         except Exception as e:
             return 'Não foi possível buscar nenhum administrador. Error: {}'.format(str(e)), 405
-    
-    elif  request.method == 'PUT':
+
+    elif request.method == 'PUT':
         def verify_password(dados, administrador_banco):
             senha = dados['senha']
             senha_banco = administrador_banco.senha
@@ -60,27 +41,29 @@ def administradorController():
                 senha_byte = senha.encode('utf-8')
                 sal = bcrypt.gensalt()
                 senha_hash = bcrypt.hashpw(senha_byte, sal)
-                administrador_banco.senha    = senha_hash
-                return
-            
+                administrador_banco.senha = senha_hash
 
         try:
             data = request.get_json()
-            put_admistrador_codigo = data['codigo']
-            senha = data['senha']
-            cpf_criptografado = encrypt_cpf(data['cpf'])
-            put_administrador = Administrador.query.get(put_admistrador_codigo)
+            put_administrador_codigo = data['codigo']
+            cpf = data['cpf']
+            put_administrador = Administrador.query.get(put_administrador_codigo)
             if put_administrador is None:
                 return {'error': 'Administrador não encontrado'}, 404
+            
+            # Verifica e atualiza a senha se necessário
             verify_password(data, put_administrador)
-            if cpf_criptografado != put_administrador.cpf:
-                put_administrador.cpf  = cpf_criptografado
-            put_administrador.nome  = data.get('nome', put_administrador.nome)
+            
+            # Verifica e atualiza o CPF
+            if not verificar_cpf_cadastro(cpf, put_administrador.cpf):
+                put_administrador.cpf = hash_cpf(cpf)  # Atualiza o CPF se necessário
+
+            put_administrador.nome = data.get('nome', put_administrador.nome)
             db.session.commit()
-            return 'Admistrador atualizado com sucesso', 200
+            return 'Administrador atualizado com sucesso', 200
         except Exception as e:
-            return {'error': 'Erro ao atualizar Administrador. Erro{}'.format(e)}, 400
-    
+            return {'error': 'Erro ao atualizar Administrador. Erro: {}'.format(e)}, 400
+
     elif request.method == 'DELETE':
         try:
             codigo = request.args.get('codigo')

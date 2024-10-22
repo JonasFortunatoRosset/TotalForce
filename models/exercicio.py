@@ -9,8 +9,8 @@ class Exercicio(db.Model):
             'nome':          self.nome,
             'descricao':     self.descricao,
             'gif':           self.gif,
-            'repeticoes':    self.repeticoes
-            'serie'          self.serie,
+            'repeticoes':    self.repeticoes,
+            'serie':         self.serie,
             'codtreino':     self.codtreino,
             'codmodalidade': self.codmodalidade
         }
