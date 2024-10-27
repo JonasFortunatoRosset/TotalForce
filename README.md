@@ -18,6 +18,9 @@ npx expo install @react-native-community/slider
 
  # Baixar Expo av
 npx expo install expo-av
+
+# Baixar SafeAreaContext
+npx expo install react-native-safe-area-context 
  
 # Baixar todas as dependências
 npm install
