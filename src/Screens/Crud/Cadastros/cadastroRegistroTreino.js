@@ -25,15 +25,6 @@ export function CadastroRegistroTreino() {
   const [planos, setPlanos] = useState([]); 
   const [users, setUsers] = useState([])
 
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      return token;
-    } catch (error) {
-      console.error('Erro ao recuperar o token:', error);
-      return null;
-    }
-  };
 
   const validarData = (text) => {
     const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -45,13 +36,7 @@ export function CadastroRegistroTreino() {
   };
 
   const buscarPlanos = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
+    
     try {
       const response = await axios.get("http://localhost:3000/planos", {
         headers: {

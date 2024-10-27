@@ -15,24 +15,7 @@ export function VerAdministrador() {
         senha: ""
     });
 
-
-    const getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');  
-            return token;
-        } catch (error) {
-            console.error('Erro ao recuperar o token:', error);
-            return null;
-        }
-    };
-
     const carregarAdministradores = async () => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.get('http://localhost:3000/administradores', {
             headers: {

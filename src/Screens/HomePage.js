@@ -1,55 +1,74 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Entypo from '@expo/vector-icons/Entypo';
 
-import totalforcelogo from './Images/totalforcelogo.png'
+import logoTotal from './Images/logoTotal.png';
 import dumbel from './Images/dumbel.png';
 import nutricao from './Images/nutricao.png';
-import configuracao from './Images/configuracao.png';
 
-export function HomePage({navigation}) {
+export function HomePage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <EvilIcons name="user" size={60} color="black"/>
+        <EvilIcons name="user" size={60} color="black" />
       </View>
+
+      
       <View style={styles.body}>
-        <View style={styles.line1}>
-          <TouchableHighlight onPress={() => navigation.navigate('TrainPage')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Treino</Text>
-            <Image source={dumbel} style={styles.boxImageTrain}/>
-          </View>
+        <View style={styles.line}>
+          <TouchableHighlight 
+            onPress={() => navigation.navigate('TrainPage')} 
+            underlayColor={'#855200'} 
+            style={styles.boxHighlight}
+          >
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Treino</Text>
+              <Image source={dumbel} style={styles.boxImage} />
+            </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('NutricaoPage')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Nutrição</Text>
-            <Image source={nutricao} style={styles.boxImageNutricao} />
-          </View>
+          <TouchableHighlight 
+            onPress={() => navigation.navigate('NutricaoPage')} 
+            underlayColor={'#855200'} 
+            style={styles.boxHighlight}
+          >
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Nutrição</Text>
+              <Image source={nutricao} style={styles.boxImage} />
+            </View>
           </TouchableHighlight>
         </View>
 
-        <View style={styles.line2}>
-          <TouchableHighlight onPress={() => navigation.navigate('ConfigPage')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Configurações</Text>
-            <Image source={configuracao} style={styles.boxImageConfig} />
-          </View>
+        <View style={styles.line}>
+          <TouchableHighlight 
+            onPress={() => navigation.navigate('ResultsPage')} 
+            underlayColor={'#855200'} 
+            style={styles.boxHighlight}
+          >
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Evolução</Text>
+              <Entypo name="bar-graph" size={125} color="black" />
+            </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('GoalsPage')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Metas</Text>
-            <MaterialCommunityIcons name="checkbox-multiple-marked-outline" size={125} color="black" />
-          </View>
+          <TouchableHighlight 
+            onPress={() => navigation.navigate('GoalsPage')} 
+            underlayColor={'#855200'} 
+            style={styles.boxHighlight}
+          >
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Metas</Text>
+              <MaterialCommunityIcons name="checkbox-multiple-marked-outline" size={125} color="black" />
+            </View>
           </TouchableHighlight>
         </View>
       </View>
+
       <View style={styles.footer}>
-        <Image style={styles.imgfooter} source={totalforcelogo}/>
+        <Image style={styles.imgFooter} source={logoTotal} />
       </View>
     </View>
   );
@@ -58,81 +77,71 @@ export function HomePage({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#E49413',
   },
   header: {
     width: '100%',
     backgroundColor: '#E49413',
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    elevation: 4,
+    borderRadius: 12,
+    marginTop: 25,
   },
   txtheader: {
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
   body: {
+    backgroundColor: '#FFB031',
     flex: 1,
-    width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFB031'
   },
-  line1: {
+  line: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 30,
-    gap: 45, 
-
+    justifyContent: 'space-evenly',
+    marginBottom: 40,
+    width: '90%',
   },
-  line2: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 30,
-    gap: 45, 
-    marginBottom: '25%'
-
+  boxHighlight: {
+    borderRadius: 12,
   },
   box: {
     backgroundColor: '#E49413',
-    padding: 10,
-    height: 200,
-    width: 150,
-    alignItems: 'center',
+    width: 160,
+    height: 220,
+    borderRadius: 12,
     justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
   },
   boxText: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 18,
     marginBottom: 10,
   },
-  boxImageTrain: {
+  boxImage: {
     width: 120,
     height: 120,
-  },
-  boxImageNutricao: {
-    width: 92,
-    height: 120,
-  },
-  boxImageConfig: {
-    width: 120,
-    height: 120,
-  },
-  boxImagePagamento: {
-    width: 120,
-    height: 120,
+    resizeMode: 'contain',
   },
   footer: {
     width: '100%',
     backgroundColor: '#E49413',
-    padding: 15,
+    padding: 20,
     alignItems: 'center',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
-  imgfooter: {
-    width: 110,
-    height: 50,
-  }
+  imgFooter: {
+    width: 120,
+    height: 60,
+    resizeMode: 'contain',
+  },
 });

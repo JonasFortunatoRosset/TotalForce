@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';  
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';  // Importação do Picker
 
 export function VerColaborador() {
     const [colaborador, setColaborador] = useState([]);
@@ -12,40 +13,25 @@ export function VerColaborador() {
         nome: "",
         cpf: "",
         endereco: "",
-        senha: ""
+        cidade: "",
+        senha: "",
+        login: "",
+        status: "",
     });
 
-  
-    const getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');  
-            return token;
-        } catch (error) {
-            console.error('Erro ao recuperar o token:', error);
-            return null;
-        }
-    };
-
     
+
     const carregarColaboradores = async () => {
-        const token = await getToken();
+        
 
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
-
-        axios.get('http://localhost:3000/colaboradores', {
-            headers: {
-                'Authorization': `Bearer ${token}`,  
-            }
-        })
-        .then(response => {
+        try {
+            const response = await axios.get('http://localhost:3000/colaboradores', {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
             setColaborador(response.data.colaborador);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao carregar colaboradores:', error);
-        });
+        }
     };
 
     useEffect(() => {
@@ -58,49 +44,31 @@ export function VerColaborador() {
     };
 
     const handleUpdate = async () => {
-        const token = await getToken();
 
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
-
-        axios.put('http://localhost:3000/colaboradores', dataColaborador, {
-            params: { codigo: dataColaborador.codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,  
-            }
-        })
-        .then(response => {
+        try {
+            await axios.put('http://localhost:3000/colaboradores', dataColaborador, {
+                params: { codigo: dataColaborador.codigo },
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
             carregarColaboradores();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao atualizar colaborador:', error);
-        });
+        }
     };
 
     const handleDelete = async (codigo) => {
-        const token = await getToken();
 
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
-
-        axios.delete('http://localhost:3000/colaboradores', {
-            params: { codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,  
-            }
-        })
-        .then(response => {
-            setColaborador(colaborador.filter(colaborador => colaborador.codigo !== codigo));
-        })
-        .catch(error => {
+        try {
+            await axios.delete('http://localhost:3000/colaboradores', {
+                params: { codigo },
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            setColaborador(colaborador.filter(col => col.codigo !== codigo));
+        } catch (error) {
             console.error('Erro ao deletar colaborador:', error);
-        });
+        }
     };
 
     return (
@@ -120,6 +88,7 @@ export function VerColaborador() {
                                 <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
                                 <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
                                 <Text style={styles.itemText}>Senha: {item.senha}</Text>
+                                <Text style={styles.itemText}>Status: {item.status}</Text>
                             </View>
 
                             <View style={styles.icons}>
@@ -141,9 +110,7 @@ export function VerColaborador() {
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(false);
-                }}>
+                onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
@@ -157,37 +124,46 @@ export function VerColaborador() {
                                     value={dataColaborador.nome}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, nome: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="CPF"
                                     value={dataColaborador.cpf}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, cpf: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Endereço"
                                     value={dataColaborador.endereco}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, endereco: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Senha"
                                     value={dataColaborador.senha}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, senha: text })}
                                 />
+
+                                {/* Picker para seleção de status */}
+                                <Picker
+                                    selectedValue={dataColaborador.status}
+                                    style={styles.input}
+                                    onValueChange={(itemValue) =>
+                                        setDataColaborador({ ...dataColaborador, status: itemValue })
+                                    }>
+                                    <Picker.Item label="Ativo" value="ativo" />
+                                    <Picker.Item label="Inativo" value="inativo" />
+                                    <Picker.Item label="Em Análise" value="em_analise" />
+                                    <Picker.Item label="Recusado" value="recusado" />
+                                </Picker>
                             </View>
 
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
                                     <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity
                                     style={[styles.btns, styles.btnCancel]}
-                                    onPress={() => { setModalVisible(false); }}>
+                                    onPress={() => setModalVisible(false)}>
                                     <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>

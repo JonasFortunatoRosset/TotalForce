@@ -7,7 +7,7 @@ import { Picker } from '@react-native-picker/picker';
 export function CadastroUsuario() {
   const [usuario, setUsuario] = useState({
     nome: "",
-    cpf: "",
+    login: "",
     endereco: "",
     senha: "",
     peso: "",
@@ -20,23 +20,10 @@ export function CadastroUsuario() {
   const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [planos, setPlanos] = useState([]); 
 
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      return token;
-    } catch (error) {
-      console.error('Erro ao recuperar o token:', error);
-      return null;
-    }
-  };
+
 
   const buscarPlanos = async () => {
     const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
 
     try {
       const response = await axios.get("http://localhost:3000/planos", {
@@ -64,7 +51,7 @@ export function CadastroUsuario() {
         "http://localhost:3000/usuarios",
         {
           nome: usuario.nome,
-          cpf: usuario.cpf,
+          login: usuario.login,
           endereco: usuario.endereco,
           senha: usuario.senha,
           peso: usuario.peso,
@@ -83,7 +70,7 @@ export function CadastroUsuario() {
         Alert.alert("Sucesso", "Usuário foi cadastrado");
         setUsuario({
           nome: "",
-          cpf: "",
+          login: "",
           endereco: "",
           senha: "",
           peso: "",
@@ -116,9 +103,9 @@ export function CadastroUsuario() {
 
         <TextInput
           style={styles.inputs}
-          placeholder="CPF"
-          value={usuario.cpf}
-          onChangeText={(text) => setUsuario({ ...usuario, cpf: text })}
+          placeholder="Login"
+          value={usuario.login}
+          onChangeText={(text) => setUsuario({ ...usuario, login: text })}
         />
 
         <TextInput

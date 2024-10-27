@@ -1,41 +1,56 @@
 import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
+import { Picker } from '@react-native-picker/picker';
+import { SafeAreaView } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 export function VerUsuario() {
     const [usuario, setUsuario] = useState([]);
+    const [statusFiltro, setStatusFiltro] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [statusModalVisible, setStatusModalVisible] = useState(false);
+    const [planos, setPlanos] = useState([]);
     const [dataUsuario, setDataUsuario] = useState({
         codigo: "",
         nome: "",
-        cpf: "",
+        login: "",
         endereco: "",
         senha: "",
         peso: "",
         altura: "",
+        codplano: "",
         status: ""
     });
+;
 
-    const getToken = async () => {
+    const buscarPlanos = async () => {
+
+    
         try {
-            const token = await AsyncStorage.getItem('token');
-            return token;
+          const response = await axios.get("http://localhost:3000/planos", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setPlanos(response.data);  
         } catch (error) {
-            console.error('Erro ao recuperar o token:', error);
-            return null;
+          Alert.alert('Erro', 'Não foi possível buscar os planos.');
+          console.error(error);
         }
+      };
+
+      const usuariosFiltrados = () => {
+        if (statusFiltro === "") return usuario;
+        return usuario.filter((user) => user.status === statusFiltro);
     };
 
-    const carregarUsuarios = async () => {
-        const token = await getToken();
+    const contarUsuariosFiltrados = () => usuariosFiltrados().length;
 
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
+    const carregarUsuarios = async () => {
 
         axios.get('http://localhost:3000/usuarios', {
             headers: {
@@ -60,12 +75,6 @@ export function VerUsuario() {
     };
 
     const handleUpdate = async () => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.put('http://localhost:3000/usuarios', dataUsuario, {
             params: { codigo: dataUsuario.codigo },
@@ -75,7 +84,7 @@ export function VerUsuario() {
         })
         .then(response => {
             carregarUsuarios();
-            setDataUsuario({ codigo: "", nome: "", cpf: "", endereco: "", senha: "", peso: "", altura: "", status: "" });
+            setDataUsuario({ codigo: "", nome: "", login: "", endereco: "", senha: "", peso: "", altura: "",codplano: "", status: "" });
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
         })
@@ -85,12 +94,6 @@ export function VerUsuario() {
     };
 
     const handleDelete = async (codigo) => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.delete('http://localhost:3000/usuarios', {
             params: { codigo },
@@ -107,25 +110,52 @@ export function VerUsuario() {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.txtheader}>Pesquisa de Usuários</Text>
             </View>
 
             <View style={styles.body}>
+            <View style={styles.filterContainer}>
+    <View style={styles.filterButtons}>
+        {["Todos", "Ativo", "Inativo", "Em Análise", "Recusado"].map((status) => (
+            <TouchableOpacity 
+                key={status}
+                style={[
+                    styles.filterButton, 
+                    statusFiltro === status && styles.selectedButton
+                ]}
+                onPress={() => setStatusFiltro(status === "Todos" ? "" : status)}
+            >
+                <Text 
+                    style={[
+                        styles.filterText, 
+                        statusFiltro === status && styles.selectedText
+                    ]}
+                >
+                    {status}
+                </Text>
+            </TouchableOpacity>
+        ))}
+    </View>
+    <Text style={styles.statusText}>
+        Total  {statusFiltro || "Usários"}: {contarUsuariosFiltrados()}
+    </Text>
+</View>
                 <FlatList
-                    data={usuario}
+                    data={usuariosFiltrados()}
                     keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
+                    renderItem={({ item }) => ( 
                         <View style={styles.itemContainer}>
                             <View style={styles.dados}>
                                 <Text style={styles.itemText}>Código: {item.codigo}</Text>
                                 <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
+                                <Text style={styles.itemText}>login: {item.login}</Text>
                                 <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
                                 <Text style={styles.itemText}>Senha: {item.senha}</Text>
                                 <Text style={styles.itemText}>Peso: {item.peso}</Text>
                                 <Text style={styles.itemText}>Altura: {item.altura}</Text>
+                                <Text style={styles.itemText}>Plano: {item.codplano}</Text>
                                 <Text style={styles.itemText}>Status: {item.status}</Text>
                             </View>
 
@@ -167,9 +197,9 @@ export function VerUsuario() {
 
                                 <TextInput 
                                     style={styles.input} 
-                                    placeholder="CPF"
-                                    value={dataUsuario.cpf}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, cpf: text })} 
+                                    placeholder="login"
+                                    value={dataUsuario.login}
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, login: text })} 
                                 />
 
                                 <TextInput 
@@ -199,13 +229,91 @@ export function VerUsuario() {
                                     value={dataUsuario.altura}
                                     onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })} 
                                 />
+                                <TouchableOpacity 
+                                    style={styles.inputs} 
+                                    onPress={() => {
+                                        buscarPlanos(); 
+                                        setModalVisible(true);
+                                    }}
+                                    >
+                                    <Text style={styles.placeholderText}>
+                                        {usuario.codplano ? `Plano: ${usuario.codplano}` : "Selecione um plano"}
+                                    </Text>
+                                </TouchableOpacity>
 
-                                <TextInput 
-                                    style={styles.input} 
-                                    placeholder="Status"
-                                    value={dataUsuario.status}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, status: text })} 
-                                />
+                            <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => setModalVisible(false)}
+                            >
+                            <View style={styles.modalContainer}>
+                                <View style={styles.modalContent}>
+                                <Picker
+                                    selectedValue={usuario.codplano}
+                                    onValueChange={(itemValue) => {
+                                    setUsuario({ ...usuario, codplano: itemValue });
+                                    setModalVisible(false);
+                                    }}
+                                    style={styles.picker}
+                                >
+                                    <Picker.Item label="Selecione um plano" value="" />
+                                    {planos.map((plano) => (
+                                    <Picker.Item key={plano.id} label={plano.nome} value={plano.id} />
+                                    ))}
+                                </Picker>
+
+                                <TouchableOpacity 
+                                    style={styles.closeButton} 
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.closeButtonText}>Fechar</Text>
+                                </TouchableOpacity>
+                                </View>
+                            </View>
+                            </Modal>
+
+                            <TouchableOpacity 
+                            style={styles.inputs} 
+                            onPress={() => setStatusModalVisible(true)}
+                            >
+                            <Text style={styles.placeholderText}>
+                                {usuario.status}
+                            </Text>
+                            </TouchableOpacity>
+
+                            <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={statusModalVisible}
+                            onRequestClose={() => setStatusModalVisible(false)}
+                            >
+                            <View style={styles.modalContainer}>
+                                <View style={styles.modalContent}>
+                                <Picker
+                                    selectedValue={usuario.status}
+                                    onValueChange={(itemValue) => {
+                                    setUsuario({ ...usuario, status: itemValue });
+                                    setStatusModalVisible(false);
+                                    }}
+                                    style={styles.picker}
+                                >
+                                    <Picker.Item label="Ativo"      value="Ativo" />
+                                    <Picker.Item label="Inativo"    value="Inativo" />
+                                    <Picker.Item label="Em Análise" value="Em Análise" />
+                                    <Picker.Item label="Recusado"   value="Recusado" />
+                                </Picker>
+
+                                <TouchableOpacity 
+                                    style={styles.closeButton} 
+                                    onPress={() => setStatusModalVisible(false)}
+                                >
+                                    <Text style={styles.closeButtonText}>Fechar</Text>
+                                </TouchableOpacity>
+                                </View>
+                            </View>
+                            </Modal>
+
                             </View>
 
                             <View style={styles.btnContainer}>
@@ -221,78 +329,88 @@ export function VerUsuario() {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FFB031', 
     },
     header: {
-        backgroundColor: '#E49413',
-        width: '100%',
-        height: '8%',
+        backgroundColor: '#FFB031', 
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
+        borderBottomWidth: 2,
+        borderBottomColor: '#E49413',
     },
     txtheader: {
-        fontSize: 20,
-        color: '#fff',
+        fontSize: 24, 
+        color: '#000',
+        fontWeight: 'bold', 
     },
     body: {
-        backgroundColor: '#E49413',
         flex: 1,
         padding: 20,
+        backgroundColor: '#E49413', 
     },
     icons: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     dados: {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         padding: 5,
-        height: '100%',
+        flex: 1, 
     },
     itemContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        backgroundColor: '#FFB031',
-        borderRadius: 8,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        backgroundColor: '#E49413', 
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3, 
+        marginBottom: 10, 
     },
     itemText: {
-        color: '#fff',
+        color: '#333', 
         fontSize: 16,
         marginBottom: 5,
     },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#E49413', 
         marginVertical: 10,
     },
     modalOverlay: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
     },
     modalContent: {
-        width: '80%',
-        backgroundColor: '#FFB031',
-        borderRadius: 8,
+        width: '85%',
+        backgroundColor: '#FFFFFF', 
+        borderRadius: 12,
         padding: 20,
         shadowColor: '#000',
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FFB031',
         padding: 15,
         alignItems: 'center',
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
     },
     modalBody: {
         justifyContent: 'center',
@@ -300,28 +418,41 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     ModalTitle: {
-        fontSize: 20,
+        fontSize: 22,
         color: '#000',
+        fontWeight: 'bold',
     },
     BoxInputs: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100%', 
     },
     input: {
-        width: 250,
-        height: 40,
+        width: '90%', 
+        height: 45,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff', 
         borderRadius: 8,
-        marginVertical: 5,
+        marginVertical: 8,
+        color: '#333',
+    },
+    inputs: {
         color: '#000',
+        marginBottom: 20,
+        borderRadius: 12,
+        backgroundColor: '#fff',
+        width: '90%', 
+        height: 50,
+        padding: 10,
+
     },
     btnContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: 250, 
+        width: '90%', 
+        marginTop: 15,
     },
     btns: {
         width: '48%', 
@@ -329,15 +460,50 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginVertical: 5,
         alignItems: 'center',
+        backgroundColor: '#FFB031',
     },
     txtbtns: {
-        color: '#000',
+        color: '#E49413', 
         fontSize: 16,
+        fontWeight: 'bold',
     },
-    btnSave: {
-        backgroundColor: '#E49413',
+    filterContainer: {
+        padding: 10,
+        backgroundColor: '#FFB031',
+        alignItems: 'center',
+        borderRadius: 10,
+        marginBottom: 15, 
     },
-    btnCancel: {
-        backgroundColor: '#E49413',
+    filterButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 10,
+    },
+    filterButton: {
+        flex: 1,
+        marginHorizontal: 5,
+        paddingVertical: 12,
+        backgroundColor: '#E49413', 
+        borderRadius: 8,
+        height: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    selectedButton: {
+        backgroundColor: '#E49413', 
+    },
+    filterText: {
+        color: '#000',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    selectedText: {
+        color: '#fff',
+    },
+    statusText: {
+        fontSize: 18,
+        color: '#000',
+        fontWeight: 'bold',
     },
 });

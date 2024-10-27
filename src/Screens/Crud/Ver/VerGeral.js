@@ -18,10 +18,6 @@ export function VerGeral({ navigation }) {
                 <Text style={styles.txtbox}>Ver Exercícios</Text>
              </TouchableHighlight>
 
-             <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerModalidade')}>
-                <Text style={styles.txtbox}>Ver Modalidades</Text>
-             </TouchableHighlight>
-
              <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerPersonal')}>
                 <Text style={styles.txtbox}>Ver Personais</Text>
              </TouchableHighlight>

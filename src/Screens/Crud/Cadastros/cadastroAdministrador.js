@@ -11,25 +11,8 @@ export  function CadastroAdministrador(){
         senha: ""
     })
 
-    const getToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        return token;
-      } catch (error) {
-        console.error('Erro ao recuperar o token:', error);
-        return null;
-      }
-    };    
-
-    
     const inserirAdministrador = async() => {
 
-      const token = await getToken();  
-
-      if (!token) {
-        Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-        return;
-      }
         axios.post("http://localhost:3000/administradores", {
             nome: administrador.nome,
             cpf: administrador.cpf,

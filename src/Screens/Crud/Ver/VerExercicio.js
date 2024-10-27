@@ -16,23 +16,10 @@ export function VerExercicio() {
         codtreino: ""
     });
 
-    const getToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token'); 
-            return token;
-        } catch (error) {
-            console.error('Erro ao recuperar o token:', error);
-            return null;
-        }
-    };
+    
 
     const carregarExercicios = async () => {
         const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.get('http://localhost:3000/exercicios', {
             headers: {
@@ -57,12 +44,6 @@ export function VerExercicio() {
     };
 
     const handleUpdate = async () => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.put('http://localhost:3000/exercicios', dataExercicios, {
             params: { codigo: dataExercicios.codigo },
@@ -82,12 +63,6 @@ export function VerExercicio() {
     };
 
     const handleDelete = async (codigo) => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.delete('http://localhost:3000/exercicios', {
             params: { codigo },

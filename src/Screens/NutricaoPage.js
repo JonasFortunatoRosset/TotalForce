@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, ScrollView, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, TextInput, View, ScrollView, TouchableHighlight,Modal,Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
 import Slider from '@react-native-community/slider';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -15,6 +15,7 @@ export function NutricaoPage({ navigation }) {
   const [resultadoP, setResultadoP] = useState(0);
   const [resultadoCa, setResultadoCa] = useState(0);
   const [resultadoD, setResultadoD] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
 
 
   function calc(vlr) {
@@ -53,6 +54,13 @@ export function NutricaoPage({ navigation }) {
         <View>
           <Text style={styles.txtheader}>Nutrição</Text>
         </View>
+        <TouchableHighlight 
+          underlayColor={null} 
+          onPress={() => setModalVisible(true)} 
+          style={styles.infoIcon}
+        >
+          <AntDesign name="infocirlceo" size={30} color="black" />
+        </TouchableHighlight>
       </View>
       <View style={styles.body}>
 
@@ -139,6 +147,25 @@ export function NutricaoPage({ navigation }) {
           </View>
         </View>
       </View>
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+            Todos os cálculos são baseados em artigos científicos para assegurar a precisão.
+             No entanto, esses valores servem apenas como referência inicial. 
+             Para uma alimentação adequada e personalizada, é recomendável buscar a orientação de um profissional de saúde.
+            </Text>
+            <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
+              <Text style={styles.modalButtonText}>Fechar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
     </ScrollView>
   );
 }
@@ -147,65 +174,100 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFB031',
+    paddingHorizontal: 20,
+    paddingTop: 40,
   },
   header: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#E49413',
-    width: '100%',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    marginBottom: 30,
+    elevation: 4,
   },
   seta: {
-    marginRight: 90,
+    marginRight: 15,
+  },
+  infoIcon: {
+    marginLeft: 'auto',
   },
   txtheader: {
-    fontSize: 50,
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000',
   },
   body: {
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
   },
-  boxinputpeso: {},
+  boxinputpeso: {
+    width: 220,
+    alignItems: 'center',
+    marginBottom: 25,
+  },
   inputpeso: {
+    width: '100%',
+    height: 50,
     backgroundColor: '#E49413',
     color: '#000',
-    height: 25,
-    width: 130,
-    margin: 20,
-    borderRadius: 6,
-    padding: 3,
+    fontSize: 18,
+    borderRadius: 10,
+    padding: 12,
+    textAlign: 'center',
+    fontWeight: '600',
+    elevation: 2,
   },
   boxnutri: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    padding: 20,
-    backgroundColor: '#E49413',
     width: 220,
-    height: 140,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: '#E49413',
+    alignItems: 'center',
+    marginBottom: 20,
+    elevation: 3,
   },
   txtbox: {
-    fontSize: 18,
-    marginBottom: 2,
+    fontSize: 20,
+    color: '#000',
+    fontWeight: '600',
+    marginBottom: 5,
+    textAlign: 'center',
   },
-  areaslider:{
-    marginTop: 4,
-    marginBottom: 4,
-    width: "80%",
-    height: '15%',
-    backgroundColor:"#E49413",
+  areaslider: {
+    marginTop: 10,
+    width: '100%',
+  },
+  slide: {
+    width: '100%',
+    height: 40,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#FFB031',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#E49413',
+    padding: 10,
     borderRadius: 8,
   },
-  slide:{
-    width: "100%",   
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    
+  modalButtonText: {
+    color: '#000',
+    fontWeight: 'bold',
   },
 });

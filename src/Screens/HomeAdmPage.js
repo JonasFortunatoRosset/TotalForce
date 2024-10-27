@@ -1,38 +1,39 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
+import Entypo from '@expo/vector-icons/Entypo';
 
-import totalforcelogo from './Images/totalforcelogo.png'
+import logoTotal from './Images/logoTotal.png';
 
-export function HomeAdmPage({navigation}) {
+export function HomeAdmPage({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
         <EvilIcons name="user" size={60} color="black" />
       </View>
+
       <View style={styles.body}>
-        <View style={styles.line1}>
-          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Cadastrar</Text>
-            <Feather name="credit-card" size={120} color="black" />
-          </View>
+        <View style={styles.line}>
+          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'} style={styles.boxHighlight}>
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Cadastrar</Text>
+              <Feather name="credit-card" size={120} color="black" />
+            </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={'#855200'}>
-          <View style={styles.box}>
-            <Text style={styles.boxText}>Ver</Text>
-             <Entypo name="eye" size={120} color="black" />
-          </View>
+          <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={'#855200'} style={styles.boxHighlight}>
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Cadastros</Text>
+              <Entypo name="eye" size={120} color="black" />
+            </View>
           </TouchableHighlight>
         </View>
       </View>
+
       <View style={styles.footer}>
-        <Image style={styles.imgfooter} source={totalforcelogo}/>
+        <Image style={styles.imgFooter} source={logoTotal} />
       </View>
     </View>
   );
@@ -41,81 +42,66 @@ export function HomeAdmPage({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#E49413',
   },
   header: {
     width: '100%',
     backgroundColor: '#E49413',
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    elevation: 4,
+    borderRadius: 12,
+    marginTop: 25,
   },
   txtheader: {
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
   body: {
+    backgroundColor: '#FFB031',
     flex: 1,
-    width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFB031'
   },
-  line1: {
+  line: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 30,
-    gap: 45, 
-
+    justifyContent: 'space-evenly',
+    marginBottom: 40,
+    width: '90%',
   },
-  line2: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 30,
-    gap: 45, 
-    marginBottom: '25%'
-
+  boxHighlight: {
+    borderRadius: 12,
   },
   box: {
     backgroundColor: '#E49413',
-    padding: 10,
-    height: 200,
-    width: 150,
-    alignItems: 'center',
+    width: 160,
+    height: 220,
+    borderRadius: 12,
     justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
   },
   boxText: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 18,
     marginBottom: 10,
-  },
-  boxImageTrain: {
-    width: 120,
-    height: 120,
-  },
-  boxImageNutricao: {
-    width: 92,
-    height: 120,
-  },
-  boxImageConfig: {
-    width: 120,
-    height: 120,
-  },
-  boxImagePagamento: {
-    width: 120,
-    height: 120,
   },
   footer: {
     width: '100%',
     backgroundColor: '#E49413',
-    padding: 15,
+    padding: 20,
     alignItems: 'center',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
-  imgfooter: {
-    width: 110,
-    height: 50,
-  }
+  imgFooter: {
+    width: 120,
+    height: 60,
+    resizeMode: 'contain',
+  },
 });

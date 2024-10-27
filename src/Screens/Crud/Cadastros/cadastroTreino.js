@@ -18,16 +18,6 @@ export function CadastroTreino() {
     fetchPlanos(); 
   }, []);
 
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      return token;
-    } catch (error) {
-      console.error('Erro ao recuperar o token:', error);
-      return null;
-    }
-  };
-
   const fetchPlanos = async () => {
     const token = await getToken();
     if (!token) {

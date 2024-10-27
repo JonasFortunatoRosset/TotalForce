@@ -52,15 +52,7 @@ export function CadastroExercicio() {
     }
   };
 
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      return token;
-    } catch (error) {
-      console.error('Erro ao recuperar o token:', error);
-      return null;
-    }
-  };
+
 
   const pickMedia = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -88,13 +80,7 @@ export function CadastroExercicio() {
   };
 
   const inserirExercicio = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
+   
     try {
       await axios.post(
         'http://localhost:3000/exercicios',

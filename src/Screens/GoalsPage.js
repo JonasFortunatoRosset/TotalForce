@@ -118,7 +118,7 @@ export function GoalsPage({ navigation }) {
                   color="black"
                 />
               </TouchableHighlight>
-              <TouchableHighlight style={styles.trash} onPress={() => deleteGoal(goal.id)}>
+              <TouchableHighlight underlayColor={null} style={styles.trash} onPress={() => deleteGoal(goal.id)}>
                 <Feather name="trash-2" size={24} color="black"/>
               </TouchableHighlight>
             </View>
@@ -149,12 +149,14 @@ export function GoalsPage({ navigation }) {
                   placeholder="Exercício"
                   value={newTitle}
                   onChangeText={setNewTitle}
+                  maxLength={14}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder="Carga"
                   value={newLoad}
                   onChangeText={setNewLoad}
+                  keyboardType='numeric'
                 />
 
                 <View style={styles.dateInputContainer}>
@@ -183,9 +185,9 @@ export function GoalsPage({ navigation }) {
                     value={newEndDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                     editable={false}
                   />
-                  <TouchableOpacity onPress={() => setShowEndPicker(true)} style={styles.calendarButton}>
+                  <TouchableHighlight onPress={() => setShowEndPicker(true)} style={styles.calendarButton} underlayColor={null}>
                     <Feather name="calendar" size={24} color="black" />
-                  </TouchableOpacity>
+                  </TouchableHighlight>
                 </View>
 
                 {showEndPicker && (
@@ -225,58 +227,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFB031',
+    paddingHorizontal: 20,
+    paddingTop: 40,
   },
   header: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#E49413',
-    width: '100%',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    marginBottom: 30,
+    elevation: 4,
   },
   seta: {
-    marginRight: '27%',
-  },
-  trash: {
-    marginLeft: 10,
+    marginRight: 15,
   },
   txtheader: {
-    fontSize: 50,
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000',
   },
   body: {
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
   },
   boxnutri: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    marginVertical: 10,
     padding: 20,
+    borderRadius: 12,
     backgroundColor: '#E49413',
     width: 300,
-    height: 110,
+    elevation: 3,
   },
   txtbox: {
-    fontSize: 17,
-    marginBottom: 10,
+    fontSize: 18,
+    color: '#000',
+    fontWeight: '600',
   },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  trash: {
+    marginLeft: 10,
+  },
   btnadd: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    padding: 20,
     backgroundColor: '#E49413',
+    padding: 15,
+    borderRadius: 12,
+    marginVertical: 20,
+    elevation: 3,
   },
   modalOverlay: {
     flex: 1,
@@ -285,75 +288,48 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
+    width: '85%',
     backgroundColor: '#FFB031',
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
   },
   ModalHeader: {
     backgroundColor: '#E49413',
+    borderRadius: 12,
     padding: 15,
+    marginBottom: 10,
     alignItems: 'center',
-  },
-  modalBody: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
   },
   ModalTitle: {
-    fontSize: 20,
+    fontSize: 22,
+    fontWeight: 'bold',
     color: '#000',
+  },
+  modalBody: {
+    alignItems: 'center',
   },
   BoxInputs: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: '100%',
+    marginVertical: 10,
   },
   input: {
-    width: 250,
-    height: 40,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    height: 50,
     backgroundColor: '#E49413',
-    borderRadius: 8,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     marginVertical: 5,
-    color: '#000',
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 250,
-  },
-  btns: {
-    width: '48%',
-    padding: 10,
-    borderRadius: 8,
-    marginVertical: 5,
-    alignItems: 'center',
-  },
-  txtbtns: {
     color: '#000',
     fontSize: 16,
   },
-  btnSave: {
-    backgroundColor: '#E49413',
-  },
-  btnCancel: {
-    backgroundColor: '#E49413',
-  },
-   dateInputContainer: {
+  dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#E49413',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 10,
     marginVertical: 5,
     justifyContent: 'space-between',
-    width: 250,
   },
   inputText: {
     fontSize: 16,
@@ -362,5 +338,27 @@ const styles = StyleSheet.create({
   calendarButton: {
     marginLeft: 10,
   },
-});
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
 
+  },
+  btns: {
+    width: '48%',
+    padding: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    margin: 5
+  },
+  btnSave: {
+    backgroundColor: '#E49413',
+  },
+  btnCancel: {
+    backgroundColor: '#E49413',
+  },
+  txtbtns: {
+    fontSize: 16,
+    color: '#000',
+  },
+});
