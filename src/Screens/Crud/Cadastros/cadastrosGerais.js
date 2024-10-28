@@ -19,7 +19,7 @@ export function CadastroGeral({ navigation }) {
                     <Text style={styles.txtbox}>Cadastro Exercícios</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPersonal')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroColaborador')}>
                     <Text style={styles.txtbox}>Cadastro Personais</Text>
                 </TouchableHighlight>
 

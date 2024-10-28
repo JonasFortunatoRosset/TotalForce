@@ -24,12 +24,8 @@ export function CadastroColaborador() {
       senha: personal.senha,
       login: personal.login,
       status: "Ativo"  
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }
-    }).then(response => {
+    }
+    ).then(response => {
       Alert.alert("Sucesso", "Personal cadastrado com sucesso");
       setPersonal({
         nome: "",

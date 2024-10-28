@@ -64,7 +64,7 @@ export function LoginPage({ navigation }) {
         const { token } = response.data;
         await armazenarDadosUsuario(token);
         Alert.alert('Login efetuado com sucesso');
-        navigation.navigate('LoginAdmPage');
+        navigation.navigate('HomeAdmPage');
       }
     } catch (error) {
       console.error(error);

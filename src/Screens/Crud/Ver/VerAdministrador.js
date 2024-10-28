@@ -12,16 +12,13 @@ export function VerAdministrador() {
         codigo: "",
         nome: "",
         cpf: "",
+        login: "",
         senha: ""
     });
 
     const carregarAdministradores = async () => {
 
-        axios.get('http://localhost:3000/administradores', {
-            headers: {
-                'Authorization': `Bearer ${token}`,  
-            }
-        })
+        axios.get('http://localhost:3000/administradores')
         .then(response => {
             setAdministrador(response.data.administrador);
         })
@@ -40,18 +37,9 @@ export function VerAdministrador() {
     };
 
     const handleUpdate = async () => {
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.put('http://localhost:3000/administradores', dataAdministrador, {
-            params: { codigo: dataAdministrador.codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,  
-            }
+            params: { codigo: dataAdministrador.codigo }
         })
         .then(response => {
             carregarAdministradores();
@@ -64,13 +52,6 @@ export function VerAdministrador() {
     };
 
     const handleDelete = async (codigo) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-            return;
-        }
 
         axios.delete('http://localhost:3000/administradores', {
             params: { codigo },
@@ -102,6 +83,7 @@ export function VerAdministrador() {
                                 <Text style={styles.itemText}>Código: {item.codigo}</Text>
                                 <Text style={styles.itemText}>Nome: {item.nome}</Text>
                                 <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
+                                <Text style={styles.itemText}>Login: {item.login}</Text>
                                 <Text style={styles.itemText}>Senha: {item.senha}</Text>
                             </View>
 
@@ -153,6 +135,13 @@ export function VerAdministrador() {
                                     placeholder="CPF"
                                     value={dataAdministrador.cpf}
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })}
+                                />
+
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Login"
+                                    value={dataAdministrador.login}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, login: text })}
                                 />
 
                                 <TextInput

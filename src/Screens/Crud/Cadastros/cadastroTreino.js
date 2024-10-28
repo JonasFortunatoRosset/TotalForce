@@ -19,16 +19,9 @@ export function CadastroTreino() {
   }, []);
 
   const fetchPlanos = async () => {
-    const token = await getToken();
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
 
     try {
-      const response = await axios.get('http://localhost:3000/planos', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get('http://localhost:3000/planos');
       setPlanos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
@@ -37,23 +30,13 @@ export function CadastroTreino() {
   };
 
   const inserirTreino = async () => {
-    const token = await getToken();
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
+    
     try {
-      await axios.post(
-        'http://localhost:3000/treinos',
-        { ...treino },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      await axios.post('http://localhost:3000/treinos', {
+        nome: treino.nome,
+        descricao: treino.descricao,
+        codplano: treino.codplano
+      });
       Alert.alert('Sucesso', 'Treino cadastrado com sucesso!');
       setTreino({ nome: '', descricao: '', codplano: '' });
     } catch (error) {
@@ -82,7 +65,7 @@ export function CadastroTreino() {
           value={treino.descricao}
           onChangeText={(text) => setTreino({ ...treino, descricao: text })}
         />
-
+        
         <TouchableOpacity style={styles.inputs} onPress={() => setModalVisible(true)}>
           <Text style={styles.placeholderText}>
             {treino.codplano ? `Plano: ${treino.codplano}` : 'Selecionar Plano'}
@@ -97,7 +80,7 @@ export function CadastroTreino() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Picker
+            <Picker
                 selectedValue={treino.codplano}
                 onValueChange={(itemValue) => {
                   setTreino({ ...treino, codplano: itemValue });
@@ -107,11 +90,7 @@ export function CadastroTreino() {
               >
                 <Picker.Item label="Selecione um plano" value="" />
                 {planos.map((plano) => (
-                  <Picker.Item
-                    key={plano.id}
-                    label={plano.nome}
-                    value={plano.codplano}
-                  />
+                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
                 ))}
               </Picker>
 

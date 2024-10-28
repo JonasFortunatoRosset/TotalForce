@@ -31,11 +31,7 @@ export function VerUsuario() {
 
     
         try {
-          const response = await axios.get("http://localhost:3000/planos", {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
+          const response = await axios.get("http://localhost:3000/planos");
           setPlanos(response.data);  
         } catch (error) {
           Alert.alert('Erro', 'Não foi possível buscar os planos.');
@@ -52,11 +48,7 @@ export function VerUsuario() {
 
     const carregarUsuarios = async () => {
 
-        axios.get('http://localhost:3000/usuarios', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        })
+        axios.get('http://localhost:3000/usuarios')
         .then(response => {
             setUsuario(response.data.usuario);
         })
@@ -77,10 +69,7 @@ export function VerUsuario() {
     const handleUpdate = async () => {
 
         axios.put('http://localhost:3000/usuarios', dataUsuario, {
-            params: { codigo: dataUsuario.codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
+            params: { codigo: dataUsuario.codigo }
         })
         .then(response => {
             carregarUsuarios();

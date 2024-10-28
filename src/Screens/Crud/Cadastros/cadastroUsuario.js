@@ -23,14 +23,8 @@ export function CadastroUsuario() {
 
 
   const buscarPlanos = async () => {
-    const token = await getToken();
-
     try {
-      const response = await axios.get("http://localhost:3000/planos", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await axios.get("http://localhost:3000/planos");
       setPlanos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
@@ -39,13 +33,6 @@ export function CadastroUsuario() {
   };
 
   const inserirUsuarios = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
     axios
       .post(
         "http://localhost:3000/usuarios",
@@ -58,12 +45,6 @@ export function CadastroUsuario() {
           altura: usuario.altura,
           status: usuario.status,
           codplano: usuario.codplano
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
         }
       )
       .then(() => {
@@ -209,7 +190,7 @@ export function CadastroUsuario() {
               >
                 <Picker.Item label="Selecione um plano" value="" />
                 {planos.map((plano) => (
-                  <Picker.Item key={plano.id} label={plano.nome} value={plano.id} />
+                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
                 ))}
               </Picker>
 
