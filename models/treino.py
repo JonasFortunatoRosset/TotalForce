@@ -17,8 +17,7 @@ class Treino(db.Model):
     codplano  = db.Column(db.Integer)
 
 
-    def __init__(self,codigo,nome,descricao,codplano):
-        self.codigo    = codigo
+    def __init__(self,nome,descricao,codplano):
         self.nome      = nome
         self.descricao = descricao
         self.codplano  = codplano

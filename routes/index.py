@@ -1,6 +1,5 @@
 from routes.usuarioRoute       import usuarios 
 from routes.treinoRoute        import treinos
-from routes.modalidadeRoute    import modalidades
 from routes.exercicioRoute     import exercicios
 from routes.colaboradorRoute   import colaboradores
 from routes.administradorRoute import administradores
@@ -13,12 +12,12 @@ from routes.pesquisartreinos import pesquisartreinos
 from routes.validarTokenRoute import validartokens
 from routes.invalidartoken import invalidartokens
 from routes.planoRoute   import planos
+from routes.resultadoUsuarioRoute import resultadoUsuarios
 
 
 def default_routes(app):
     usuarios(app)
     treinos(app)
-    modalidades(app)
     exercicios(app)
     colaboradores(app)
     administradores(app)
@@ -29,3 +28,4 @@ def default_routes(app):
     validartokens(app)
     invalidartokens(app)
     planos(app)
+    resultadoUsuarios(app)

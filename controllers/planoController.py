@@ -14,10 +14,11 @@ def planoController():
         except Exception as e:
             return jsonify({'error': 'Erro ao inserir novo plano. Erro: {}'.format(str(e))}), 400
     
-    if request.method == 'GET':
+    elif request.method == 'GET':
         try:
             data = Plano.query.all()
-            planos = {'Plano' : [plano.to_dict() for plano in data]}
+            planos = [plano.to_dict() for plano in data]  # Lista de dicionários
+            print(planos)
             return planos
         except Exception as e:
                 return 'Não foi possível buscar plano. Error: {}'.format(str(e)), 405
@@ -33,7 +34,7 @@ def planoController():
             db.session.commit()
             return {'message': 'Plano alterado com sucesso'}, 200
         except Exception as e:
-            return {'error': 'Erro ao alterar plano. Errror{}'.format(e)}, 400
+            return {'error': 'Erro ao alterar plano. Error{}'.format(e)}, 400
 
     elif request.method == 'DELETE':
         try:

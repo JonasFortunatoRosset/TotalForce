@@ -1,77 +1,65 @@
 from flask import jsonify, request
 from database.db import db
 from models.administrador import Administrador
-from cryptography.fernet import Fernet 
 import bcrypt
-from hashes.funcoes import hash_cpf, verificar_cpf_cadastro, hashSenha
+from hashes.funcoes import hash_senha, hash_cpf, atualizar_cpf_banco, atualizar_senha_banco
 
 def administradorController():
 
+    # Realiza o cadastro de um novo administrador
     if request.method == 'POST':
         try:
-            data = request.get_json()  # nome cpf login senha
-            if not all(key in data for key in ['nome', 'cpf', 'senha']):
-                return jsonify({'error': 'Nome, CPF e senha são obrigatórios'}), 400
-            cpf = data['cpf']
-            senha = data['senha']
-            cpf_hash = hash_cpf(cpf)
-            senha_hash = hashSenha(senha)
-            administrador = Administrador(cpf=cpf_hash, nome=data['nome'], senha=senha_hash)
+            data = request.get_json()
+            # Pega dados de data
+            senha = data['senha'] 
+            cpf   = data['cpf'] 
+            # transforma os dados em hash  
+            senha_hash = hash_senha(senha)
+            cpf_hash   = hash_cpf(cpf)
+            administrador = Administrador(cpf=cpf_hash,nome=data['nome'],login=data['login'],senha=senha_hash)
             db.session.add(administrador)
             db.session.commit()
-            return {'message': 'Administrador inserido com sucesso'}
+            return jsonify({'message': 'Administrador inserido com sucesso'}), 200
         except Exception as e:
-            return jsonify({'error': 'Erro ao inserir novo administrador. Erro: {}'.format(str(e))}), 400
-
+            return jsonify({'error': 'Erro ao atualizar Administrador. Erro: {}'.format(e)}), 400
+    
+    # Envia todos os colaboradores cadastrados para o front-end
     elif request.method == 'GET':
         try:
             data = Administrador.query.all()
             administradores = {'administrador': [administrador.to_dict() for administrador in data]}
+            print(administradores)
             return administradores
         except Exception as e:
-            return 'Não foi possível buscar nenhum administrador. Error: {}'.format(str(e)), 405
-
+            return jsonify({'error': 'Não foi possível buscar nenhum administrador. Error: {}'.format(str(e))}), 405
+    
+    # Atualiza os dados do colaborador mediante seu código
     elif request.method == 'PUT':
-        def verify_password(dados, administrador_banco):
-            senha = dados['senha']
-            senha_banco = administrador_banco.senha
-            if bcrypt.checkpw(senha.encode(), senha_banco.encode()) or dados['senha'] == administrador_banco.senha:
-                return
-            else:
-                senha_byte = senha.encode('utf-8')
-                sal = bcrypt.gensalt()
-                senha_hash = bcrypt.hashpw(senha_byte, sal)
-                administrador_banco.senha = senha_hash
-
         try:
             data = request.get_json()
             put_administrador_codigo = data['codigo']
-            cpf = data['cpf']
             put_administrador = Administrador.query.get(put_administrador_codigo)
             if put_administrador is None:
-                return {'error': 'Administrador não encontrado'}, 404
-            
-            # Verifica e atualiza a senha se necessário
-            verify_password(data, put_administrador)
-            
-            # Verifica e atualiza o CPF
-            if not verificar_cpf_cadastro(cpf, put_administrador.cpf):
-                put_administrador.cpf = hash_cpf(cpf)  # Atualiza o CPF se necessário
-
-            put_administrador.nome = data.get('nome', put_administrador.nome)
+                    return jsonify({'error': 'Administrador não encontrado'}), 404
+            put_administrador.nome     = data.get('nome'    , put_administrador.nome)
+            put_administrador.login    = data.get('login'   , put_administrador.login)
+            atualizar_cpf_banco(data  , put_administrador)
+            atualizar_senha_banco(data, put_administrador)
             db.session.commit()
-            return 'Administrador atualizado com sucesso', 200
+            return jsonify({'message': 'Administrador atualizado com sucesso'}), 200
         except Exception as e:
-            return {'error': 'Erro ao atualizar Administrador. Erro: {}'.format(e)}, 400
-
+            return jsonify({'error': 'Erro ao atualizar administrador. Erro: {}'.format(e)}), 400
+        
+    # Deleta o administrador mediante seu código
     elif request.method == 'DELETE':
         try:
             codigo = request.args.get('codigo')
             delete_administrador = Administrador.query.get(codigo)
             if delete_administrador is None:
-                return {'Administrador': 'Administrador inexistente'}, 404
+                return jsonify({'Administrador': 'Administrador inexistente'}), 404
             db.session.delete(delete_administrador)
             db.session.commit()
-            return 'Administrador deletado com sucesso'
+            return jsonify({'message': 'Administrador deletado com sucesso'})
         except Exception as e:
-            return 'Não foi possível deletar o administrador. Error: {}'.format(str(e)), 405
+            return jsonify({'error': 'Não foi possível deletar o administrador. Error: {}'.format(str(e))}), 405
+
