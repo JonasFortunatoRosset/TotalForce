@@ -17,7 +17,7 @@ def planoController():
     elif request.method == 'GET':
         try:
             data = Plano.query.all()
-            planos = [plano.to_dict() for plano in data]  # Lista de dicionários
+            planos = {plano.to_dict() for plano in data}  # Lista de dicionários
             print(planos)
             return planos
         except Exception as e:

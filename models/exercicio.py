@@ -8,11 +8,10 @@ class Exercicio(db.Model):
             'codigo':        self.codigo,
             'nome':          self.nome,
             'descricao':     self.descricao,
-            'gif':           self.gif,
             'repeticoes':    self.repeticoes,
             'serie':         self.serie,
             'codtreino':     self.codtreino,
-            'codmodalidade': self.codmodalidade
+            'video':         self.video
         }
     
     codigo        = db.Column(db.Integer, primary_key=True, unique=True, nullable=True, autoincrement=True) 
@@ -25,8 +24,7 @@ class Exercicio(db.Model):
 
 
 
-    def __init__(self,codigo,nome,descricao,video,repeticoes,serie,codtreino):
-        self.codigo     = codigo
+    def __init__(self,nome,descricao,video,repeticoes,serie,codtreino):
         self.nome       = nome
         self.descricao  = descricao
         self.video      = video

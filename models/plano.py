@@ -6,7 +6,7 @@ class Plano(db.Model):
     def to_dict(self):
         
         return{
-        'codigo':       self.nome,
+        'codigo':       self.codigo,
         'nome':         self.nome,
         }
     
