@@ -25,8 +25,8 @@ export function VerUsuario({ navigation }) {
 
     const buscarPlanos = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/planos");
-            setPlanos(response.data);  
+          const response = await axios.get("http://localhost:3000/planos");
+          setPlanos(response.data);  
         } catch (error) {
             Alert.alert('Erro', 'Não foi possível buscar os planos.');
             console.error(error);
@@ -42,17 +42,17 @@ export function VerUsuario({ navigation }) {
 
     const carregarUsuarios = async () => {
         axios.get('http://localhost:3000/usuarios')
-            .then(response => {
-                setUsuario(response.data.usuario);
-            })
-            .catch(error => {
-                console.error('Erro ao carregar usuários:', error);
-            });
+        .then(response => {
+            setUsuario(response.data.usuario);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar usuários:', error);
+        });
     };
 
     useEffect(() => {
         carregarUsuarios();
-        buscarPlanos(); // Adicionei a chamada para buscar os planos aqui
+        buscarPlanos(); 
     }, []);
 
     const handleEdit = (use) => {

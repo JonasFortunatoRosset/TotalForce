@@ -9,7 +9,7 @@ import { HomeColaboradorPage } from './src/Screens/HomeColaboradorPage';
 import { HomeAdmPage }         from './src/Screens/HomeAdmPage';
 import { TrainPage }           from './src/Screens/TrainPage';
 import { ListaTreinos }        from './src/Screens/ListaTreinos';
-import { PlanilhaExercicios }  from './src/Screens/PlanilhaTreino';
+import { PlanilhaExercicios }  from './src/Screens/PlanilhaTreino'
 import { ResultsPage }         from './src/Screens/ResultsPage';
 import { GoalsPage }           from './src/Screens/GoalsPage';
 import { NutricaoPage }        from './src/Screens/NutricaoPage';
@@ -45,7 +45,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName='HomeAdmPage'>
+      <Stack.Navigator initialRouteName='LoginPage'>
         <Stack.Screen name="LoginPage"             component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"           component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>
@@ -58,6 +58,7 @@ export default function App() {
         <Stack.Screen name="NutricaoPage"          component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral"         component={CadastroGeral}></Stack.Screen>
         
+
         <Stack.Screen name="Teste"                 component={Teste}></Stack.Screen>
         
         <Stack.Screen name="cadastroAdministrador" component={CadastroAdministrador}></Stack.Screen>

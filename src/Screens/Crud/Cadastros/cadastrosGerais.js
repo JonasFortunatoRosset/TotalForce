@@ -27,7 +27,7 @@ export function CadastroGeral({ navigation }) {
 
                 <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPlanos')}>
                     <Text style={styles.txtbox}>Cadastro Planos</Text>
-                </TouchableHighlight>
+                </TouchableHighlight>    
 
                 <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroTreino')}>
                     <Text style={styles.txtbox}>Cadastro Treinos</Text>
@@ -38,7 +38,6 @@ export function CadastroGeral({ navigation }) {
                 </TouchableHighlight>
             </View>
             <View style={styles.footer}>
-                {/* Footer content */}
             </View>
         </ScrollView>
     );

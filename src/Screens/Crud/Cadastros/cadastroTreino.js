@@ -23,7 +23,7 @@ export function CadastroTreino() {
   const fetchPlanos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/planos');
-      setPlanos(response.data);
+      setPlanos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
       console.error(error);
@@ -68,7 +68,7 @@ export function CadastroTreino() {
           value={treino.descricao}
           onChangeText={(text) => setTreino({ ...treino, descricao: text })}
         />
-
+        
         <TouchableOpacity style={styles.inputs} onPress={() => setModalVisible(true)}>
           <Text style={styles.placeholderText}>
             {treino.codplano ? `Plano: ${treino.codplano}` : 'Selecionar Plano'}
@@ -83,7 +83,7 @@ export function CadastroTreino() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Picker
+            <Picker
                 selectedValue={treino.codplano}
                 onValueChange={(itemValue) => {
                   setTreino({ ...treino, codplano: parseInt(itemValue) });

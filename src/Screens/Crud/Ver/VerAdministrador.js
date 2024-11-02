@@ -13,6 +13,7 @@ export function VerAdministrador() {
         login: "",
         nome: "",
         cpf: "",
+        login: "",
         senha: ""
     });
 
@@ -38,6 +39,8 @@ export function VerAdministrador() {
     const handleUpdate = async () => {
         axios.put('http://localhost:3000/administradores', dataAdministrador, {
             params: { codigo: dataAdministrador.codigo },
+
+
         })
         .then(response => {
             carregarAdministradores();
@@ -120,6 +123,13 @@ export function VerAdministrador() {
                                     value={dataAdministrador.cpf}
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })}
                                 />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Login"
+                                    value={dataAdministrador.login}
+                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, login: text })}
+                                />
+
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Senha"

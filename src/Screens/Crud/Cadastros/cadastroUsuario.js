@@ -40,21 +40,21 @@ export function CadastroUsuario() {
     }
   };
 
-  const inserirUsuarios = async () => {
+  const inserirUsuarios = async () => { 
     try {
-      await axios.post("http://localhost:3000/usuarios", {
-          nome: usuario.nome,
-          login: usuario.login,
-          endereco: usuario.endereco,
-          senha: usuario.senha,
-          peso: usuario.peso,
-          altura: usuario.altura,
-          status: usuario.status,
-          codplano: usuario.codplano, 
+      const response = await axios.post("http://localhost:3000/usuarios", {
+        nome: usuario.nome,
+        login: usuario.login,
+        endereco: usuario.endereco,
+        senha: usuario.senha,
+        peso: usuario.peso,
+        altura: usuario.altura,
+        status: usuario.status,
+        codplano: usuario.codplano, 
       }, {
-          headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
       });
-
+  
       Alert.alert("Sucesso", "Usuário foi cadastrado");
       setUsuario({
         nome: "",
@@ -64,7 +64,7 @@ export function CadastroUsuario() {
         peso: "",
         altura: "",
         codplano: "",
-        status: "Ativo",
+        status: "Ativo"
       });
       setModalVisible(false);
       setStatusModalVisible(false);
@@ -73,7 +73,7 @@ export function CadastroUsuario() {
       console.error(error);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>

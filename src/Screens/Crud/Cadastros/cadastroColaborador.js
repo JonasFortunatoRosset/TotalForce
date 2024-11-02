@@ -15,7 +15,7 @@ export function CadastroColaborador({ navigation }) {
 
   const inserirColaborador = async () => {
     try {
-      await axios.post('http://localhost:3000/colaboradores', {
+      const response = await axios.post('http://localhost:3000/colaboradores', {
         nome: colaborador.nome,
         cpf: colaborador.cpf,
         endereco: colaborador.endereco,
@@ -23,14 +23,15 @@ export function CadastroColaborador({ navigation }) {
         login: colaborador.login,
         status: 'Ativo',
       });
-      Alert.alert('Sucesso', 'colaborador cadastrado com sucesso');
+
+      Alert.alert("Sucesso", "Personal cadastrado com sucesso");
       setColaborador({
-        nome: '',
-        cpf: '',
-        endereco: '',
-        cidade: '',
-        senha: '',
-        login: '',
+        nome: "",
+        cpf: "",
+        endereco: "",
+        cidade: "",
+        senha: "",
+        login: ""
       });
     } catch (error) {
       Alert.alert('Erro', 'Erro ao cadastrar o colaborador');
