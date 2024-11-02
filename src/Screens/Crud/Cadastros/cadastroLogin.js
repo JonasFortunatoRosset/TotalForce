@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function CadastroLogin({ navigation }) {
   const [etapa, setEtapa] = useState(1); 
@@ -54,7 +55,7 @@ export function CadastroLogin({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableHighlight
           style={styles.seta}
@@ -147,7 +148,7 @@ export function CadastroLogin({ navigation }) {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -159,11 +160,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    marginTop: 30,
-    backgroundColor: '#E49413',
-    borderRadius: 12,
+    backgroundColor: '#E49413'
   },
   seta: {
     marginRight: 15,
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#ffff',
+    backgroundColor: '#FFB031',
     borderRadius: 12,
     elevation: 2,
   },
