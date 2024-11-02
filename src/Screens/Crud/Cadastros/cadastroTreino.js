@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export function CadastroTreino() {
+  const navigation = useNavigation();
   const [treino, setTreino] = useState({
     nome: '',
     descricao: '',
@@ -15,21 +17,13 @@ export function CadastroTreino() {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    fetchPlanos(); 
+    fetchPlanos();
   }, []);
 
   const fetchPlanos = async () => {
-    const token = await getToken();
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
     try {
-      const response = await axios.get('http://localhost:3000/planos', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPlanos(response.data); 
+      const response = await axios.get('http://localhost:3000/planos');
+      setPlanos(response.data);
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
       console.error(error);
@@ -37,23 +31,12 @@ export function CadastroTreino() {
   };
 
   const inserirTreino = async () => {
-    const token = await getToken();
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
     try {
-      await axios.post(
-        'http://localhost:3000/treinos',
-        { ...treino },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      await axios.post('http://localhost:3000/treinos', {
+        nome: treino.nome,
+        descricao: treino.descricao,
+        codplano: treino.codplano,
+      });
       Alert.alert('Sucesso', 'Treino cadastrado com sucesso!');
       setTreino({ nome: '', descricao: '', codplano: '' });
     } catch (error) {
@@ -65,7 +48,10 @@ export function CadastroTreino() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.txtheader}>Cadastro de Treino</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={30} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.txtheader}>Cadastro de Treinos</Text>
       </View>
 
       <View style={styles.body}>
@@ -100,18 +86,14 @@ export function CadastroTreino() {
               <Picker
                 selectedValue={treino.codplano}
                 onValueChange={(itemValue) => {
-                  setTreino({ ...treino, codplano: itemValue });
+                  setTreino({ ...treino, codplano: parseInt(itemValue) });
                   setModalVisible(false);
                 }}
                 style={styles.picker}
               >
                 <Picker.Item label="Selecione um plano" value="" />
                 {planos.map((plano) => (
-                  <Picker.Item
-                    key={plano.id}
-                    label={plano.nome}
-                    value={plano.codplano}
-                  />
+                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
                 ))}
               </Picker>
 
@@ -133,33 +115,43 @@ export function CadastroTreino() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#E49413',
   },
   header: {
-    backgroundColor: '#E49413',
-    width: '100%',
-    height: '8%',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    elevation: 4,
+    marginTop: 30,
+  },
+  backButton: {
+    marginRight: 15,
   },
   txtheader: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
   },
   body: {
-    backgroundColor: '#E49413',
-    height: '80%',
     margin: 20,
     padding: 15,
+    backgroundColor: '#FFB031',
+    borderRadius: 12,
+    elevation: 2,
     alignItems: 'center',
   },
   inputs: {
-    color: '#000',
-    marginBottom: 20,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    width: 300,
+    width: '100%',
     height: 45,
-    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    justifyContent: 'center'
   },
   placeholderText: {
     color: '#888',
@@ -173,7 +165,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    height: '50%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
@@ -194,15 +185,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: '#FFB031',
-    width: 300,
-    height: 45,
+    marginTop: 10,
   },
   txtbtn: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
 });

@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Alert, TouchableOpacity, Modal } from 'react-native';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'; 
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 export function CadastroRegistroTreino() {
+  const navigation = useNavigation();
   const [registroTreino, setRegistroTreino] = useState({
     exercicio1: "",
     exercicio2: "",    
@@ -15,16 +17,16 @@ export function CadastroRegistroTreino() {
     exercicio7: "",
     exercicio8: "",
     exercicio9: "",
+    exercicio10: "",
+    exercicio11: "",
     data: "",
-    codtreino: "",
+    codplano: "",
     codusario: ""
   });
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [planos, setPlanos] = useState([]); 
-  const [users, setUsers] = useState([])
-
+  const [users, setUsers] = useState([]);
 
   const validarData = (text) => {
     const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -36,14 +38,9 @@ export function CadastroRegistroTreino() {
   };
 
   const buscarPlanos = async () => {
-    
     try {
-      const response = await axios.get("http://localhost:3000/planos", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setRegistroTreino(response.data); 
+      const response = await axios.get("http://localhost:3000/planos");
+      setPlanos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
       console.error(error);
@@ -51,20 +48,9 @@ export function CadastroRegistroTreino() {
   };
 
   const buscarUsuario = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
     try {
-      const response = await axios.get("http://localhost:3000/usuarios", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setRegistroTreino(response.data); 
+      const response = await axios.get("http://localhost:3000/usuarios");
+      setUsers(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os usuários.');
       console.error(error);
@@ -72,16 +58,7 @@ export function CadastroRegistroTreino() {
   };
 
   const inserirRegistrosTreino = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
-    axios
-      .post(
-        "http://localhost:3000/registrotreinos",
+    axios.post("http://localhost:3000/resultadousuarios",
         {
             exercicio1: registroTreino.exercicio1,
             exercicio2: registroTreino.exercicio2,
@@ -92,34 +69,37 @@ export function CadastroRegistroTreino() {
             exercicio7: registroTreino.exercicio7,
             exercicio8: registroTreino.exercicio8,
             exercicio9: registroTreino.exercicio9,
-            codtreino: registroTreino.codtreino,
+            exercicio10: registroTreino.exercicio10,
+            exercicio11: registroTreino.exercicio11,
+            data: registroTreino.data,
+            codplano: registroTreino.codplano,
             codusario: registroTreino.codusario
         },
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
       )
       .then(() => {
         Alert.alert("Sucesso", "Usuário foi cadastrado");
-        setUsuario({
-            exercicio1: "",
-            exercicio2: "",    
-            exercicio3: "",
-            exercicio4: "",    
-            exercicio5: "",
-            exercicio6: "",
-            exercicio7: "",
-            exercicio8: "",
-            exercicio9: "",
-            data: "",
-            codtreino: "",
-            codusario: ""
+        setRegistroTreino({
+          exercicio1: "",
+          exercicio2: "",    
+          exercicio3: "",
+          exercicio4: "",    
+          exercicio5: "",
+          exercicio6: "",
+          exercicio7: "",
+          exercicio8: "",
+          exercicio9: "",
+          exercicio10: "",
+          exercicio11: "",
+          data: "",
+          codplano: "",
+          codusario: ""
         });
         setModalVisible(false);
-        setStatusModalVisible(false);
       })
       .catch((error) => {
         Alert.alert("Erro", "Não foi possível cadastrar o usuário");
@@ -130,71 +110,22 @@ export function CadastroRegistroTreino() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.txtheader}>Cadastro de Usuário</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={28} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.txtheader}>Cadastro de Registro de Treino</Text>
       </View>
 
       <View style={styles.body}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício1 "
-          value={registroTreino.exercicio1}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício2 "
-          value={registroTreino.exercicio2}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício3 "
-          value={registroTreino.exercicio3}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-                <TextInput
-          style={styles.inputs}
-          placeholder="Exercício4 "
-          value={registroTreino.exercicio4}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício5 "
-          value={registroTreino.exercicio5}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício6 "
-          value={registroTreino.exercicio6}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício7 "
-          value={registroTreino.exercicio7}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício8 "
-          value={registroTreino.exercicio8}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
-
-        <TextInput
-          style={styles.inputs}
-          placeholder="Exercício9 "
-          value={registroTreino.exercicio9}
-          onChangeText={(text) => setRegistroTreino({ ...registroTreino, nome: text })}
-        />
+        {[...Array(11)].map((_, index) => (
+          <TextInput
+            key={index}
+            style={styles.inputs}
+            placeholder={`Exercício ${index + 1}`}
+            value={registroTreino[`exercicio${index + 1}`]}
+            onChangeText={(text) => setRegistroTreino({ ...registroTreino, [`exercicio${index + 1}`]: text })}
+          />
+        ))}
 
         <TextInput
           style={styles.inputs}
@@ -237,7 +168,6 @@ export function CadastroRegistroTreino() {
                   <Picker.Item key={plano.id} label={plano.nome} value={plano.id} />
                 ))}
               </Picker>
-              
             </View>
           </View>
         </Modal>
@@ -270,12 +200,11 @@ export function CadastroRegistroTreino() {
                 }}
                 style={styles.picker}
               >
-                <Picker.Item label="Selecione um plano" value="" />
-                {planos.map((user) => (
-                  <Picker.Item key={user.id} label={user.nome} value={user.id} />
+                <Picker.Item label="Selecione um usuário" value="" />
+                {users.map((user) => (
+                  <Picker.Item key={user.codigo} label={user.nome} value={user.codigo} />
                 ))}
               </Picker>
-
             </View>
           </View>
         </Modal>
@@ -297,15 +226,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#E49413',
     width: '100%',
     height: '8%',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+  },
+  backButton: {
+    paddingLeft: 15,
+    paddingRight: 10,
   },
   txtheader: {
     fontSize: 20,
   },
   body: {
     backgroundColor: '#E49413',
-    height: '100%',
     margin: 20,
     padding: 15,
     alignItems: 'center',
@@ -341,17 +273,6 @@ const styles = StyleSheet.create({
   picker: {
     height: 150,
     width: '100%',
-  },
-  closeButton: {
-    marginTop: 20,
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#FFB031',
-    borderRadius: 10,
-  },
-  closeButtonText: {
-    color: '#000',
-    fontSize: 16,
   },
   btn: {
     justifyContent: 'center',

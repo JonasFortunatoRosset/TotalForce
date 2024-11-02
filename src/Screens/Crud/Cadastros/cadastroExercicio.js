@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Modal, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,TouchableHighlight, Modal, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import { Video } from 'expo-av';
 import { Picker } from '@react-native-picker/picker';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 
-export function CadastroExercicio() {
+export function CadastroExercicio({navigation}) {
   const [mediaUri, setMediaUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [treinos, setTreinos] = useState([]); 
@@ -35,24 +35,14 @@ export function CadastroExercicio() {
   };
 
   const fetchTreinos = async () => {
-    const token = await getToken();
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
     try {
-      const response = await axios.get('http://localhost:3000/treinos', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get('http://localhost:3000/treinos');
       setTreinos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os treinos.');
       console.error(error);
     }
   };
-
-
 
   const pickMedia = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -80,17 +70,11 @@ export function CadastroExercicio() {
   };
 
   const inserirExercicio = async () => {
-   
     try {
       await axios.post(
         'http://localhost:3000/exercicios',
         { ...exercicio },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
       Alert.alert('Sucesso', 'Exercício cadastrado com sucesso!');
       setExercicio({
@@ -110,7 +94,14 @@ export function CadastroExercicio() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.header}>
+        <TouchableHighlight
+          style={styles.seta}
+          underlayColor={null}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="arrowleft" size={30} color="black" />
+        </TouchableHighlight>
         <Text style={styles.txtheader}>Cadastro de Exercício</Text>
       </View>
 
@@ -145,7 +136,7 @@ export function CadastroExercicio() {
           keyboardType="numeric"
         />
 
-        <TouchableOpacity style={styles.inputs} onPress={() => setModalVisible(true)}>
+        <TouchableOpacity style={styles.inputpickers} onPress={() => setModalVisible(true)}>
           <Text style={styles.placeholderText}>
             {exercicio.codtreino ? `Treino: ${exercicio.codtreino}` : 'Selecionar Treino'}
           </Text>
@@ -153,7 +144,7 @@ export function CadastroExercicio() {
 
         <Modal
           animationType="slide"
-          transparent={true}
+          transparent
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}
         >
@@ -170,7 +161,7 @@ export function CadastroExercicio() {
                 <Picker.Item label="Selecione um treino" value="" />
                 {treinos.map((treino) => (
                   <Picker.Item
-                    key={treino.id}
+                    key={treino.codigo}
                     label={treino.nome}
                     value={treino.codtreino}
                   />
@@ -184,7 +175,7 @@ export function CadastroExercicio() {
           </View>
         </Modal>
 
-        <TouchableOpacity style={styles.inputs} onPress={pickMedia}>
+        <TouchableOpacity style={styles.inputpickers} onPress={pickMedia}>
           <Text style={styles.placeholderText}>
             {mediaUri ? 'Vídeo selecionado' : 'Selecionar Vídeo'}
           </Text>
@@ -210,33 +201,51 @@ export function CadastroExercicio() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#E49413',
   },
   header: {
-    backgroundColor: '#E49413',
-    width: '100%',
-    height: '8%',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    elevation: 4,
+    marginTop: 30,
+  },
+  seta: {
+    marginRight: 15,
   },
   txtheader: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
   },
   body: {
-    backgroundColor: '#E49413',
-    height: '80%',
     margin: 20,
     padding: 15,
+    backgroundColor: '#FFB031',
+    borderRadius: 12,
+    elevation: 2,
     alignItems: 'center',
   },
   inputs: {
-    color: '#000',
-    marginBottom: 20,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    width: 300,
+    width: '100%',
     height: 45,
-    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  inputpickers: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    justifyContent: 'center',
+
   },
   placeholderText: {
     color: '#888',
@@ -250,36 +259,37 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    height: '50%',
-    backgroundColor: 'white',
-    borderRadius: 10,
     padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 12,
     alignItems: 'center',
   },
   picker: {
-    height: 150,
     width: '100%',
   },
   closeButton: {
-    marginTop: 20,
-    padding: 10,
     backgroundColor: '#FFB031',
-    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 12,
+    marginTop: 20,
   },
   closeButtonText: {
     color: '#000',
     fontSize: 16,
   },
   btn: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: '#FFB031',
-    width: 300,
-    height: 45,
+    marginTop: 10,
   },
   txtbtn: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
 });

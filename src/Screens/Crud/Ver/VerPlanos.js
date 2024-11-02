@@ -6,71 +6,67 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 
-export function VerTreino() {
+export function VerPlanos() {
     const navigation = useNavigation();
-    const [treinos, setTreinos] = useState([]);
+    const [planos, setPlanos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [dataTreino, setDataTreino] = useState({
+    const [dataPlanos, setDataPlanos] = useState({
         codigo: "",
         nome: "",
-        descricao: "",
-        codusuario: "",
-        propriedade: "",
-        codmodalidade: ""
     });
 
-    const carregarTreinos = async () => {
-        axios.get('http://localhost:3000/treinos', {
+    const carregarPlanos = async () => {
+        axios.get('http://localhost:3000/planos', {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json',  
             }
         })
         .then(response => {
-            setTreinos(response.data.Treino);
+            setPlanos(response.data.planos);
         })
         .catch(error => {
-            console.error('Erro ao carregar treinos:', error);
+            console.error('Erro ao carregar planos:', error);
         });
     };
 
     useEffect(() => {
-        carregarTreinos();
+        carregarPlanos();
     }, []);
 
-    const handleEdit = (tre) => {
-        setDataTreino(tre);
+    const handleEdit = (pla) => {
+        setDataPlanos(pla);
         setModalVisible(true);
     };
 
     const handleUpdate = async () => {
-        axios.put('http://localhost:3000/treinos', dataTreino, {
-            params: { codigo: dataTreino.codigo },
+        axios.put('http://localhost:3000/planos', dataPlanos, {
+            params: { codigo: dataPlanos.codigo },
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json', 
             }
         })
         .then(response => {
-            carregarTreinos();
+            carregarPlanos();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
         })
         .catch(error => {
-            console.error('Erro ao atualizar treino:', error);
+            console.error('Erro ao atualizar planos:', error);
         });
     };
 
     const handleDelete = async (codigo) => {
-        axios.delete('http://localhost:3000/treinos', {
+        axios.delete('http://localhost:3000/planos', {
             params: { codigo },
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json',  
             }
         })
         .then(response => {
-            setTreinos(treinos.filter(t => t.codigo !== codigo));
+            setPlanos(planos.filter(planos => planos.codigo !== codigo));
         })
         .catch(error => {
-            console.error('Erro ao deletar treino:', error);
+            console.error('Erro ao deletar planos:', error);
         });
     };
 
@@ -80,22 +76,18 @@ export function VerTreino() {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <AntDesign name="arrowleft" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.txtheader}>Pesquisa de Treinos</Text>
+                <Text style={styles.txtheader}>Pesquisa de Planos</Text>
             </View>
 
             <View style={styles.body}>
                 <FlatList
-                    data={treinos}
+                    data={planos}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.itemContainer}>
                             <View style={styles.dados}>
                                 <Text style={styles.itemText}>Código: {item.codigo}</Text>
                                 <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
-                                <Text style={styles.itemText}>Código do Usuário: {item.codusuario}</Text>
-                                <Text style={styles.itemText}>Propriedade: {item.propriedade}</Text>
-                                <Text style={styles.itemText}>Código da Modalidade: {item.codmodalidade}</Text>
                             </View>
 
                             <View style={styles.icons}>
@@ -123,45 +115,22 @@ export function VerTreino() {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
-                            <Text style={styles.ModalTitle}>Editar Treino</Text>
+                            <Text style={styles.ModalTitle}>Editar Plano</Text>
                         </View>
                         <View style={styles.modalBody}>
                             <View style={styles.BoxInputs}>
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Código"
-                                    value={dataTreino.codigo}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codigo: text })}
+                                    value={dataPlanos.codigo}
+                                    onChangeText={(text) => setDataPlanos({ ...dataPlanos, codigo: text })}
                                 />
+
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Nome"
-                                    value={dataTreino.nome}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, nome: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Descrição"
-                                    value={dataTreino.descricao}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, descricao: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Código do Usuário"
-                                    value={dataTreino.codusuario}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codusuario: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Propriedade"
-                                    value={dataTreino.propriedade}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, propriedade: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Código da Modalidade"
-                                    value={dataTreino.codmodalidade}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codmodalidade: text })}
+                                    value={dataPlanos.nome}
+                                    onChangeText={(text) => setDataPlanos({ ...dataPlanos, nome: text })}
                                 />
                             </View>
 
@@ -277,7 +246,7 @@ const styles = StyleSheet.create({
         height: 40,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#ffff',
+        backgroundColor: '#E49413',
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',

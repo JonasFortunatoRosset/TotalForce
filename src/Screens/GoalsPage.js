@@ -105,7 +105,7 @@ export function GoalsPage({ navigation }) {
 
       <View style={styles.body}>
         {goals.map((goal) => (
-          <View key={goal.id} style={styles.boxnutri}>
+          <View key={goal.id} style={styles.boxmeta}>
             <View>
               <Text style={styles.txtbox}>{goal.title}</Text>
               <Text style={styles.txtbox}>{goal.date}</Text>
@@ -114,12 +114,12 @@ export function GoalsPage({ navigation }) {
               <TouchableHighlight onPress={() => toggleCompleted(goal.id)} underlayColor={null}>
                 <Fontisto
                   name={goal.completed ? 'checkbox-active' : 'checkbox-passive'}
-                  size={24}
+                  size={28}
                   color="black"
                 />
               </TouchableHighlight>
               <TouchableHighlight underlayColor={null} style={styles.trash} onPress={() => deleteGoal(goal.id)}>
-                <Feather name="trash-2" size={24} color="black"/>
+                <Feather name="trash-2" size={28} color="black"/>
               </TouchableHighlight>
             </View>
           </View>
@@ -149,7 +149,7 @@ export function GoalsPage({ navigation }) {
                   placeholder="Exercício"
                   value={newTitle}
                   onChangeText={setNewTitle}
-                  maxLength={14}
+                  maxLength={8}
                 />
                 <TextInput
                   style={styles.input}
@@ -157,6 +157,7 @@ export function GoalsPage({ navigation }) {
                   value={newLoad}
                   onChangeText={setNewLoad}
                   keyboardType='numeric'
+                  maxLength={4}
                 />
 
                 <View style={styles.dateInputContainer}>
@@ -251,19 +252,20 @@ const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
   },
-  boxnutri: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-    padding: 20,
-    borderRadius: 12,
-    backgroundColor: '#E49413',
-    width: 300,
-    elevation: 3,
+  boxmeta: {
+    width: 280, 
+    paddingVertical: 27, 
+    paddingHorizontal: 15, 
+    borderRadius: 15, 
+    backgroundColor: '#E49413', 
+    alignItems: 'center', 
+    marginBottom: 20, 
+    elevation: 3, 
+    flexDirection:'row',
+    justifyContent: 'space-around',
   },
   txtbox: {
-    fontSize: 18,
+    fontSize: 22,
     color: '#000',
     fontWeight: '600',
   },

@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { useState, useEffect } from 'react';
-import Feather from '@expo/vector-icons/Feather';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Feather from '@expo/vector-icons/Feather';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Picker } from '@react-native-picker/picker';  // Importação do Picker
+import { Picker } from '@react-native-picker/picker';  
+import { useNavigation } from '@react-navigation/native';
 
-export function VerColaborador() {
+export function VerColaborador({}) {
+    const navigation = useNavigation();
     const [colaborador, setColaborador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataColaborador, setDataColaborador] = useState({
@@ -19,15 +21,9 @@ export function VerColaborador() {
         status: "",
     });
 
-    
-
     const carregarColaboradores = async () => {
-        
-
         try {
-            const response = await axios.get('http://localhost:3000/colaboradores', {
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
+            const response = await axios.get('http://localhost:3000/colaboradores');
             setColaborador(response.data.colaborador);
         } catch (error) {
             console.error('Erro ao carregar colaboradores:', error);
@@ -44,11 +40,9 @@ export function VerColaborador() {
     };
 
     const handleUpdate = async () => {
-
         try {
             await axios.put('http://localhost:3000/colaboradores', dataColaborador, {
                 params: { codigo: dataColaborador.codigo },
-                headers: { 'Authorization': `Bearer ${token}` },
             });
             carregarColaboradores();
             setModalVisible(false);
@@ -59,11 +53,9 @@ export function VerColaborador() {
     };
 
     const handleDelete = async (codigo) => {
-
         try {
             await axios.delete('http://localhost:3000/colaboradores', {
                 params: { codigo },
-                headers: { 'Authorization': `Bearer ${token}` },
             });
             setColaborador(colaborador.filter(col => col.codigo !== codigo));
         } catch (error) {
@@ -74,6 +66,9 @@ export function VerColaborador() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <AntDesign name="arrowleft" size={30} color="black" />
+                </TouchableOpacity>
                 <Text style={styles.txtheader}>Pesquisa de Colaborador</Text>
             </View>
 
@@ -90,14 +85,12 @@ export function VerColaborador() {
                                 <Text style={styles.itemText}>Senha: {item.senha}</Text>
                                 <Text style={styles.itemText}>Status: {item.status}</Text>
                             </View>
-
                             <View style={styles.icons}>
                                 <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <Feather name="trash-2" size={40} color="black" />
+                                    <Feather name="trash-2" size={30} color="black" />
                                 </TouchableOpacity>
-
                                 <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={40} color="black" />
+                                    <FontAwesome name="pencil" size={30} color="black" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -142,8 +135,6 @@ export function VerColaborador() {
                                     value={dataColaborador.senha}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, senha: text })}
                                 />
-
-                                {/* Picker para seleção de status */}
                                 <Picker
                                     selectedValue={dataColaborador.status}
                                     style={styles.input}
@@ -156,7 +147,6 @@ export function VerColaborador() {
                                     <Picker.Item label="Recusado" value="recusado" />
                                 </Picker>
                             </View>
-
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
                                     <Text style={styles.txtbtns}>Salvar</Text>
@@ -178,33 +168,37 @@ export function VerColaborador() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#E49413',
     },
     header: {
-        backgroundColor: '#E49413',
-        width: '100%',
-        height: '8%',
-        justifyContent: 'center',
+        flexDirection: 'row',
         alignItems: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        backgroundColor: '#E49413',
+        borderRadius: 12,
+        elevation: 4,
+        marginTop: 30,
     },
     txtheader: {
-        fontSize: 20,
-        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+        marginLeft: 10, 
     },
     body: {
-        backgroundColor: '#E49413',
         flex: 1,
         padding: 20,
     },
     icons: {
-        justifyContent: 'space-between'
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '30%',
     },
     dados: {
-        justifyContent: 'flex-start',
         flexDirection: 'column',
         padding: 5,
         height: '100%',
-    
     },
     itemContainer: {
         flexDirection: 'row',
@@ -215,7 +209,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     itemText: {
-        color: '#fff',
+        color: '#000',
         fontSize: 16,
         marginBottom: 5,
     },
@@ -229,8 +223,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      },
-      modalContent: {
+    },
+    modalContent: {
         width: '80%',
         backgroundColor: '#FFB031',
         borderRadius: 8,
@@ -239,27 +233,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-      },
-      ModalHeader: {
+    },
+    ModalHeader: {
         backgroundColor: '#E49413',
         padding: 15,
         alignItems: 'center', 
-      },
-      modalBody: {
+    },
+    modalBody: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10,
-      },
-      ModalTitle: {
+    },
+    ModalTitle: {
         fontSize: 20,
         color: '#000',
-      },
-      BoxInputs: {
+    },
+    BoxInputs: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-      },
-      input: {
+    },
+    input: {
         width: 250,
         height: 40,
         paddingVertical: 10,
@@ -268,27 +262,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
-      },
-      btnContainer: {
+    },
+    btnContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: 250, 
-      },
-      btns: {
+    },
+    btns: {
         width: '48%', 
         padding: 10,
         borderRadius: 8,
         marginVertical: 5,
         alignItems: 'center',
-      },
-      txtbtns: {
+    },
+    txtbtns: {
         color: '#000',
         fontSize: 16,
-      },
-      btnSave: {
+    },
+    btnSave: {
         backgroundColor: '#E49413',
-      },
-      btnCancel: {
+    },
+    btnCancel: {
         backgroundColor: '#E49413',
-      },
+    },
 });

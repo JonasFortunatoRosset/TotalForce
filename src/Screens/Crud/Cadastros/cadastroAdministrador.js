@@ -1,132 +1,191 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
 import axios from 'axios';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-export  function CadastroAdministrador(){
-    const [administrador, setAdministrador] = useState({
-        nome: "",
-        cpf: "",
-        login: "",
-        senha: ""
-    })
+export function CadastroAdministrador({ navigation }) {
+  const [administrador, setAdministrador] = useState({
+    nome: '',
+    cpf: '',
+    login: '',
+    senha: '',
+  });
 
-    const inserirAdministrador = async() => {
+  const [modalVisible, setModalVisible] = useState(false);
 
-        axios.post("http://localhost:3000/administradores", {
-            nome: administrador.nome,
-            cpf: administrador.cpf,
-            senha: administrador.senha,
-        },{
-          headers: {
-          'Authorization': `Bearer ${token}`,  
-          'Content-Type': 'application/json',
-        }
+  const inserirAdministrador = async () => {
+    try {
+      await axios.post(
+        'http://localhost:3000/administradores',
+        administrador,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
-        }).then(response => {
-            Alert.alert("Sucesso", "administrador cadastrado!")
-            console.response(response)
-            setAdministrador({
-                nome: "",
-                cpf: "",
-                login: "",
-                senha: ""
-            })
-        }).catch(error => {
-            Alert.alert("Erro", "não foi possível cadastrar o administrador")
-            console.error(error)
-        })
+      Alert.alert('Sucesso', 'Administrador cadastrado!');
+      setAdministrador({ nome: '', cpf: '', login: '', senha: '' });
+      setModalVisible(true); 
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível cadastrar o administrador.');
+      console.error(error);
     }
+  };
 
-    return(
-        <View style={styles.container}>
-            <View style={styles.header}> 
-                <Text style={styles.txtheader}>Cadastro de Administrador</Text>
-            </View>
-            
-        <View style={styles.body}>
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableHighlight
+          style={styles.seta}
+          underlayColor={null}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="arrowleft" size={30} color="black" />
+        </TouchableHighlight>
+        <Text style={styles.txtheader}>Cadastro Administrador</Text>
+      </View>
 
-            <TextInput
+      <View style={styles.body}>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Nome"
+          value={administrador.nome}
+          onChangeText={(text) => setAdministrador({ ...administrador, nome: text })}
+        />
 
-            style={styles.inputs}
-            placeholder='Nome'
-            value={administrador.nome}
-            onChangeText={(text) => setAdministrador({...administrador, nome: text})}/>
+        <TextInput
+          style={styles.inputs}
+          placeholder="CPF"
+          value={administrador.cpf}
+          onChangeText={(text) => setAdministrador({ ...administrador, cpf: text })}
+          keyboardType="numeric"
+        />
 
-            <TextInput
-            
-            style={styles.inputs}
-            placeholder='CPF'
-            value={administrador.cpf}
-            onChangeText={(text) => setAdministrador({...administrador, cpf: text})}/>
+        <TextInput
+          style={styles.inputs}
+          placeholder="Login"
+          value={administrador.login}
+          onChangeText={(text) => setAdministrador({ ...administrador, login: text })}
+        />
 
-            <TextInput
+        <TextInput
+          style={styles.inputs}
+          placeholder="Senha"
+          value={administrador.senha}
+          onChangeText={(text) => setAdministrador({ ...administrador, senha: text })}
+          secureTextEntry
+        />
 
-            style={styles.inputs}
-            placeholder='Senha'
-            value={administrador.senha}
-            onChangeText={(text) => setAdministrador({...administrador, senha: text})}
-            secureTextEntry={true}/>
+        <TouchableOpacity style={styles.btn} onPress={inserirAdministrador}>
+          <Text style={styles.txtbtn}>Cadastrar</Text>
+        </TouchableOpacity>
+      </View>
 
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.txtbtn} onPress={inserirAdministrador}> Cadastrar</Text>
+      <Modal animationType="slide" transparent visible={modalVisible}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Parabéns!</Text>
+            <Text style={styles.modalMessage}>
+              O cadastro do administrador foi concluído com sucesso.
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('LoginPage');
+              }}
+            >
+              <Text style={styles.modalButtonText}>Entendi!</Text>
             </TouchableOpacity>
-
-
-
+          </View>
         </View>
+      </Modal>
     </View>
-    )
+  );
 }
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFB031',
-      },
-      header:{
-        backgroundColor: '#E49413',
-        width: '100%',
-        height: '8%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      txtheader:{
-        fontSize: 20,
-      },
-      body:{
-        backgroundColor: '#E49413',
-        height: '80%',
-        margin: 20,
-        padding: 15,
-        alignItems: 'center',
-
-      },
-
-      inputs: {
-        color: '#000',
-        size: 20,
-        marginBottom: 20,
-        borderRadius: 12,
-        backgroundColor: '#fff',
-        width: 300,
-        height: 45,
-        padding: 10,
-      },
-      btn:{
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#fff',
-        size: 20,
-        marginBottom: 20,
-        borderRadius: 12,
-        backgroundColor: '#FFB031',
-        width: 300,
-        height: 45,
-      },
-      txtbtn:{
-        justifyContent:'center',
-        backgroundColor: '#FFB031',
-        color: '#000',
-        fontSize: 20,
-      },
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#E49413',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    elevation: 4,
+    marginTop: 30,
+  },
+  seta: {
+    marginRight: 15,
+  },
+  txtheader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  body: {
+    margin: 20,
+    padding: 15,
+    backgroundColor: '#FFB031',
+    borderRadius: 12,
+    elevation: 2,
+    alignItems: 'center',
+  },
+  inputs: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  btn: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  txtbtn: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#FFB031',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 12,
+  },
+  modalButtonText: {
+    fontSize: 18,
+    color: '#000',
+  },
+});

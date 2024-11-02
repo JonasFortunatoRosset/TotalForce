@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, TouchableOpacity, StyleSheet, FlatList, Alert, ScrollView } from 'react-native';
+import {View, Text, TextInput, Button, Modal, TouchableOpacity, StyleSheet, FlatList, Alert, ScrollView} from 'react-native';
 import axios from 'axios';
 
 export function PlanilhaExercicios({ route, navigation }) {
@@ -19,6 +19,8 @@ export function PlanilhaExercicios({ route, navigation }) {
   };
 
 
+  const fecharModal = () => setModalVisible(false);
+
   const salvarTreino = async () => {
     if (data.length !== 8) {
       Alert.alert('Erro', 'Por favor, insira a data no formato ddMMyyyy.');
@@ -29,7 +31,7 @@ export function PlanilhaExercicios({ route, navigation }) {
       codtreino,
       codplano,
       data,
-      ...cargas, 
+      ...cargas,
     };
 
     try {
@@ -69,7 +71,7 @@ export function PlanilhaExercicios({ route, navigation }) {
       <TextInput
         placeholder="Data (ddMMyyyy)"
         style={styles.inputData}
-        maxLength={4}
+        maxLength={8}
         keyboardType="numeric"
         value={data}
         onChangeText={setData}
@@ -78,15 +80,19 @@ export function PlanilhaExercicios({ route, navigation }) {
 
       <Modal visible={modalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
-          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeModalButton}>
+          <TouchableOpacity onPress={fecharModal} style={styles.closeModalButton}>
             <Text style={styles.closeModalText}>X</Text>
           </TouchableOpacity>
           {exercicioModal && (
             <>
-              <Text style={styles.exercicioNome}>{exercicioModal.nome}</Text>
+              <Text style={styles.modalExercicioNome}>{exercicioModal.nome}</Text>
               <Text>Descrição: {exercicioModal.descricao}</Text>
-              <Text>Vídeo:</Text>
-              <Text>{exercicioModal.videoURL}</Text>
+              {exercicioModal.videoURL && (
+                <>
+                  <Text>Vídeo:</Text>
+                  <Text>{exercicioModal.videoURL}</Text>
+                </>
+              )}
             </>
           )}
         </View>
@@ -104,7 +110,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   lista: {
     paddingBottom: 20,
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     paddingHorizontal: 10,
+    textAlign: 'center',
   },
   inputData: {
     marginTop: 20,
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     fontSize: 18,
+    textAlign: 'center',
   },
   modalContainer: {
     flex: 1,
@@ -153,6 +162,12 @@ const styles = StyleSheet.create({
   closeModalText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#fff',
+  },
+  modalExercicioNome: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
     color: '#fff',
   },
 });

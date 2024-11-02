@@ -1,104 +1,109 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'; 
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
-export  function CadastroPlano(){
+export function CadastroPlanos() {
+    const navigation = useNavigation();
     const [plano, setPlano] = useState({
         nome: "",
-    })
+    });
 
-    const inserirPlano = async() => {
-
+    const inserirPlano = async () => {
         axios.post("http://localhost:3000/planos", {
             nome: plano.nome,
-
         }, {
             headers: {
-                'Authorization': `Bearer ${token}`,  
                 'Content-Type': 'application/json',
             }
         }).then(response => {
-            Alert.alert("Sucesso", "O Plano foi cadastrado")
+            Alert.alert("Sucesso", "O Plano foi cadastrado");
             setPlano({
-              nome: "",
-            })
+                nome: "",
+            });
         }).catch(error => {
-            alert.Alert("Erro", "Não foi possível cadastrar o plano")
-            console.error(error)
-        })
-    }
+            Alert.alert("Erro", "Não foi possível cadastrar o plano");
+            console.error(error);
+        });
+    };
 
-    return(
+    return (
         <View style={styles.container}>
-         <View style={styles.header}> 
-            <Text style={styles.txtheader}>Cadastro de Plano</Text>
-         </View>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.seta}>
+                    <Ionicons name="arrow-back" size={30} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.txtheader}>Cadastro de Plano</Text>
+            </View>
+            
             <View style={styles.body}>
-        
-            <TextInput
-            style={styles.inputs}
-            placeholder='Nome'
-            value={plano.nome}
-            onChangeText={(text) => setPlano({...plano, nome: text})}/>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Nome"
+                    value={plano.nome}
+                    onChangeText={(text) => setPlano({ ...plano, nome: text })}
+                />
 
-            <TouchableOpacity style={styles.btn} onPress={inserirPlano}>
-                <Text style={styles.txtbtn} > Cadastrar</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.btn} onPress={inserirPlano}>
+                    <Text style={styles.txtbtn}>Cadastrar</Text>
+                </TouchableOpacity>
             </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFB031',
-      },
-      header:{
         backgroundColor: '#E49413',
-        width: '100%',
-        height: '8%',
-        justifyContent: 'center',
+    },
+    header: {
+        flexDirection: 'row',
         alignItems: 'center',
-      },
-      txtheader:{
-        fontSize: 20,
-      },
-      body:{
+        paddingVertical: 15,
+        paddingHorizontal: 10,
         backgroundColor: '#E49413',
-        height: '80%',
+        borderRadius: 12,
+        elevation: 4,
+        marginTop: 30,
+    },
+    seta: {
+        marginRight: 15,
+    },
+    txtheader: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    body: {
         margin: 20,
         padding: 15,
-        alignItems: 'center',
-
-      },
-
-      inputs: {
-        color: '#000',
-        size: 20,
-        marginBottom: 20,
+        backgroundColor: '#FFB031',
         borderRadius: 12,
-        backgroundColor: '#fff',
-        width: 300,
+        elevation: 2,
+        alignItems: 'center',
+    },
+    inputs: {
+        width: '100%',
         height: 45,
-        padding: 10,
-      },
-      btn:{
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        paddingHorizontal: 10,
+        marginBottom: 15,
+    },
+    btn: {
+        width: '100%',
+        height: 45,
+        backgroundColor: '#E49413',
+        borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        color: '#fff',
-        size: 20,
-        marginBottom: 20,
-        borderRadius: 12,
-        backgroundColor: '#FFB031',
-        width: 300,
-        height: 45,
-      },
-      txtbtn:{
-        justifyContent:'center',
-        backgroundColor: '#FFB031',
+        marginTop: 10,
+    },
+    txtbtn: {
+        fontSize: 18,
+        fontWeight: 'bold',
         color: '#000',
-        fontSize: 20,
-      },
-})
+    },
+});

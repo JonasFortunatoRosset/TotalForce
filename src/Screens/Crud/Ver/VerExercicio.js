@@ -2,12 +2,13 @@ import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, M
 import { useState, useEffect } from 'react';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export function VerExercicio() {
+    const navigation = useNavigation();
     const [exercicio, setExercicio] = useState([]);
-    const [editingExercicio, setEditingExercicio] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataExercicios, setDataExercicios] = useState({
         codigo: "",
@@ -16,22 +17,13 @@ export function VerExercicio() {
         codtreino: ""
     });
 
-    
-
     const carregarExercicios = async () => {
-        const token = await getToken();
-
-        axios.get('http://localhost:3000/exercicios', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        })
-        .then(response => {
+        try {
+            const response = await axios.get('http://localhost:3000/exercicios');
             setExercicio(response.data.Exercicio);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao carregar exercícios:', error);
-        });
+        }
     };
 
     useEffect(() => {
@@ -44,43 +36,36 @@ export function VerExercicio() {
     };
 
     const handleUpdate = async () => {
-
-        axios.put('http://localhost:3000/exercicios', dataExercicios, {
-            params: { codigo: dataExercicios.codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        })
-        .then(response => {
+        try {
+            await axios.put('http://localhost:3000/exercicios', dataExercicios, {
+                params: { codigo: dataExercicios.codigo },
+            });
             carregarExercicios();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
             setDataExercicios({ codigo: "", nome: "", descricao: "", codtreino: "" });
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao atualizar exercícios:', error);
-        });
+        }
     };
 
     const handleDelete = async (codigo) => {
-
-        axios.delete('http://localhost:3000/exercicios', {
-            params: { codigo },
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        })
-        .then(response => {
+        try {
+            await axios.delete('http://localhost:3000/exercicios', {
+                params: { codigo },
+            });
             setExercicio(exercicio.filter(exercicio => exercicio.codigo !== codigo));
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao deletar exercício:', error);
-        });
+        }
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <AntDesign name="arrowleft" size={30} color="black" />
+                </TouchableOpacity>
                 <Text style={styles.txtheader}>Pesquisa de Exercício</Text>
             </View>
 
@@ -118,7 +103,6 @@ export function VerExercicio() {
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(false);
-                    setEditingExercicio(null);
                 }}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
@@ -133,21 +117,18 @@ export function VerExercicio() {
                                     value={dataExercicios.codigo}
                                     onChangeText={(text) => setDataExercicios({ ...dataExercicios, codigo: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Nome"
                                     value={dataExercicios.nome}
                                     onChangeText={(text) => setDataExercicios({ ...dataExercicios, nome: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Descrição"
                                     value={dataExercicios.descricao}
                                     onChangeText={(text) => setDataExercicios({ ...dataExercicios, descricao: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="CodTreino"
@@ -161,7 +142,7 @@ export function VerExercicio() {
                                     <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => { setModalVisible(false); }}>
+                                <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => setModalVisible(false)}>
                                     <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
@@ -176,29 +157,34 @@ export function VerExercicio() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#E49413',
     },
     header: {
-        backgroundColor: '#E49413',
-        width: '100%',
-        height: '8%',
-        justifyContent: 'center',
+        flexDirection: 'row',
         alignItems: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        backgroundColor: '#E49413',
+        borderRadius: 12,
+        elevation: 4,
+        marginTop: 30,
     },
     txtheader: {
-        fontSize: 20,
-        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+        marginLeft: 10,
     },
     body: {
-        backgroundColor: '#E49413',
         flex: 1,
         padding: 20,
     },
     icons: {
-        justifyContent: 'space-between'
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '30%',
     },
     dados: {
-        justifyContent: 'flex-start',
         flexDirection: 'column',
         padding: 5,
         height: '100%',

@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Alert, TouchableHighlight } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function TrainPage({ navigation }) {
-  const [planos, setPlanos] = useState([]); 
-  const [codPlanoUsuario, setCodPlanoUsuario] = useState(null); 
-
+export async function TrainPage({ navigation }) {
+  const [data, setData] = useState([]);   // dados 
+  const codplano = `plano ${data.Plano_usuario}`; // Código do plano do usuário
   
   const carregarPlanos = async () => {
-    try {
-      const codigo = await AsyncStorage.getItem('codigo'); 
-      if (codigo) {
-       
-        const [resPlanos, resUsuario] = await Promise.all([
-          axios.get('http://localhost:3000/planos'), 
-          axios.get(`http://localhost:3000/usuarios/${JSON.parse(codigo)}`), 
-        ]);
+    try {  
+        const response = await axios.get('http://localhost:3000/pesquisartreinos',);
 
-        setPlanos(resPlanos.data); 
-        setCodPlanoUsuario(resUsuario.data.codplano); 
-      } else {
-        Alert.alert('Erro', 'Usuário não encontrado.');
-      }
+        console.log(response.data)
+        setData(response.data);
+        await AsyncStorage.setItem(data)
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
@@ -32,33 +23,10 @@ export function TrainPage({ navigation }) {
   };
 
   useEffect(() => {
+    VerificaçãoPlanoUsuario();
     carregarPlanos();
   }, []);
-
-
-  const renderizarPlano = ({ item }) => {
-    const planoLiberado = item.codplano === codPlanoUsuario; 
-
-    return (
-      <TouchableOpacity
-        style={[
-          styles.planoButton,
-          planoLiberado ? styles.planoLiberado : styles.planoBloqueado,
-        ]}
-        onPress={() =>
-          planoLiberado
-            ? navigation.navigate('ListaTreinos', { treinos: item.treinos }) 
-            : Alert.alert('Plano Bloqueado', 'Este plano não está disponível para você.')
-        }
-      >
-        <Text style={styles.txtPlano}>{item.nome}</Text>
-        {!planoLiberado && (
-          <MaterialCommunityIcons name="lock" size={24} color="black" style={styles.cadeado} />
-        )}
-      </TouchableOpacity>
-    );
-  };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -69,15 +37,29 @@ export function TrainPage({ navigation }) {
         >
           <AntDesign name="arrowleft" size={30} color="black" />
         </TouchableHighlight>
-        <Text style={styles.txtheader}>PLANOS</Text>
+        <Text style={styles.txtheader}>Planos</Text>
       </View>
+      <View style={styles.body}>
+      <TouchableOpacity onPress={() => navigation.navigate('ListaTreinos',{codplano})} style={styles.planoButton}>
+        {data.Plano !== undefined     //mapeação dos planos 
+          ? data.Plano.map((i) => (
 
-      <FlatList
-        data={planos}
-        keyExtractor={(item) => item.codplano.toString()} 
-        renderItem={renderizarPlano}
-        contentContainerStyle={styles.lista}
-      />
+              <View style={styles.planoContainer}>
+                <Text style={styles.txtPlano} key={i.nome} >{i.nome}</Text>    {/*renderização dos planos */}
+                 {i.codigo !== codplano && (     
+                  <MaterialCommunityIcons
+                    name="lock"
+                    size={24}
+                    color="black"
+                    style={styles.cadeado}
+                  />
+                )}      {/*Verificação dos planos */}  
+              </View>
+            ))
+          : null}
+      </TouchableOpacity>
+
+      </View>
     </View>
   );
 }
@@ -107,17 +89,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  lista: {
-    alignItems: 'center',
+  body: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#FFB031',
   },
   planoButton: {
-    width: '80%',
-    padding: 15,
+    width: '100%',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#E49413',
     elevation: 4,
   },
   planoLiberado: {

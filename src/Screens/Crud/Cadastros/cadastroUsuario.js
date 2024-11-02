@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Modal } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons'; 
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 export function CadastroUsuario() {
+  const navigation = useNavigation();
   const [usuario, setUsuario] = useState({
     nome: "",
     login: "",
@@ -18,20 +20,20 @@ export function CadastroUsuario() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
-  const [planos, setPlanos] = useState([]); 
+  const [planos, setPlanos] = useState([]);
 
-
+  useEffect(() => {
+    buscarPlanos();
+  }, []);
 
   const buscarPlanos = async () => {
-    const token = await getToken();
-
     try {
       const response = await axios.get("http://localhost:3000/planos", {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          'Content-Type': 'application/json',
+        },
       });
-      setPlanos(response.data); 
+      setPlanos(response.data);
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
       console.error(error);
@@ -39,17 +41,8 @@ export function CadastroUsuario() {
   };
 
   const inserirUsuarios = async () => {
-    const token = await getToken();
-
-    if (!token) {
-      Alert.alert('Erro', 'Token não encontrado. Faça login novamente.');
-      return;
-    }
-
-    axios
-      .post(
-        "http://localhost:3000/usuarios",
-        {
+    try {
+      await axios.post("http://localhost:3000/usuarios", {
           nome: usuario.nome,
           login: usuario.login,
           endereco: usuario.endereco,
@@ -57,42 +50,39 @@ export function CadastroUsuario() {
           peso: usuario.peso,
           altura: usuario.altura,
           status: usuario.status,
-          codplano: usuario.codplano
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(() => {
-        Alert.alert("Sucesso", "Usuário foi cadastrado");
-        setUsuario({
-          nome: "",
-          login: "",
-          endereco: "",
-          senha: "",
-          peso: "",
-          altura: "",
-          codplano: "",
-          status: "Ativo"
-        });
-        setModalVisible(false);
-        setStatusModalVisible(false);
-      })
-      .catch((error) => {
-        Alert.alert("Erro", "Não foi possível cadastrar o usuário");
-        console.error(error);
+          codplano: usuario.codplano, 
+      }, {
+          headers: { 'Content-Type': 'application/json' },
       });
+
+      Alert.alert("Sucesso", "Usuário foi cadastrado");
+      setUsuario({
+        nome: "",
+        login: "",
+        endereco: "",
+        senha: "",
+        peso: "",
+        altura: "",
+        codplano: "",
+        status: "Ativo",
+      });
+      setModalVisible(false);
+      setStatusModalVisible(false);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível cadastrar o usuário");
+      console.error(error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={30} color="black" />
+        </TouchableOpacity>
         <Text style={styles.txtheader}>Cadastro de Usuário</Text>
       </View>
-
+      <View style={styles.color}>
       <View style={styles.body}>
         <TextInput
           style={styles.inputs}
@@ -100,28 +90,25 @@ export function CadastroUsuario() {
           value={usuario.nome}
           onChangeText={(text) => setUsuario({ ...usuario, nome: text })}
         />
-
         <TextInput
           style={styles.inputs}
           placeholder="Login"
           value={usuario.login}
           onChangeText={(text) => setUsuario({ ...usuario, login: text })}
         />
-
         <TextInput
           style={styles.inputs}
           placeholder="Endereço"
           value={usuario.endereco}
           onChangeText={(text) => setUsuario({ ...usuario, endereco: text })}
         />
-
         <TextInput
           style={styles.inputs}
           placeholder="Senha"
           value={usuario.senha}
           onChangeText={(text) => setUsuario({ ...usuario, senha: text })}
+          secureTextEntry
         />
-
         <TextInput
           style={styles.inputs}
           placeholder="Peso"
@@ -129,7 +116,6 @@ export function CadastroUsuario() {
           onChangeText={(text) => setUsuario({ ...usuario, peso: text })}
           keyboardType="numeric"
         />
-
         <TextInput
           style={styles.inputs}
           placeholder="Altura"
@@ -138,13 +124,11 @@ export function CadastroUsuario() {
           keyboardType="numeric"
         />
 
-        <TouchableOpacity 
-          style={styles.inputs} 
+        <TouchableOpacity
+          style={styles.inputs}
           onPress={() => setStatusModalVisible(true)}
         >
-          <Text style={styles.placeholderText}>
-            {usuario.status}
-          </Text>
+          <Text style={styles.placeholderText}>{usuario.status}</Text>
         </TouchableOpacity>
 
         <Modal
@@ -163,14 +147,13 @@ export function CadastroUsuario() {
                 }}
                 style={styles.picker}
               >
-                <Picker.Item label="Ativo"      value="Ativo" />
-                <Picker.Item label="Inativo"    value="Inativo" />
+                <Picker.Item label="Ativo" value="Ativo" />
+                <Picker.Item label="Inativo" value="Inativo" />
                 <Picker.Item label="Em Análise" value="Em Análise" />
-                <Picker.Item label="Recusado"   value="Recusado" />
+                <Picker.Item label="Recusado" value="Recusado" />
               </Picker>
-
-              <TouchableOpacity 
-                style={styles.closeButton} 
+              <TouchableOpacity
+                style={styles.closeButton}
                 onPress={() => setStatusModalVisible(false)}
               >
                 <Text style={styles.closeButtonText}>Fechar</Text>
@@ -179,12 +162,9 @@ export function CadastroUsuario() {
           </View>
         </Modal>
 
-        <TouchableOpacity 
-          style={styles.inputs} 
-          onPress={() => {
-            buscarPlanos(); 
-            setModalVisible(true);
-          }}
+        <TouchableOpacity
+          style={styles.inputs}
+          onPress={() => setModalVisible(true)}
         >
           <Text style={styles.placeholderText}>
             {usuario.codplano ? `Plano: ${usuario.codplano}` : "Selecione um plano"}
@@ -202,19 +182,22 @@ export function CadastroUsuario() {
               <Picker
                 selectedValue={usuario.codplano}
                 onValueChange={(itemValue) => {
-                  setUsuario({ ...usuario, codplano: itemValue });
-                  setModalVisible(false);
+                  if (itemValue) {
+                    setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
+                    setModalVisible(false);
+                  } else {
+                    Alert.alert('Por favor, selecione um plano válido.');
+                  }
                 }}
                 style={styles.picker}
               >
                 <Picker.Item label="Selecione um plano" value="" />
                 {planos.map((plano) => (
-                  <Picker.Item key={plano.id} label={plano.nome} value={plano.id} />
+                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
                 ))}
               </Picker>
-
-              <TouchableOpacity 
-                style={styles.closeButton} 
+              <TouchableOpacity
+                style={styles.closeButton}
                 onPress={() => setModalVisible(false)}
               >
                 <Text style={styles.closeButtonText}>Fechar</Text>
@@ -227,6 +210,7 @@ export function CadastroUsuario() {
           <Text style={styles.txtbtn}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
+      </View>
     </View>
   );
 }
@@ -234,33 +218,46 @@ export function CadastroUsuario() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#E49413',
   },
   header: {
-    backgroundColor: '#E49413',
-    width: '100%',
-    height: '8%',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    elevation: 4,
+    marginTop: 30,
+  },
+  backButton: {
+    marginRight: 15,
   },
   txtheader: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+  },
+  color:{
+    backgroundColor: '#E49413'
   },
   body: {
-    backgroundColor: '#E49413',
-    height: '80%',
     margin: 20,
     padding: 15,
+    backgroundColor: '#FFB031',
+    borderRadius: 12,
+    elevation: 2,
     alignItems: 'center',
   },
   inputs: {
-    color: '#000',
-    marginBottom: 20,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    width: 300,
+    width: '100%',
     height: 45,
-    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    justifyContent: 'center',
   },
   placeholderText: {
     color: '#888',
@@ -274,12 +271,10 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    height: '50%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   picker: {
     height: 150,
@@ -287,7 +282,6 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 20,
-    alignItems: 'center',
     padding: 10,
     backgroundColor: '#FFB031',
     borderRadius: 10,
@@ -297,15 +291,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFB031',
-    borderRadius: 12,
-    width: 300,
-    height: 45,
+    marginTop: 10,
   },
   txtbtn: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
 });

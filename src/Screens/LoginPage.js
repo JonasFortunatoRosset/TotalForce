@@ -61,10 +61,10 @@ export function LoginPage({ navigation }) {
         senha: "",
       });
       if (response) {
-        const { token } = response.data;
-        await armazenarDadosUsuario(token);
+        const { token,codusuario } = response.data;
+        await armazenarDadosUsuario(token,codusuario);
         Alert.alert('Login efetuado com sucesso');
-        navigation.navigate('LoginAdmPage');
+        navigation.navigate('HomeAdmPage');
       }
     } catch (error) {
       console.error(error);
@@ -128,7 +128,7 @@ export function LoginPage({ navigation }) {
               onPress={() => boxClick(1)}
               style={[
                 styles.logs,
-                { backgroundColor: Click === 1 ? '#FFB031' : '#E49413' },
+                { backgroundColor: Click === 1 ? '#E49413' : '#FFB031' },
               ]}
             >
               <Image source={user} style={styles.imguser} />
@@ -139,7 +139,7 @@ export function LoginPage({ navigation }) {
               onPress={() => boxClick(2)}
               style={[
                 styles.logs,
-                { backgroundColor: Click === 2 ? '#FFB031' : '#E49413' },
+                { backgroundColor: Click === 2 ? '#E49413' : '#FFB031' },
               ]}
             >
               <Image source={personal} style={styles.imguser} />
@@ -150,7 +150,7 @@ export function LoginPage({ navigation }) {
               onPress={() => boxClick(3)}
               style={[
                 styles.logs,
-                { backgroundColor: Click === 3 ? '#FFB031' : '#E49413' },
+                { backgroundColor: Click === 3 ? '#E49413' : '#FFB031' },
               ]}
             >
               <Image source={adm} style={styles.imguser} />
@@ -196,7 +196,7 @@ export function LoginPage({ navigation }) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFB031',
+      backgroundColor: '#fff',
     },
     scrollContent: {
       justifyContent: 'center',
@@ -220,7 +220,7 @@ export function LoginPage({ navigation }) {
       marginTop: 10,
     },
     body: {
-      backgroundColor: '#E49413',
+      backgroundColor: '#FFB031',
       borderRadius: 15,
       width: '90%',
       padding: 20,
@@ -264,7 +264,7 @@ export function LoginPage({ navigation }) {
       alignItems: 'center',
       marginBottom: 20,
       borderRadius: 12,
-      backgroundColor: '#FFB031',
+      backgroundColor: '#E49413',
       width: 300,
       height: 45,
     },

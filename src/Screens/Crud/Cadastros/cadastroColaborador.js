@@ -1,91 +1,91 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function CadastroColaborador() {
-  const [personal, setPersonal] = useState({
-    nome: "",
-    cpf: "",
-    endereco: "",
-    cidade: "",
-    senha: "",
-    login: ""
+export function CadastroColaborador({ navigation }) {
+  const [colaborador, setColaborador] = useState({
+    nome: '',
+    cpf: '',
+    endereco: '',
+    cidade: '',
+    senha: '',
+    login: '',
   });
 
-
-
   const inserirColaborador = async () => {
-   
-    axios.post("http://localhost:3000/colaboradores", {
-      nome: personal.nome,
-      cpf: personal.cpf,
-      endereco: personal.endereco,
-      senha: personal.senha,
-      login: personal.login,
-      status: "Ativo"  
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }
-    }).then(response => {
-      Alert.alert("Sucesso", "Personal cadastrado com sucesso");
-      setPersonal({
-        nome: "",
-        cpf: "",
-        endereco: "",
-        cidade: "",
-        senha: "",
-        login: ""
+    try {
+      await axios.post('http://localhost:3000/colaboradores', {
+        nome: colaborador.nome,
+        cpf: colaborador.cpf,
+        endereco: colaborador.endereco,
+        senha: colaborador.senha,
+        login: colaborador.login,
+        status: 'Ativo',
       });
-    }).catch(error => {
-      Alert.alert("Erro", "Erro ao cadastrar o personal");
+      Alert.alert('Sucesso', 'colaborador cadastrado com sucesso');
+      setColaborador({
+        nome: '',
+        cpf: '',
+        endereco: '',
+        cidade: '',
+        senha: '',
+        login: '',
+      });
+    } catch (error) {
+      Alert.alert('Erro', 'Erro ao cadastrar o colaborador');
       console.error(error);
-    });
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.txtheader}>Cadastro de Personal</Text>
+        <TouchableOpacity
+          style={styles.seta}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="arrowleft" size={30} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.txtheader}>Cadastro de colaborador</Text>
       </View>
 
       <View style={styles.body}>
         <TextInput
           style={styles.inputs}
           placeholder="Nome"
-          value={personal.nome}
-          onChangeText={(text) => setPersonal({ ...personal, nome: text })}
+          value={colaborador.nome}
+          onChangeText={(text) => setColaborador({ ...colaborador, nome: text })}
         />
 
         <TextInput
           style={styles.inputs}
           placeholder="CPF"
-          value={personal.cpf}
-          onChangeText={(text) => setPersonal({ ...personal, cpf: text })}
+          value={colaborador.cpf}
+          onChangeText={(text) => setColaborador({ ...colaborador, cpf: text })}
+          keyboardType="numeric"
         />
 
         <TextInput
           style={styles.inputs}
           placeholder="Endereço"
-          value={personal.endereco}
-          onChangeText={(text) => setPersonal({ ...personal, endereco: text })}
+          value={colaborador.endereco}
+          onChangeText={(text) => setColaborador({ ...colaborador, endereco: text })}
         />
 
         <TextInput
           style={styles.inputs}
           placeholder="Senha"
-          value={personal.senha}
+          value={colaborador.senha}
           secureTextEntry
-          onChangeText={(text) => setPersonal({ ...personal, senha: text })}
+          onChangeText={(text) => setColaborador({ ...colaborador, senha: text })}
         />
 
         <TextInput
           style={styles.inputs}
           placeholder="Login"
-          value={personal.login}
-          onChangeText={(text) => setPersonal({ ...personal, login: text })}
+          value={colaborador.login}
+          onChangeText={(text) => setColaborador({ ...colaborador, login: text })}
         />
 
         <TouchableOpacity style={styles.btn} onPress={inserirColaborador}>
@@ -99,45 +99,54 @@ export function CadastroColaborador() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#E49413',
   },
   header: {
-    backgroundColor: '#E49413',
-    width: '100%',
-    height: '8%',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
+    elevation: 4,
+    marginTop: 30,
+  },
+  seta: {
+    marginRight: 15,
   },
   txtheader: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
   },
   body: {
-    backgroundColor: '#E49413',
-    height: '80%',
     margin: 20,
     padding: 15,
+    backgroundColor: '#FFB031',
+    borderRadius: 12,
+    elevation: 2,
     alignItems: 'center',
   },
   inputs: {
-    color: '#000',
-    fontSize: 18,
-    marginBottom: 20,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    width: 300,
+    width: '100%',
     height: 45,
-    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
   },
   btn: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#E49413',
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: '#FFB031',
-    width: 300,
-    height: 45,
+    marginTop: 10,
   },
   txtbtn: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
-    fontSize: 20,
   },
 });

@@ -1,12 +1,14 @@
-import { ScrollView, View, Text, StyleSheet, TouchableHighlight,Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
-
-
+import { Ionicons } from '@expo/vector-icons';
 
 export function CadastroGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
+                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={'#E49413'}>
+                    <Ionicons name="arrow-back" size={28} color="black" />
+                </TouchableHighlight>
                 <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
                 <EvilIcons name="user" size={60} color="black" />
             </View>
@@ -15,12 +17,16 @@ export function CadastroGeral({ navigation }) {
                     <Text style={styles.txtbox}>Cadastro Admin</Text>
                 </TouchableHighlight>
 
+                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroColaborador')}>
+                    <Text style={styles.txtbox}>Cadastro Colaborador</Text>
+                </TouchableHighlight>
+
                 <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroExercicio')}>
                     <Text style={styles.txtbox}>Cadastro Exercícios</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPersonal')}>
-                    <Text style={styles.txtbox}>Cadastro Personais</Text>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPlanos')}>
+                    <Text style={styles.txtbox}>Cadastro Planos</Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroTreino')}>
@@ -32,7 +38,7 @@ export function CadastroGeral({ navigation }) {
                 </TouchableHighlight>
             </View>
             <View style={styles.footer}>
-                
+                {/* Footer content */}
             </View>
         </ScrollView>
     );
@@ -48,16 +54,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#E49413',
         padding: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         elevation: 4,
         borderRadius: 12,
         marginTop: 30,
     },
+    backButton: {
+        paddingRight: 10,
+    },
     txtheader: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#000',
+        flex: 1,
+        textAlign: 'center',
     },
     body: {
         alignItems: 'center',
@@ -67,7 +77,7 @@ const styles = StyleSheet.create({
     boxtbns: {
         backgroundColor: '#E49413',
         width: '70%',
-        height: 60, 
+        height: 60,
         padding: 10,
         margin: 15,
         borderRadius: 12,
@@ -88,10 +98,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
-      },
-      imgFooter: {
-        width: 120,
-        height: 60,
-        resizeMode: 'contain',
-      },
+    },
 });
