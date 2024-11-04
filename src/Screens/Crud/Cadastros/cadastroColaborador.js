@@ -100,14 +100,14 @@ export function CadastroColaborador({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
     marginTop: 30,

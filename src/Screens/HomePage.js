@@ -77,11 +77,11 @@ export function HomePage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     width: '100%',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     paddingVertical: 15,
     paddingHorizontal: 15,
     flexDirection: 'row',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   body: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   box: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     width: 160,
     height: 220,
     borderRadius: 12,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: '100%',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     padding: 20,
     alignItems: 'center',
     borderTopLeftRadius: 12,

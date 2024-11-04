@@ -49,16 +49,35 @@ export function VerExercicio() {
         }
     };
 
-    const handleDelete = async (codigo) => {
-        try {
-            await axios.delete('http://localhost:3000/exercicios', {
-                params: { codigo },
-            });
-            setExercicio(exercicio.filter(exercicio => exercicio.codigo !== codigo));
-        } catch (error) {
-            console.error('Erro ao deletar exercício:', error);
-        }
+    const handleDelete = (codigo) => {
+        Alert.alert(
+            "Confirmação de Exclusão",
+            "Você tem certeza que deseja excluir este exercício?",
+            [
+                {
+                    text: "Cancelar",
+                    onPress: () => console.log("Exclusão cancelada"),
+                    style: "cancel"
+                },
+                {
+                    text: "Excluir",
+                    onPress: async () => {
+                        try {
+                            await axios.delete('http://localhost:3000/exercicios', {
+                                params: { codigo },
+                            });
+                            setExercicio(exercicio.filter(exercicio => exercicio.codigo !== codigo));
+                            Alert.alert("Sucesso", "Exercício excluído com sucesso!");
+                        } catch (error) {
+                            console.error('Erro ao deletar exercício:', error);
+                        }
+                    },
+                    style: "destructive"
+                }
+            ]
+        );
     };
+    
 
     return (
         <View style={styles.container}>

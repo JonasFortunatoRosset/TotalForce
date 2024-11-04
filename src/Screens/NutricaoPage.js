@@ -104,14 +104,14 @@ export function NutricaoPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   inputpeso: {
     width: '100%',
     height: 50,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     color: '#000',
     fontSize: 18,
     borderRadius: 10,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     paddingHorizontal: 15,
     borderRadius: 15,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     alignItems: 'center',
     marginBottom: 20,
     elevation: 3,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
     width: '80%',
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     padding: 10,
     borderRadius: 8,
   },

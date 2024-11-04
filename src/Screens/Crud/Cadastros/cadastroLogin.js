@@ -155,14 +155,14 @@ export function CadastroLogin({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413'
+    backgroundColor: '#fff'
   },
   seta: {
     marginRight: 15,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#E49413',
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 12,

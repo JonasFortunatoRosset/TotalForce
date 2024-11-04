@@ -85,17 +85,27 @@ export function VerUsuario({ navigation }) {
         });
     };
 
-    const handleDelete = async (codigo) => {
-        axios.delete('http://localhost:3000/usuarios', {
-            params: { codigo },
-        })
-        .then(response => {
-            setUsuario(usuario.filter(user => user.codigo !== codigo));
-        })
-        .catch(error => {
-            console.error('Erro ao deletar usuário:', error);
-        });
-    };
+const handleDelete = async (codigo) => {
+    Alert.alert(
+        "Confirmação de Exclusão",
+        "Tem certeza de que deseja excluir este usuário?",
+        [
+            { text: "Cancelar", style: "cancel" },
+            { text: "Excluir", style: "destructive", onPress: async () => {
+                try {
+                    await axios.delete('http://localhost:3000/usuarios', {
+                        params: { codigo },
+                    });
+                    setUsuario(usuario.filter(user => user.codigo !== codigo));
+                    Alert.alert("Sucesso", "Usuário excluído com sucesso!");
+                } catch (error) {
+                    console.error('Erro ao deletar usuário:', error);
+                    Alert.alert("Erro", "Não foi possível excluir o usuário.");
+                }
+            }},
+        ]
+    );
+};
 
     return (
         <SafeAreaView style={styles.container}>

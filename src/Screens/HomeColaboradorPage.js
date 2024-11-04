@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {StyleSheet,Text,View,Image,TouchableHighlight,TouchableOpacity,FlatList,Alert,Modal,} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'; // Para o ícone da caneta
 import logoTotal from './Images/logoTotal.png';
 import axios from 'axios';
 
@@ -73,12 +74,12 @@ export function HomeColaboradorPage({ navigation }) {
       </View>
       <TouchableHighlight
         onPress={() => handlePlanChange(item.codigo)}
-        underlayColor={'#D87D0E'}
+        underlayColor={null}
         style={styles.changePlanButton}
       >
         <View style={styles.buttonContent}>
           <Text style={styles.buttonText}>Alterar Plano</Text>
-          <Entypo name="cog" size={30} color="black" />
+          <MaterialIcons name="edit" size={30} color="black" /> 
         </View>
       </TouchableHighlight>
     </View>
@@ -143,14 +144,14 @@ export function HomeColaboradorPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   },
   userCard: {
     width: '90%',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     padding: 15,
     marginVertical: 10,
     borderRadius: 12,
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
   },
   imgFooter: {
     width: 120,

@@ -52,17 +52,37 @@ export function VerAdministrador() {
         });
     };
 
-    const handleDelete = async (codigo) => {
-        axios.delete('http://localhost:3000/administradores', {
-            params: { codigo },
-        })
-        .then(response => {
-            setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
-        })
-        .catch(error => {
-            console.error('Erro ao deletar administrador:', error);
-        });
+    const handleDelete = (codigo) => {
+        Alert.alert(
+            "Confirmação de Exclusão",
+            "Tem certeza de que deseja excluir este administrador?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Excluir",
+                    onPress: () => {
+                        axios.delete('http://localhost:3000/administradores', {
+                            params: { codigo },
+                        })
+                        .then(response => {
+                            setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
+                            Alert.alert("Sucesso", "Administrador excluído com sucesso!");
+                        })
+                        .catch(error => {
+                            console.error('Erro ao deletar administrador:', error);
+                            Alert.alert("Erro", "Não foi possível excluir o administrador.");
+                        });
+                    },
+                    style: "destructive"
+                }
+            ],
+            { cancelable: false }
+        );
     };
+    
 
     return (
         <View style={styles.container}>

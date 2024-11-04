@@ -227,14 +227,14 @@ export function GoalsPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     paddingVertical: 27, 
     paddingHorizontal: 15, 
     borderRadius: 15, 
-    backgroundColor: '#E49413', 
+    backgroundColor: '#FFB031', 
     alignItems: 'center', 
     marginBottom: 20, 
     elevation: 3, 
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   btnadd: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     padding: 15,
     borderRadius: 12,
     marginVertical: 20,
@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '85%',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
     elevation: 5,
   },
   ModalHeader: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 5,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
     borderRadius: 10,
     padding: 10,
     marginVertical: 5,
@@ -354,10 +354,10 @@ const styles = StyleSheet.create({
     margin: 5
   },
   btnSave: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
   },
   btnCancel: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FFB031',
   },
   txtbtns: {
     fontSize: 16,

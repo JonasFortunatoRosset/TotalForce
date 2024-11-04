@@ -53,15 +53,33 @@ export function VerColaborador({}) {
     };
 
     const handleDelete = async (codigo) => {
-        try {
-            await axios.delete('http://localhost:3000/colaboradores', {
-                params: { codigo },
-            });
-            setColaborador(colaborador.filter(col => col.codigo !== codigo));
-        } catch (error) {
-            console.error('Erro ao deletar colaborador:', error);
-        }
+        Alert.alert(
+            "Confirmar Exclusão",
+            "Tem certeza de que deseja excluir este colaborador?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Excluir",
+                    onPress: async () => {
+                        try {
+                            await axios.delete('http://localhost:3000/colaboradores', {
+                                params: { codigo },
+                            });
+                            setColaborador(colaborador.filter(col => col.codigo !== codigo));
+                            Alert.alert("Sucesso", "Colaborador excluído com sucesso!");
+                        } catch (error) {
+                            console.error('Erro ao deletar colaborador:', error);
+                        }
+                    },
+                    style: "destructive"
+                }
+            ]
+        );
     };
+    
 
     return (
         <View style={styles.container}>
@@ -168,14 +186,14 @@ export function VerColaborador({}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 12,
         elevation: 4,
         marginTop: 30,
@@ -215,7 +233,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FFB031',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -226,7 +244,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
         padding: 20,
         shadowColor: '#000',
@@ -235,7 +253,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FFB031',
         padding: 15,
         alignItems: 'center', 
     },
@@ -258,7 +276,7 @@ const styles = StyleSheet.create({
         height: 40,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
@@ -280,9 +298,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnSave: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FFB031',
     },
     btnCancel: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FFB031',
     },
 });

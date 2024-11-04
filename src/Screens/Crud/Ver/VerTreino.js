@@ -60,19 +60,28 @@ export function VerTreino() {
     };
 
     const handleDelete = async (codigo) => {
-        axios.delete('http://localhost:3000/treinos', {
-            params: { codigo },
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => {
-            setTreinos(treinos.filter(t => t.codigo !== codigo));
-        })
-        .catch(error => {
-            console.error('Erro ao deletar treino:', error);
-        });
+        Alert.alert(
+            "Confirmação de Exclusão",
+            "Tem certeza de que deseja excluir este treino?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                { text: "Excluir", style: "destructive", onPress: async () => {
+                    try {
+                        await axios.delete('http://localhost:3000/treinos', {
+                            params: { codigo },
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        setTreinos(treinos.filter(t => t.codigo !== codigo));
+                        Alert.alert("Sucesso", "Treino excluído com sucesso!");
+                    } catch (error) {
+                        console.error('Erro ao deletar treino:', error);
+                        Alert.alert("Erro", "Não foi possível excluir o treino.");
+                    }
+                }}
+            ]
+        );
     };
+    
 
     return (
         <View style={styles.container}>

@@ -5,17 +5,21 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export async function TrainPage({ navigation }) {
-  const [data, setData] = useState([]);   // dados 
-  const codplano = `plano ${data.Plano_usuario}`; // Código do plano do usuário
-  
-  const carregarPlanos = async () => {
-    try {  
-        const response = await axios.get('http://localhost:3000/pesquisartreinos',);
+export function TrainPage({ navigation }) {
+  const [data, setData] = useState([]);
+  const [codplanoUsuario, setCodplanoUsuario] = useState(null);
 
-        console.log(response.data)
-        setData(response.data);
-        await AsyncStorage.setItem(data)
+  const carregarPlanos = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/pesquisartreinos');
+      setData(response.data);
+      
+      // Armazenando dados no AsyncStorage 
+      await AsyncStorage.setItem('planosData', JSON.stringify(response.data));
+      
+      // Pegando o plano do usuário
+        setCodplanoUsuario(response.data.Plano_usuario);
+
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
@@ -23,10 +27,9 @@ export async function TrainPage({ navigation }) {
   };
 
   useEffect(() => {
-    VerificaçãoPlanoUsuario();
     carregarPlanos();
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -40,25 +43,28 @@ export async function TrainPage({ navigation }) {
         <Text style={styles.txtheader}>Planos</Text>
       </View>
       <View style={styles.body}>
-      <TouchableOpacity onPress={() => navigation.navigate('ListaTreinos',{codplano})} style={styles.planoButton}>
-        {data.Plano !== undefined     //mapeação dos planos 
-          ? data.Plano.map((i) => (
-
-              <View style={styles.planoContainer}>
-                <Text style={styles.txtPlano} key={i.nome} >{i.nome}</Text>    {/*renderização dos planos */}
-                 {i.codigo !== codplano && (     
-                  <MaterialCommunityIcons
-                    name="lock"
-                    size={24}
-                    color="black"
-                    style={styles.cadeado}
-                  />
-                )}      {/*Verificação dos planos */}  
-              </View>
-            ))
-          : null}
-      </TouchableOpacity>
-
+        {data.Plano &&
+          data.Plano.map((i) => (
+            <TouchableOpacity
+              key={i.codigo}
+              onPress={() => {
+                if (i.codigo === codplanoUsuario) {
+                  navigation.navigate('ListaTreinos', { codplano: i.codigo });  // verificação para a navegação e passando codplano para a próxima página
+                } else {
+                  Alert.alert('Acesso restrito', 'Este plano está bloqueado.');
+                }
+              }}
+              style={[
+                styles.planoContainer,
+                i.codigo === codplanoUsuario ? styles.planoLiberado : styles.planoBloqueado, // verificação para os estilos do botão
+              ]}
+            >
+              <Text style={styles.txtPlano}>{i.nome}</Text>
+              {i.codigo !== codplanoUsuario && (
+                <MaterialCommunityIcons name="lock" size={24} color="black" style={styles.cadeado} /> // verificação para a adicão do cadeado
+              )}
+            </TouchableOpacity>
+          ))}
       </View>
     </View>
   );
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#FFB031',
   },
-  planoButton: {
+  planoContainer: {
     width: '100%',
     paddingVertical: 15,
     paddingHorizontal: 20,

@@ -55,20 +55,36 @@ export function VerPlanos() {
         });
     };
 
-    const handleDelete = async (codigo) => {
-        axios.delete('http://localhost:3000/planos', {
-            params: { codigo },
-            headers: {
-                'Content-Type': 'application/json',  
-            }
-        })
-        .then(response => {
-            setPlanos(planos.filter(planos => planos.codigo !== codigo));
-        })
-        .catch(error => {
-            console.error('Erro ao deletar planos:', error);
-        });
+    const handleDelete = (codigo) => {
+        Alert.alert(
+            "Confirmação",
+            "Tem certeza de que deseja excluir este plano?",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel",
+                },
+                {
+                    text: "Excluir",
+                    onPress: async () => {
+                        try {
+                            await axios.delete('http://localhost:3000/planos', {
+                                params: { codigo },
+                                headers: { 'Content-Type': 'application/json' },
+                            });
+                            setPlanos(planos.filter(plano => plano.codigo !== codigo));
+                            Alert.alert("Sucesso", "Plano excluído com sucesso!");
+                        } catch (error) {
+                            console.error('Erro ao deletar plano:', error);
+                        }
+                    },
+                    style: "destructive",
+                },
+            ],
+            { cancelable: false }
+        );
     };
+    
 
     return (
         <View style={styles.container}>
