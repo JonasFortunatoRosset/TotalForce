@@ -6,35 +6,34 @@ export function VerGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={'#E49413'}>
+                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
                     <Ionicons name="arrow-back" size={28} color="black" />
                 </TouchableHighlight>
                 <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-                <EvilIcons name="user" size={60} color="black" />
             </View>
             <View style={styles.color}>
             <View style={styles.body}>
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerAdministrador')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerAdministrador')}>
                     <Text style={styles.txtbox}>Ver Admin</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerColaborador')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerColaborador')}>
                     <Text style={styles.txtbox}>Ver Colaborador</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerExercicio')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerExercicio')}>
                     <Text style={styles.txtbox}>Ver Exercícios</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerPlanos')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerPlanos')}>
                     <Text style={styles.txtbox}>Ver Planos</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerTreino')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerTreino')}>
                     <Text style={styles.txtbox}>Ver Treinos</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('VerUsuario')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('VerUsuario')}>
                     <Text style={styles.txtbox}>Ver Usuários</Text>
                 </TouchableHighlight>
             </View>
@@ -49,20 +48,21 @@ export function VerGeral({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     header: {
         width: '100%',
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
+
         elevation: 4,
         borderRadius: 12,
-        marginTop: 30,
+        marginTop: 35,
     },
     backButton: {
-        paddingRight: 10,
+        paddingRight: -10,
     },
     txtheader: {
         fontSize: 24,
@@ -72,15 +72,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     color:{
-        backgroundColor:'#FFB031'
+        backgroundColor:'#fff'
     },
     body: {
         alignItems: 'center',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         justifyContent: 'center',
     },
     boxtbns: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         width: '70%',
         height: 60,
         padding: 10,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     footer: {
         width: '100%',
         height: '50%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         padding: 20,
         alignItems: 'center',
         borderTopLeftRadius: 12,

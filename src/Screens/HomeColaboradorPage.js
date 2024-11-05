@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
-import Entypo from '@expo/vector-icons/Entypo';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'; // Para o ícone da caneta
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'; 
 import logoTotal from './Images/logoTotal.png';
 import axios from 'axios';
 
@@ -89,15 +88,16 @@ export function HomeColaboradorPage({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtHeader}>ACADEMIA TOTAL FORCE</Text>
-        <EvilIcons name="user" size={60} color="black" />
       </View>
       <View style={styles.body}>
+        <View style={styles.color}>
         <FlatList
           data={usuarios}
           renderItem={renderItem}
           keyExtractor={(item) => item.codigo.toString()}
           contentContainerStyle={styles.listContainer}
         />
+        </View>
       </View>
       <View style={styles.footer}>
         <Image style={styles.imgFooter} source={logoTotal} />
@@ -144,14 +144,15 @@ export function HomeColaboradorPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FF9756',
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#FFB031',
+    marginTop: 22,
+    backgroundColor: '#FF9756',
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
@@ -164,13 +165,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  color:{
+    backgroundColor: '#fff',
   },
   listContainer: {
     paddingBottom: 20,
   },
   userCard: {
     width: '90%',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     padding: 15,
     marginVertical: 10,
     borderRadius: 12,
@@ -207,7 +212,7 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
   },
   imgFooter: {
     width: 120,
@@ -222,7 +227,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 300,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
   },
@@ -233,7 +238,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     padding: 10,
     borderRadius: 12,
     elevation: 4,

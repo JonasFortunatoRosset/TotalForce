@@ -6,23 +6,43 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function TrainPage({ navigation }) {
-  const [data, setData] = useState([]);
-  const [codplanoUsuario, setCodplanoUsuario] = useState(null);
+  const [data, setData] = useState(null);
+  const [codPlano, setCodPlano] = useState(''); 
+  const [codUsuario, setCodUsuario] = useState('');
 
   const carregarPlanos = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/pesquisartreinos');
-      setData(response.data);
-      
-      // Armazenando dados no AsyncStorage 
-      await AsyncStorage.setItem('planosData', JSON.stringify(response.data));
-      
-      // Pegando o plano do usuário
-        setCodplanoUsuario(response.data.Plano_usuario);
+      // Obtém o codusuario do AsyncStorage
+      const storedCodUsuario = await AsyncStorage.getItem('codusuario');
+      if (!storedCodUsuario) {
+        Alert.alert('Erro', 'Usuário não logado.');
+        return;
+      }
+      setCodUsuario(JSON.parse(storedCodUsuario)); // Armazena o codusuario no estado
 
+      // Faz a requisição para o servidor
+      const response = await axios.get(`http://localhost:3000/pesquisartreinos?codigo=${codUsuario}`);
+      console.log(response.data);
+
+      if (response.data && response.data.Plano_usuario && response.data.Plano) {
+        setData(response.data);
+        setCodPlano(response.data.Plano_usuario);
+
+        try {
+          await AsyncStorage.setItem('dadosPlanos', JSON.stringify(response.data));
+        } catch (storageError) {
+          console.error('Erro ao salvar no AsyncStorage:', storageError);
+        }
+      } else {
+        Alert.alert('Erro', 'Estrutura de dados inesperada do servidor.');
+      }
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
-      Alert.alert('Erro', 'Não foi possível carregar os planos.');
+
+      const errorMessage = error.response
+        ? `Erro ${error.response.status}: ${error.response.statusText || 'Erro desconhecido'}`
+        : 'Erro ao conectar com o servidor.';
+      Alert.alert('Erro', errorMessage);
     }
   };
 
@@ -43,28 +63,36 @@ export function TrainPage({ navigation }) {
         <Text style={styles.txtheader}>Planos</Text>
       </View>
       <View style={styles.body}>
-        {data.Plano &&
+        {data && data.Plano ? (
           data.Plano.map((i) => (
             <TouchableOpacity
-              key={i.codigo}
+              key={i.nome}
               onPress={() => {
-                if (i.codigo === codplanoUsuario) {
-                  navigation.navigate('ListaTreinos', { codplano: i.codigo });  // verificação para a navegação e passando codplano para a próxima página
+                if (codPlano) {
+                  navigation.navigate('ListaTreinos', { codPlano });
                 } else {
-                  Alert.alert('Acesso restrito', 'Este plano está bloqueado.');
+                  Alert.alert("Erro", "Plano do usuário não carregado.");
                 }
               }}
               style={[
-                styles.planoContainer,
-                i.codigo === codplanoUsuario ? styles.planoLiberado : styles.planoBloqueado, // verificação para os estilos do botão
+                styles.planoButton,
+                i.codigo === codPlano ? styles.planoLiberado : styles.planoBloqueado
               ]}
             >
               <Text style={styles.txtPlano}>{i.nome}</Text>
-              {i.codigo !== codplanoUsuario && (
-                <MaterialCommunityIcons name="lock" size={24} color="black" style={styles.cadeado} /> // verificação para a adicão do cadeado
+              {i.codigo !== codPlano && (
+                <MaterialCommunityIcons
+                  name="lock"
+                  size={24}
+                  color="black"
+                  style={styles.cadeado}
+                />
               )}
             </TouchableOpacity>
-          ))}
+          ))
+        ) : (
+          <Text>Carregando planos...</Text>
+        )}
       </View>
     </View>
   );
@@ -73,14 +101,14 @@ export function TrainPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -97,10 +125,9 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
   },
-  planoContainer: {
+  planoButton: {
     width: '100%',
     paddingVertical: 15,
     paddingHorizontal: 20,
@@ -109,14 +136,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     elevation: 4,
   },
   planoLiberado: {
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
   },
   planoBloqueado: {
-    backgroundColor: '#855200',
+    backgroundColor: '#EA5D04',
   },
   txtPlano: {
     fontSize: 20,

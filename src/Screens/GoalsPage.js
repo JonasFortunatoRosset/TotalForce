@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     paddingVertical: 27, 
     paddingHorizontal: 15, 
     borderRadius: 15, 
-    backgroundColor: '#FFB031', 
+    backgroundColor: '#FF9756', 
     alignItems: 'center', 
     marginBottom: 20, 
     elevation: 3, 
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   btnadd: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     padding: 15,
     borderRadius: 12,
     marginVertical: 20,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   ModalHeader: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 5,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     borderRadius: 10,
     padding: 10,
     marginVertical: 5,
@@ -354,10 +354,10 @@ const styles = StyleSheet.create({
     margin: 5
   },
   btnSave: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
   },
   btnCancel: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
   },
   txtbtns: {
     fontSize: 16,

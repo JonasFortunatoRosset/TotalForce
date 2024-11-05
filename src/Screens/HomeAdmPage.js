@@ -11,19 +11,18 @@ export function HomeAdmPage({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <EvilIcons name="user" size={60} color="black" />
       </View>
 
       <View style={styles.body}>
         <View style={styles.line}>
-          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={'#855200'} style={styles.boxHighlight}>
+          <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={null} style={styles.boxHighlight}>
             <View style={styles.box}>
               <Text style={styles.boxText}>Cadastrar</Text>
               <Feather name="credit-card" size={120} color="black" />
             </View>
           </TouchableHighlight>
 
-          <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={'#855200'} style={styles.boxHighlight}>
+          <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={null} style={styles.boxHighlight}>
             <View style={styles.box}>
               <Text style={styles.boxText}>Cadastros</Text>
               <Entypo name="eye" size={120} color="black" />
@@ -42,19 +41,19 @@ export function HomeAdmPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
   },
   header: {
     width: '100%',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
     borderRadius: 12,
-    marginTop: 25,
+    marginTop: 30,
   },
   txtheader: {
     fontSize: 24,
@@ -62,38 +61,41 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   body: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   line: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 40,
+    flex: 1,    
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: 20,
     width: '90%',
   },
   boxHighlight: {
     borderRadius: 12,
   },
   box: {
-    backgroundColor: '#E49413',
-    width: 160,
-    height: 220,
+    backgroundColor: '#FF9756',
+    width: 300,
+    height: 150,
     borderRadius: 12,
-    justifyContent: 'center',
+    margin: 20,
+    justifyContent: 'space-around',
     alignItems: 'center',
     elevation: 4,
+    flexDirection: 'row',
   },
   boxText: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 10,
   },
   footer: {
     width: '100%',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     padding: 20,
     alignItems: 'center',
     borderTopLeftRadius: 12,

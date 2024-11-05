@@ -6,34 +6,33 @@ export function CadastroGeral({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={'#E49413'}>
+                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
                     <Ionicons name="arrow-back" size={28} color="black" />
                 </TouchableHighlight>
                 <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-                <EvilIcons name="user" size={60} color="black" />
             </View>
             <View style={styles.body}>
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroAdministrador')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroAdministrador')}>
                     <Text style={styles.txtbox}>Cadastro Admin</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroColaborador')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroColaborador')}>
                     <Text style={styles.txtbox}>Cadastro Colaborador</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroExercicio')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroExercicio')}>
                     <Text style={styles.txtbox}>Cadastro Exercícios</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroPlanos')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroPlanos')}>
                     <Text style={styles.txtbox}>Cadastro Planos</Text>
                 </TouchableHighlight>    
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroTreino')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroTreino')}>
                     <Text style={styles.txtbox}>Cadastro Treinos</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={styles.boxtbns} underlayColor={'#855200'} onPress={() => navigation.navigate('cadastroUsuario')}>
+                <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroUsuario')}>
                     <Text style={styles.txtbox}>Cadastro Usuários</Text>
                 </TouchableHighlight>
             </View>
@@ -46,20 +45,20 @@ export function CadastroGeral({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     header: {
         width: '100%',
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
         elevation: 4,
         borderRadius: 12,
-        marginTop: 30,
+        marginTop: 37,
     },
     backButton: {
-        paddingRight: 10,
+        paddingRight: 0,
     },
     txtheader: {
         fontSize: 24,
@@ -70,11 +69,11 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         justifyContent: 'center',
     },
     boxtbns: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         width: '70%',
         height: 60,
         padding: 10,
@@ -92,10 +91,8 @@ const styles = StyleSheet.create({
     footer: {
         width: '100%',
         height: '40%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         padding: 20,
         alignItems: 'center',
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
     },
 });

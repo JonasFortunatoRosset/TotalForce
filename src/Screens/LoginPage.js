@@ -1,7 +1,11 @@
-import { View,ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, TouchableHighlight, Image, Alert, Pressable } from 'react-native';
-import axios from 'axios';
+import { View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert, Pressable } from 'react-native';
 import { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 import personal from './Images/personal.png';
 import user from './Images/user.png';
@@ -10,10 +14,7 @@ import logoTotal from './Images/logoTotal.png';
 
 export function LoginPage({ navigation }) {
   const [Click, setClick] = useState(null);
-
-  function boxClick(buttonIndex) {
-    setClick(buttonIndex);
-  }
+  const [dados, setDados] = useState({ login: "", senha: "" });
 
   const armazenarDadosUsuario = async (token, codusuario) => {
     try {
@@ -32,20 +33,9 @@ export function LoginPage({ navigation }) {
         login: dados.login,
         senha: dados.senha,
       });
-
-      setDados({
-        login: "",
-        senha: "",
-      });
-      if (response) {
-        const { token, codusuario } = response.data;
-        await armazenarDadosUsuario(token, codusuario);
-        Alert.alert('Login efetuado com sucesso');
-        navigation.navigate('HomePage');
-      }
+      await handleLoginResponse(response, 'HomePage');
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Credenciais incorretas!');
+      handleLoginError(error);
     }
   };
 
@@ -55,20 +45,9 @@ export function LoginPage({ navigation }) {
         login: dados.login,
         senha: dados.senha,
       });
-
-      setDados({
-        login: "",
-        senha: "",
-      });
-      if (response) {
-        const { token,codusuario } = response.data;
-        await armazenarDadosUsuario(token,codusuario);
-        Alert.alert('Login efetuado com sucesso');
-        navigation.navigate('HomeAdmPage');
-      }
+      await handleLoginResponse(response, 'HomeAdmPage');
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Credenciais incorretas!');
+      handleLoginError(error);
     }
   };
 
@@ -78,24 +57,27 @@ export function LoginPage({ navigation }) {
         login: dados.login,
         senha: dados.senha,
       });
-
-      setDados({
-        login: "",
-        senha: "",
-      });
-      if (response) {
-        const { token } = response.data;
-        await armazenarDadosUsuario(token);
-        Alert.alert('Login efetuado com sucesso');
-        navigation.navigate('HomeColaboradorPage');
-      }
+      await handleLoginResponse(response, 'HomeColaboradorPage');
     } catch (error) {
-      console.error(error);
-      Alert.alert('Erro', 'Credenciais incorretas!');
+      handleLoginError(error);
     }
   };
 
-  function Acess() {
+  const handleLoginResponse = async (response, navigateTo) => {
+    if (response) {
+      const { token, codusuario } = response.data;
+      await armazenarDadosUsuario(token, codusuario);
+      Alert.alert('Login efetuado com sucesso');
+      navigation.navigate(navigateTo);
+    }
+  };
+
+  const handleLoginError = (error) => {
+    console.error(error);
+    Alert.alert('Erro', 'Credenciais incorretas!');
+  };
+
+  const Acess = () => {
     if (Click === 1) {
       loginUsuario();
     } else if (Click === 2) {
@@ -103,180 +85,144 @@ export function LoginPage({ navigation }) {
     } else if (Click === 3) {
       loginAdministrador();
     } else {
-      Alert.alert("Usuário ou senha incorreto");
+      Alert.alert("Selecione um tipo de usuário");
     }
-  }
-
-  const [dados, setDados] = useState({
-    login: "",
-    senha: "",
-  });
+  };
 
   return (
-    <ScrollView 
-      style={styles.container} 
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.header}>
-        <Image source={logoTotal} style={styles.headerimg} />
-      </View>
-      <View style={styles.body}>
-        <View style={styles.boxlogin}>
-          <View style={styles.btnstipos}>
-            <Pressable
-              onPress={() => boxClick(1)}
-              style={[
-                styles.logs,
-                { backgroundColor: Click === 1 ? '#E49413' : '#FFB031' },
-              ]}
-            >
-              <Image source={user} style={styles.imguser} />
-              <Text style={styles.txttipos}> Usuário </Text>
-            </Pressable>
-  
-            <Pressable
-              onPress={() => boxClick(2)}
-              style={[
-                styles.logs,
-                { backgroundColor: Click === 2 ? '#E49413' : '#FFB031' },
-              ]}
-            >
-              <Image source={personal} style={styles.imguser} />
-              <Text style={styles.txttipos}> Personal </Text>
-            </Pressable>
-  
-            <Pressable
-              onPress={() => boxClick(3)}
-              style={[
-                styles.logs,
-                { backgroundColor: Click === 3 ? '#E49413' : '#FFB031' },
-              ]}
-            >
-              <Image source={adm} style={styles.imguser} />
-              <Text style={styles.txttipos}> Admin </Text>
-            </Pressable>
-          </View>
-  
-          <View style={styles.boxbtn}>
-            <TextInput
-              style={styles.inputs}
-              placeholder='Login'
-              placeholderTextColor={'#000'}
-              value={dados.login}
-              onChangeText={(text) => setDados({ ...dados, login: text })}
-            />
-  
-            <TextInput
-              style={styles.inputs}
-              placeholder='Senha'
-              placeholderTextColor={'#000'}
-              value={dados.senha}
-              onChangeText={(text) => setDados({ ...dados, senha: text })}
-              secureTextEntry={true}
-            />
-  
-            <TouchableOpacity onPress={Acess} style={styles.boxbtnacess}>
-              <Text style={styles.txtbtnlogin}> Acessar </Text>
-            </TouchableOpacity>
-          </View>
-  
-          <TouchableHighlight 
-            onPress={() => navigation.navigate('cadastroLogin')} 
-            underlayColor={null}
-          >
-            <Text style={styles.newuser}>Não tem uma conta? Cadastrar-se</Text>
-          </TouchableHighlight>
+    <LinearGradient colors={['#F4E9E3', '#FF914C']} style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent} bounces={false}>
+        <View style={styles.header}>
+          <Image source={logoTotal} style={styles.headerimg} />
         </View>
-      </View>
-    </ScrollView>
-  )};
-  
+        <View style={styles.body}>
+          <View style={styles.btnstipos}>
+            <Pressable onPress={() => setClick(1)} style={[styles.logs, { backgroundColor: Click === 1 ? '#FF914C' : '#fff' }]}>
+              <FontAwesome name="user" size={50} color="#EA5D04" />
+              <Text style={styles.txttipos}>User</Text>
+            </Pressable>
+            <Pressable onPress={() => setClick(2)} style={[styles.logs, { backgroundColor: Click === 2 ? '#FF914C' : '#fff' }]}>
+              <Ionicons name="people" size={50} color="#EA5D04" />
+              <Text style={styles.txttipos}>Personal</Text>
+            </Pressable>
+            <Pressable onPress={() => setClick(3)} style={[styles.logs, { backgroundColor: Click === 3 ? '#FF914C' : '#fff' }]}>
+              <FontAwesome5 name="chalkboard-teacher" size={50} color="#EA5D04" />  
+              <Text style={styles.txttipos}>Admin</Text>
+            </Pressable>
+          </View>
+          <TextInput
+            style={styles.inputs}
+            placeholder="Digite seu Login"
+            placeholderTextColor="#666"
+            value={dados.login}
+            onChangeText={(text) => setDados({ ...dados, login: text })}
+          />
+          <TextInput
+            style={styles.inputs}
+            placeholder="Digite sua senha"
+            placeholderTextColor="#666"
+            secureTextEntry
+            value={dados.senha}
+            onChangeText={(text) => setDados({ ...dados, senha: text })}
+          />
+          <TouchableOpacity style={styles.boxbtnacess} onPress={Acess}>
+            <Text style={styles.txtbtnlogin}>Acessar</Text>
+          </TouchableOpacity>
+          <Text style={styles.newuser} onPress={() => navigation.navigate('cadastroLogin')}>
+            Não tem uma conta? Cadastrar-se
+          </Text>
+        </View>
+      </ScrollView>
+    </LinearGradient>
+  );
+}
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingVertical: 40,
+    flexGrow: 1, 
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 60,
+
+  },
+  headerimg: {
+    width: 300,
+    height: 250,
+    resizeMode: 'contain',
+  },
+  body: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    width: '90%',
+    height: '48%',
+    padding: 20,
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    scrollContent: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingVertical: 40, 
-    },
-    header: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-      marginBottom: 20,
-    },
-    headerimg: {
-      width: 340,
-      height: 320,
-      resizeMode: 'contain',
-    },
-    imguser: {
-      width: 60,
-      height: 60,
-      marginTop: 10,
-    },
-    body: {
-      backgroundColor: '#FFB031',
-      borderRadius: 15,
-      width: '90%',
-      padding: 20,
-    },
-    boxlogin: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    btnstipos: {
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      marginBottom: 20,
-    },
-    logs: {
-      alignItems: 'center',
-      paddingTop: 5,
-      paddingBottom: 5,
-      paddingHorizontal: 10,
-      borderRadius: 8,
-      marginHorizontal: 10,
-    },
-    txttipos: {
-      fontSize: 12,
-    },
-    boxbtn: {
-      flexDirection: 'column',
-      margin: 5,
-      alignItems: 'flex-end',
-    },
-    inputs: {
-      color: '#000',
-      marginBottom: 15,
-      borderRadius: 12,
-      backgroundColor: '#fff',
-      width: 300,
-      height: 45,
-      padding: 10,
-    },
-    boxbtnacess: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 20,
-      borderRadius: 12,
-      backgroundColor: '#E49413',
-      width: 300,
-      height: 45,
-    },
-    txtbtnlogin: {
-      color: '#000',
-      fontSize: 20,
-    },
-    newuser: {
-      color: '#004cff',
-      fontSize: 12,
-      textAlign: 'left',
-      marginBottom: 10,
-      alignSelf: 'flex-start',
-    },
-  });
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+   
+  },
+  btnstipos: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 20,
+  },
+  logs: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    width: 80,
+  },
+  imguser: {
+    width: 40,
+    height: 40,
+  },
+  txttipos: {
+    fontSize: 12,
+    color: '#EA5D04',
+    marginTop: 5,
+  },
+  inputs: {
+    color: '#000',
+    borderRadius: 8,
+    backgroundColor: '#f9f9f9',
+    width: '100%',
+    height: 45,
+    paddingHorizontal: 10,
+    marginBottom: 18, 
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  boxbtnacess: {
+    backgroundColor: '#EA5D04',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 45,
+    marginTop: 10,
+  },
+  txtbtnlogin: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  newuser: {
+    color: '#000',
+    fontSize: 12,
+    marginTop: 15,
+    textAlign: 'center',
+  },
+});

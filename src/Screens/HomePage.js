@@ -4,7 +4,6 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 
-import logoTotal from './Images/logoTotal.png';
 import dumbel from './Images/dumbel.png';
 import nutricao from './Images/nutricao.png';
 
@@ -18,7 +17,7 @@ export function HomePage({ navigation }) {
 
       
       <View style={styles.body}>
-        <View style={styles.line}>
+        <View style={styles.color}>
           <TouchableHighlight 
             onPress={() => navigation.navigate('TrainPage')} 
             underlayColor={'#855200'} 
@@ -40,9 +39,7 @@ export function HomePage({ navigation }) {
               <Image source={nutricao} style={styles.boxImage} />
             </View>
           </TouchableHighlight>
-        </View>
 
-        <View style={styles.line}>
           <TouchableHighlight 
             onPress={() => navigation.navigate('ResultsPage')} 
             underlayColor={'#855200'} 
@@ -66,10 +63,6 @@ export function HomePage({ navigation }) {
           </TouchableHighlight>
         </View>
       </View>
-
-      <View style={styles.footer}>
-        <Image style={styles.imgFooter} source={logoTotal} />
-      </View>
     </View>
   );
 }
@@ -77,11 +70,11 @@ export function HomePage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FF9756',
   },
   header: {
     width: '100%',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 15,
     flexDirection: 'row',
@@ -96,32 +89,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
+  color:{
+    backgroundColor: '#fff'
+  },
   body: {
     backgroundColor: '#fff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  line: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 40,
-    width: '90%',
-  },
   boxHighlight: {
     borderRadius: 12,
+    margin: 20,
   },
   box: {
-    backgroundColor: '#FFB031',
-    width: 160,
-    height: 220,
+    backgroundColor: '#FF9756',
+    width: 300,
+    height: 150,
     borderRadius: 12,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     elevation: 4,
   },
   boxText: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 10,

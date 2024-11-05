@@ -184,14 +184,14 @@ export function VerAdministrador() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 12,
         elevation: 4,
         marginTop: 30,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         padding: 15,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF9756',
         borderRadius: 10,
         marginBottom: 10,
         alignItems: 'center',
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     modalOverlay: {
         flex: 1,
@@ -240,13 +240,13 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 10,
         padding: 20,
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         padding: 10,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -281,10 +281,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnSave: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     btnCancel: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     txtbtns: {
         color: '#000',

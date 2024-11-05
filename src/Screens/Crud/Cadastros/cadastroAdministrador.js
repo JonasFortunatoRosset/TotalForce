@@ -105,14 +105,14 @@ export function CadastroAdministrador({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
     marginTop: 30,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     borderRadius: 12,
     elevation: 2,
     alignItems: 'center',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#EA5D04',
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 12,

@@ -7,23 +7,23 @@ export function ResultsPage({ navigation }) {
     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
     datasets: [
       {
-        data: [50, 60, 55, 70, 65, 80],
-        strokeWidth: 2,
-        color: (opacity = 1) => `rgba(72, 61, 139, ${opacity})`,
+        data: [50, 55, 60, 70, 75, 85], // Valores ajustados para um gráfico crescente
+        strokeWidth: 4, // Largura da linha
+        color: (opacity = 1) => `rgba(72, 61, 139, ${opacity})`, // Cor da linha
       },
     ],
   };
 
   const chartConfig = {
-    backgroundColor: '#E49413',
-    backgroundGradientFrom: '#FFB031',
-    backgroundGradientTo: '#FFA726',
+    backgroundColor: '#FF9756',
+    backgroundGradientFrom: '#FF9756',
+    backgroundGradientTo: '#FF9756',
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // Cor dos eixos
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // Cor dos rótulos
     style: { borderRadius: 16 },
     propsForDots: {
-      r: '6',
+      r: '4', // Raio dos pontos
       strokeWidth: '2',
       stroke: '#483D8B',
     },
@@ -53,7 +53,7 @@ export function ResultsPage({ navigation }) {
           height={300}
           yAxisSuffix="kg"
           chartConfig={chartConfig}
-          bezier
+          bezier={false} // Muda para um gráfico linear
           style={styles.graph}
         />
       </View>
@@ -64,14 +64,14 @@ export function ResultsPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E49413',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -90,6 +90,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff', // Fundo sutil para destacar o gráfico
+    padding: 20,
+    borderRadius: 16,
+    elevation: 3,
   },
   txtGraphTitle: {
     fontSize: 24,

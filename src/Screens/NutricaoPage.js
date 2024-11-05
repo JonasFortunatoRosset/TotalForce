@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   inputpeso: {
     width: '100%',
     height: 50,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     color: '#000',
     fontSize: 18,
     borderRadius: 10,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     paddingHorizontal: 15,
     borderRadius: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     alignItems: 'center',
     marginBottom: 20,
     elevation: 3,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF9756',
     padding: 10,
     borderRadius: 8,
   },
