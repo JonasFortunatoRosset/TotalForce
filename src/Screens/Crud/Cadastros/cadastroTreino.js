@@ -13,7 +13,7 @@ export function CadastroTreino() {
     codplano: '',
   });
 
-  const [planos, setPlanos] = useState([]);
+  const [planos, setPlanos] = useState([]); 
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -23,7 +23,17 @@ export function CadastroTreino() {
   const fetchPlanos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/planos');
-      setPlanos(response.data); 
+      console.log("Resposta da API:", response.data); // Inspecionando a resposta da API
+
+      // Verifique se a resposta contém um array
+      if (Array.isArray(response.data)) {
+        setPlanos(response.data);
+      } else if (Array.isArray(response.data.Planos)) {
+        setPlanos(response.data.Planos); // Ajuste conforme a estrutura esperada
+      } else {
+        console.error('A chave "Planos" não é um array:', response.data);
+        Alert.alert('Erro', 'Nenhum plano encontrado.');
+      }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
       console.error(error);
@@ -83,7 +93,7 @@ export function CadastroTreino() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-            <Picker
+              <Picker
                 selectedValue={treino.codplano}
                 onValueChange={(itemValue) => {
                   setTreino({ ...treino, codplano: parseInt(itemValue) });
@@ -92,9 +102,13 @@ export function CadastroTreino() {
                 style={styles.picker}
               >
                 <Picker.Item label="Selecione um plano" value="" />
-                {planos.map((plano) => (
-                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                ))}
+                {Array.isArray(planos) && planos.length > 0 ? (
+                  planos.map((plano) => (
+                    <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                  ))
+                ) : (
+                  <Picker.Item label="Nenhum plano disponível" value="" />
+                )}
               </Picker>
 
               <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
@@ -151,7 +165,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 10,
     marginBottom: 15,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   placeholderText: {
     color: '#888',

@@ -7,24 +7,38 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-import personal from './Images/personal.png';
-import user from './Images/user.png';
-import adm from './Images/adm.png';
+
 import logoTotal from './Images/logoTotal.png';
 
 export function LoginPage({ navigation }) {
   const [Click, setClick] = useState(null);
   const [dados, setDados] = useState({ login: "", senha: "" });
 
-  const armazenarDadosUsuario = async (token, codusuario) => {
+  const armazenarDadosUsuario = async (token, codusuario = null) => {
     try {
       await AsyncStorage.setItem('token', token);
-      await AsyncStorage.setItem('codusuario', JSON.stringify(codusuario));
-      console.log('Dados armazenados:', { token, codusuario });
+      if (codusuario) {
+        await AsyncStorage.setItem('codusuario', JSON.stringify(codusuario));
+        console.log('Dados armazenados:', { token, codusuario });
+      }
     } catch (error) {
       console.error('Erro ao armazenar dados:', error);
       Alert.alert('Erro', 'Não foi possível armazenar os dados.');
     }
+  };
+
+  const handleLoginResponse = async (response, navigateTo, isUserLogin = false) => {
+    if (response) {
+      const { token, codusuario } = response.data;
+      await armazenarDadosUsuario(token, isUserLogin ? codusuario : null);
+      Alert.alert('Login efetuado com sucesso');
+      navigation.navigate(navigateTo);
+    }
+  };
+
+  const handleLoginError = (error) => {
+    console.error(error);
+    Alert.alert('Erro', 'Credenciais incorretas!');
   };
 
   const loginUsuario = async () => {
@@ -33,7 +47,7 @@ export function LoginPage({ navigation }) {
         login: dados.login,
         senha: dados.senha,
       });
-      await handleLoginResponse(response, 'HomePage');
+      await handleLoginResponse(response, 'HomePage', true); 
     } catch (error) {
       handleLoginError(error);
     }
@@ -41,11 +55,11 @@ export function LoginPage({ navigation }) {
 
   const loginAdministrador = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/loginadministradores', {
+      const response = await axios.post('http://10.32.0.45:3000/loginadministradores', {
         login: dados.login,
         senha: dados.senha,
       });
-      await handleLoginResponse(response, 'HomeAdmPage');
+      await handleLoginResponse(response, 'HomeAdmPage'); 
     } catch (error) {
       handleLoginError(error);
     }
@@ -57,24 +71,10 @@ export function LoginPage({ navigation }) {
         login: dados.login,
         senha: dados.senha,
       });
-      await handleLoginResponse(response, 'HomeColaboradorPage');
+      await handleLoginResponse(response, 'HomeColaboradorPage'); 
     } catch (error) {
       handleLoginError(error);
     }
-  };
-
-  const handleLoginResponse = async (response, navigateTo) => {
-    if (response) {
-      const { token, codusuario } = response.data;
-      await armazenarDadosUsuario(token, codusuario);
-      Alert.alert('Login efetuado com sucesso');
-      navigation.navigate(navigateTo);
-    }
-  };
-
-  const handleLoginError = (error) => {
-    console.error(error);
-    Alert.alert('Erro', 'Credenciais incorretas!');
   };
 
   const Acess = () => {
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 60,
-
   },
   headerimg: {
     width: 300,
@@ -172,7 +171,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-   
   },
   btnstipos: {
     flexDirection: 'row',

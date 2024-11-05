@@ -10,7 +10,7 @@ export function VerUsuario({ navigation }) {
     const [usuario, setUsuario] = useState([]);
     const [statusFiltro, setStatusFiltro] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
-    const [planos, setPlanos] = useState([]);
+    const [planos, setPlanos] = useState([]); // Inicializa como array
     const [dataUsuario, setDataUsuario] = useState({
         codigo: "",
         nome: "",
@@ -25,11 +25,12 @@ export function VerUsuario({ navigation }) {
 
     const buscarPlanos = async () => {
         try {
-          const response = await axios.get("http://localhost:3000/planos");
-          setPlanos(response.data);  
+            const response = await axios.get("http://localhost:3000/planos");
+            setPlanos(response.data);
         } catch (error) {
             Alert.alert('Erro', 'Não foi possível buscar os planos.');
             console.error(error);
+            setPlanos([]); // Garante que planos é um array vazio em caso de erro
         }
     };
 
@@ -41,13 +42,12 @@ export function VerUsuario({ navigation }) {
     const contarUsuariosFiltrados = () => usuariosFiltrados().length;
 
     const carregarUsuarios = async () => {
-        axios.get('http://localhost:3000/usuarios')
-        .then(response => {
+        try {
+            const response = await axios.get('http://localhost:3000/usuarios');
             setUsuario(response.data.usuario);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao carregar usuários:', error);
-        });
+        }
     };
 
     useEffect(() => {
@@ -61,10 +61,10 @@ export function VerUsuario({ navigation }) {
     };
 
     const handleUpdate = async () => {
-        axios.put('http://localhost:3000/usuarios', dataUsuario, {
-            params: { codigo: dataUsuario.codigo },
-        })
-        .then(response => {
+        try {
+            await axios.put('http://localhost:3000/usuarios', dataUsuario, {
+                params: { codigo: dataUsuario.codigo },
+            });
             carregarUsuarios();
             setDataUsuario({
                 codigo: "",
@@ -79,33 +79,32 @@ export function VerUsuario({ navigation }) {
             });
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
-        });
+        }
     };
 
-const handleDelete = async (codigo) => {
-    Alert.alert(
-        "Confirmação de Exclusão",
-        "Tem certeza de que deseja excluir este usuário?",
-        [
-            { text: "Cancelar", style: "cancel" },
-            { text: "Excluir", style: "destructive", onPress: async () => {
-                try {
-                    await axios.delete('http://localhost:3000/usuarios', {
-                        params: { codigo },
-                    });
-                    setUsuario(usuario.filter(user => user.codigo !== codigo));
-                    Alert.alert("Sucesso", "Usuário excluído com sucesso!");
-                } catch (error) {
-                    console.error('Erro ao deletar usuário:', error);
-                    Alert.alert("Erro", "Não foi possível excluir o usuário.");
-                }
-            }},
-        ]
-    );
-};
+    const handleDelete = async (codigo) => {
+        Alert.alert(
+            "Confirmação de Exclusão",
+            "Tem certeza de que deseja excluir este usuário?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                { text: "Excluir", style: "destructive", onPress: async () => {
+                    try {
+                        await axios.delete('http://localhost:3000/usuarios', {
+                            params: { codigo },
+                        });
+                        setUsuario(usuario.filter(user => user.codigo !== codigo));
+                        Alert.alert("Sucesso", "Usuário excluído com sucesso!");
+                    } catch (error) {
+                        console.error('Erro ao deletar usuário:', error);
+                        Alert.alert("Erro", "Não foi possível excluir o usuário.");
+                    }
+                }},
+            ]
+        );
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -224,9 +223,13 @@ const handleDelete = async (codigo) => {
                                     onValueChange={(itemValue) => setDataUsuario({ ...dataUsuario, codplano: itemValue })}
                                 >
                                     <Picker.Item label="Selecione um plano" value="" />
-                                    {planos.map((plano) => (
-                                        <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                                    ))}
+                                    {planos && planos.length > 0 ? (
+                                        planos.map((plano) => (
+                                            <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                                        ))
+                                    ) : (
+                                        <Picker.Item label="Nenhum plano disponível" value="" />
+                                    )}
                                 </Picker>
 
                                 <Picker
@@ -240,21 +243,14 @@ const handleDelete = async (codigo) => {
                                     <Picker.Item label="Em Análise" value="Em Análise" />
                                     <Picker.Item label="Recusado" value="Recusado" />
                                 </Picker>
-
-                                <TouchableOpacity 
-                                    style={styles.btns} 
-                                    onPress={handleUpdate}
-                                >
-                                    <Text style={styles.txtbtns}>Salvar</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity 
-                                    style={styles.btns} 
-                                    onPress={() => setModalVisible(false)}
-                                >
-                                    <Text style={styles.txtbtns}>Cancelar</Text>
-                                </TouchableOpacity>
                             </View>
+
+                            <TouchableOpacity 
+                                style={styles.btnsalvar}
+                                onPress={handleUpdate}
+                            >
+                                <Text style={styles.btnsalvarText}>Salvar Alterações</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>

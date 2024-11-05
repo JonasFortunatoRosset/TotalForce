@@ -28,21 +28,38 @@ export function CadastroUsuario() {
 
   const buscarPlanos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/planos", {
+      const response = await axios.get("http://10.32.0.45:3000/planos", {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      setPlanos(response.data);
+      
+      if (Array.isArray(response.data.Planos) && response.data.Planos.length > 0) {
+        setPlanos(response.data.Planos);
+        console.log('Planos encontrados:', response.data.Planos);
+      } else {
+        console.log('A chave "Planos" não contém um array ou está vazia:', response.data);
+        Alert.alert('Erro', 'Nenhum plano encontrado.');
+      }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
-      console.error(error);
+      console.error('Erro ao buscar planos:', error);
     }
   };
+  
+  
 
   const inserirUsuarios = async () => { 
+    // Verifica se todos os campos obrigatórios estão preenchidos antes de enviar
+    if (!usuario.nome || !usuario.login || !usuario.senha || !usuario.codplano) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+    
+    console.log("Dados do usuário:", usuario); // Exibe o objeto para verificação
+  
     try {
-      const response = await axios.post("http://localhost:3000/usuarios", {
+      await axios.post("http://10.32.0.45:3000/usuarios", {
         nome: usuario.nome,
         login: usuario.login,
         endereco: usuario.endereco,
@@ -50,7 +67,7 @@ export function CadastroUsuario() {
         peso: usuario.peso,
         altura: usuario.altura,
         status: usuario.status,
-        codplano: usuario.codplano, 
+        codplano: parseInt(usuario.codplano, 10), // Garante que seja um número
       }, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -70,9 +87,10 @@ export function CadastroUsuario() {
       setStatusModalVisible(false);
     } catch (error) {
       Alert.alert("Erro", "Não foi possível cadastrar o usuário");
-      console.error(error);
+      console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);
     }
   };
+  
   
   return (
     <View style={styles.container}>
@@ -179,23 +197,32 @@ export function CadastroUsuario() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Picker
-                selectedValue={usuario.codplano}
-                onValueChange={(itemValue) => {
-                  if (itemValue) {
-                    setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
-                    setModalVisible(false);
-                  } else {
-                    Alert.alert('Por favor, selecione um plano válido.');
-                  }
-                }}
-                style={styles.picker}
-              >
-                <Picker.Item label="Selecione um plano" value="" />
-                {planos.map((plano) => (
-                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                ))}
-              </Picker>
+            <Picker
+  selectedValue={usuario.codplano}
+  onValueChange={(itemValue) => {
+    if (itemValue) {
+      setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
+      setModalVisible(false);
+    } else {
+      Alert.alert('Por favor, selecione um plano válido.');
+    }
+  }}
+  style={styles.picker}
+>
+  <Picker.Item label="Selecione um plano" value="" />
+  {Array.isArray(planos) && planos.length > 0 ? (
+    planos.map((plano) => (
+      <Picker.Item
+        key={plano.codigo}  
+        label={plano.nome || 'Plano sem Nome'}  
+        value={plano.codigo}
+      />
+    ))
+  ) : (
+    <Picker.Item label="Nenhum plano disponível" value="" />
+  )}
+</Picker>
+
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setModalVisible(false)}

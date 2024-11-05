@@ -45,7 +45,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='HomeColaboradorPage' screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName='LoginPage' screenOptions={{headerShown: false}}>
         <Stack.Screen name="LoginPage"             component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"           component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>

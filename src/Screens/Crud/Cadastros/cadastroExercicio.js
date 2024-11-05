@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity,TouchableHighlight, Modal, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useState, useEffect } from 'react';
@@ -7,23 +7,27 @@ import { Picker } from '@react-native-picker/picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 
-export function CadastroExercicio({navigation}) {
+export function CadastroExercicio({ navigation }) {
   const [mediaUri, setMediaUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [treinos, setTreinos] = useState([]); 
+  const [treinos, setTreinos] = useState([]);
   const [exercicio, setExercicio] = useState({
     nome: '',
     descricao: '',
     serie: '',
     repeticoes: '',
-    codtreino: '',
+    codtreino: '', 
     video: '',
   });
 
   useEffect(() => {
     requestPermission();
-    fetchTreinos(); 
+    fetchTreinos();
   }, []);
+
+  useEffect(() => {
+    console.log(treinos);
+  }, [treinos]);
 
   const requestPermission = async () => {
     if (Platform.OS !== 'web') {
@@ -37,7 +41,8 @@ export function CadastroExercicio({navigation}) {
   const fetchTreinos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/treinos');
-      setTreinos(response.data); 
+      console.log('Resposta da API:', response.data); 
+      setTreinos(response.data);
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os treinos.');
       console.error(error);
@@ -71,11 +76,9 @@ export function CadastroExercicio({navigation}) {
 
   const inserirExercicio = async () => {
     try {
-      await axios.post(
-        'http://localhost:3000/exercicios',
-        { ...exercicio },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await axios.post('http://localhost:3000/exercicios', { ...exercicio }, {
+        headers: { 'Content-Type': 'application/json' }
+      });
       Alert.alert('Sucesso', 'Exercício cadastrado com sucesso!');
       setExercicio({
         nome: '',
@@ -94,7 +97,7 @@ export function CadastroExercicio({navigation}) {
 
   return (
     <View style={styles.container}>
-    <View style={styles.header}>
+      <View style={styles.header}>
         <TouchableHighlight
           style={styles.seta}
           underlayColor={null}
@@ -150,23 +153,28 @@ export function CadastroExercicio({navigation}) {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Picker
-                selectedValue={exercicio.codtreino}
-                onValueChange={(itemValue) => {
-                  setExercicio({ ...exercicio, codtreino: itemValue });
-                  setModalVisible(false);
-                }}
-                style={styles.picker}
-              >
-                <Picker.Item label="Selecione um treino" value="" />
-                {treinos.map((treino) => (
-                  <Picker.Item
-                    key={treino.codigo}
-                    label={treino.nome}
-                    value={treino.codtreino}
-                  />
-                ))}
-              </Picker>
+                <Picker
+                  selectedValue={exercicio.codtreino} 
+                  onValueChange={(itemValue) => {
+                    setExercicio({ ...exercicio, codtreino: itemValue });
+                    setModalVisible(false);
+                  }}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione um treino" value="" />
+                  {treinos.length > 0 ? (
+                    treinos.map((treino) => (
+                      <Picker.Item
+                        key={treino.codigo}
+                        label={treino.nome || 'Treino sem Nome'}
+                        value={treino.codigo}
+                      />
+                    ))
+                  ) : (
+                    <Picker.Item label="Nenhum treino disponível" value="" />
+                  )}
+                </Picker>
+
 
               <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
                 <Text style={styles.closeButtonText}>Fechar</Text>
@@ -245,7 +253,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
     justifyContent: 'center',
-
   },
   placeholderText: {
     color: '#888',
