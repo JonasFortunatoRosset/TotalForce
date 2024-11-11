@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, TouchableHighlight } from 'react-native';
-import axios from 'axios';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 export function ListaTreinos({ route, navigation }) {
   const { codplano } = route.params; // Pega o código do plano passado pela outra tela
-  const [treinos, setTreinos] = useState([]); 
+  const [data, setData] = useState([])
 
   const BuscarTreinos = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/pesquisartreinos?codplano=${codplano}`); // faz a requisição de acordo com o codplano
-      const treinoData = response.data.Treinos;
-      setTreinos(treinoData); 
+      const data = await AsyncStorage.getItem('dadosPlanos');
+      if (data !== null) {
+        setData(JSON.parse(data)); 
+      } else {
+        console.log('Nenhum dado encontrado');
+      }
     } catch (error) {
-      console.error("Erro ao buscar treinos:", error);
+      console.error('Erro ao buscar os dados:', error);
     }
   };
+
+
 
   useEffect(() => {
     BuscarTreinos();
@@ -35,18 +39,23 @@ export function ListaTreinos({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <FlatList
-          data={treinos}
-          keyExtractor={(item) => item.codigo.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('PlanilhaTreino', { codTreino: item.codigo, codplano })} // passa o código do plano e do treino para a outra tela
-              style={styles.planoButton}
-            >
-              <Text style={styles.txtPlano}>{item.nome}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        <TouchableOpacity style={styles.planoButton} onPress={() => navigation.navigate('PlanilhaTreino', {codplano})}>
+          <Text style={styles.txtPlano}>
+            {data.Treino1}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.planoButton}>
+          <Text style={styles.txtPlano}>
+            {data.Treino2}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.planoButton}>
+          <Text style={styles.txtPlano}>
+            {data.Treino3}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

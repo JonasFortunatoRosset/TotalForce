@@ -98,16 +98,16 @@ export function LoginPage({ navigation }) {
         <View style={styles.body}>
           <View style={styles.btnstipos}>
             <Pressable onPress={() => setClick(1)} style={[styles.logs, { backgroundColor: Click === 1 ? '#FF914C' : '#fff' }]}>
-              <FontAwesome name="user" size={50} color="#EA5D04" />
-              <Text style={styles.txttipos}>User</Text>
+              <FontAwesome name="user" size={50} color={Click === 1 ? '#fff' : '#EA5D04'} />
+              <Text style={[styles.txttipos, { color: Click === 1 ? '#fff' : '#EA5D04' }]}>User</Text>
             </Pressable>
             <Pressable onPress={() => setClick(2)} style={[styles.logs, { backgroundColor: Click === 2 ? '#FF914C' : '#fff' }]}>
-              <Ionicons name="people" size={50} color="#EA5D04" />
-              <Text style={styles.txttipos}>Personal</Text>
+              <Ionicons name="people" size={50} color={Click === 2 ? '#fff' : '#EA5D04'} />
+              <Text style={[styles.txttipos, { color: Click === 2 ? '#fff' : '#EA5D04' }]}>Personal</Text>
             </Pressable>
             <Pressable onPress={() => setClick(3)} style={[styles.logs, { backgroundColor: Click === 3 ? '#FF914C' : '#fff' }]}>
-              <FontAwesome5 name="chalkboard-teacher" size={50} color="#EA5D04" />  
-              <Text style={styles.txttipos}>Admin</Text>
+              <FontAwesome5 name="chalkboard-teacher" size={50} color={Click === 3 ? '#fff' : '#EA5D04'} />  
+              <Text style={[styles.txttipos, { color: Click === 3 ? '#fff' : '#EA5D04' }]}>Admin</Text>
             </Pressable>
           </View>
           <TextInput
@@ -128,6 +128,7 @@ export function LoginPage({ navigation }) {
           <TouchableOpacity style={styles.boxbtnacess} onPress={Acess}>
             <Text style={styles.txtbtnlogin}>Acessar</Text>
           </TouchableOpacity>
+
           <Text style={styles.newuser} onPress={() => navigation.navigate('cadastroLogin')}>
             Não tem uma conta? Cadastrar-se
           </Text>

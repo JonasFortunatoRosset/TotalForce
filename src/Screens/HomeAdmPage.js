@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
-
-import logoTotal from './Images/logoTotal.png';
 
 export function HomeAdmPage({ navigation }) {
   return (
@@ -14,25 +11,22 @@ export function HomeAdmPage({ navigation }) {
       </View>
 
       <View style={styles.body}>
-        <View style={styles.line}>
           <TouchableHighlight onPress={() => navigation.navigate('CadastroGeral')} underlayColor={null} style={styles.boxHighlight}>
             <View style={styles.box}>
               <Text style={styles.boxText}>Cadastrar</Text>
-              <Feather name="credit-card" size={120} color="black" />
+              <Feather name="credit-card" size={130} color="#FF914C" />
             </View>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => navigation.navigate('VerGeral')} underlayColor={null} style={styles.boxHighlight}>
             <View style={styles.box}>
-              <Text style={styles.boxText}>Cadastros</Text>
-              <Entypo name="eye" size={120} color="black" />
+              <View style={styles.txtbox}>
+                <Text style={styles.boxText}>Visualizar</Text>
+                <Text style={styles.boxText}>Cadastros</Text>
+              </View>
+              <Entypo name="eye" size={130} color="#FF914C" />
             </View>
           </TouchableHighlight>
-        </View>
-      </View>
-
-      <View style={styles.footer}>
-        <Image style={styles.imgFooter} source={logoTotal} />
       </View>
     </View>
   );
@@ -47,9 +41,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FF9756',
     paddingVertical: 15,
-    paddingHorizontal: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
     borderRadius: 12,
@@ -61,49 +52,34 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   body: {
-    backgroundColor: '#fff',
     flex: 1,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  line: {
-    flex: 1,    
-    flexDirection: 'column',
-    alignItems: 'center',
-    margin: 20,
-    width: '90%',
+    paddingVertical: 15,
   },
   boxHighlight: {
+    width: '80%',
     borderRadius: 12,
+    marginVertical: 30,
   },
   box: {
-    backgroundColor: '#FF9756',
-    width: 300,
-    height: 150,
-    borderRadius: 12,
-    margin: 20,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    elevation: 4,
+    backgroundColor: '#fff',
+    width: '100%',
+    height: 200,
+    borderRadius: 18,
+    padding: 25,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   boxText: {
-    fontSize: 25,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#000',
-    marginBottom: 10,
-  },
-  footer: {
-    width: '100%',
-    backgroundColor: '#FF9756',
-    padding: 20,
-    alignItems: 'center',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
-  imgFooter: {
-    width: 120,
-    height: 60,
-    resizeMode: 'contain',
   },
 });

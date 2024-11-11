@@ -162,11 +162,11 @@ export function CadastroExercicio({ navigation }) {
                   style={styles.picker}
                 >
                   <Picker.Item label="Selecione um treino" value="" />
-                  {treinos.length > 0 ? (
+                  {Array.isArray(treinos) && treinos.length > 0 ? (
                     treinos.map((treino) => (
                       <Picker.Item
                         key={treino.codigo}
-                        label={treino.nome || 'Treino sem Nome'}
+                        label={treino.nome}
                         value={treino.codigo}
                       />
                     ))

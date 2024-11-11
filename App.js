@@ -1,12 +1,14 @@
-import { StyleSheet }             from 'react-native';
-import { createStackNavigator }   from '@react-navigation/stack';
-import { NavigationContainer }    from '@react-navigation/native';
+import { StyleSheet }               from 'react-native';
+import { createStackNavigator }     from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer }      from '@react-navigation/native';
   
 // Importação das páginas 
 import { LoginPage }           from './src/Screens/LoginPage';
 import { HomePage }            from './src/Screens/HomePage';
 import { HomeColaboradorPage } from './src/Screens/HomeColaboradorPage';
 import { HomeAdmPage }         from './src/Screens/HomeAdmPage';
+import { ConfigPage }          from './src/Screens/ConfigPage';
 import { TrainPage }           from './src/Screens/TrainPage';
 import { ListaTreinos }        from './src/Screens/ListaTreinos';
 import { PlanilhaExercicios }  from './src/Screens/PlanilhaTreino'
@@ -42,20 +44,65 @@ import { Teste } from './src/Screens/tst';
 export default function App() {
 
   const Stack = createStackNavigator();
+  const Tab = createBottomTabNavigator();
+
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='LoginPage' screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName='HomeAdmPage' screenOptions={{headerShown: false}}>
         <Stack.Screen name="LoginPage"             component={LoginPage}></Stack.Screen>
         <Stack.Screen name="HomeAdmPage"           component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>
         <Stack.Screen name="HomePage"              component={HomePage}></Stack.Screen>
-        <Stack.Screen name="TrainPage"             component={TrainPage}></Stack.Screen>
+
+        <Tab.Screen
+          name="ConfigPage"
+          component={ConfigPage}
+          options={{
+            tabBarLabel: 'Configurações', // Título da aba
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="settings" size={size} color={color} />
+            ),
+          }}
+        />
+        
+        <Tab.Screen
+          name="TrainPage"
+          component={TrainPage}
+          options={{
+            tabBarLabel: 'Treino', // Título da aba
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="settings" size={size} color={color} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="GoalsPage"
+          component={GoalsPage}
+          options={{
+            tabBarLabel: 'Metas', // Título da aba
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="settings" size={size} color={color} />
+            ),
+          }}
+        />
+          
+
+        <Tab.Screen
+          name="NutricaoPage"
+          component={NutricaoPage}
+          options={{
+            tabBarLabel: 'Nutrição', // Título da aba
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="settings" size={size} color={color} />
+            ),
+          }}
+        />
+
         <Stack.Screen name="ListaTreinos"          component={ListaTreinos}></Stack.Screen>
         <Stack.Screen name="PlanilhaTreino"        component={PlanilhaExercicios}></Stack.Screen>
         <Stack.Screen name="ResultsPage"           component={ResultsPage}></Stack.Screen>
-        <Stack.Screen name="GoalsPage"             component={GoalsPage}></Stack.Screen>
-        <Stack.Screen name="NutricaoPage"          component={NutricaoPage}></Stack.Screen>
         <Stack.Screen name="CadastroGeral"         component={CadastroGeral}></Stack.Screen>
         
 

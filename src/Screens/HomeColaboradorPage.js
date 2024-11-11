@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'; 
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import EvilIcons from '@expo/vector-icons/EvilIcons'; 
 import logoTotal from './Images/logoTotal.png';
 import axios from 'axios';
 
 export function HomeColaboradorPage({ navigation }) {
   const [usuarios, setUsuarios] = useState([]);
+  const [filteredUsuarios, setFilteredUsuarios] = useState([]);
   const [planos, setPlanos] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [searchText, setSearchText] = useState('');
 
   const buscarPlanos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/planos');
+      console.log('Dados dos planos:', response.data); 
       setPlanos(response.data);
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
       console.error(error);
     }
   };
+  
 
   const fetchUsuarios = async () => {
     try {
       const response = await axios.get('http://localhost:3000/usuarios');
       setUsuarios(response.data);
+      setFilteredUsuarios(response.data); 
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
     }
@@ -59,6 +64,18 @@ export function HomeColaboradorPage({ navigation }) {
     }
   };
 
+  const filterUsuarios = (text) => {
+    setSearchText(text);
+    if (text === '') {
+      setFilteredUsuarios(usuarios); 
+    } else {
+      const filteredData = usuarios.filter((usuario) =>
+        usuario.nome.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredUsuarios(filteredData);
+    }
+  };
+
   useEffect(() => {
     fetchUsuarios();
     buscarPlanos();
@@ -67,7 +84,6 @@ export function HomeColaboradorPage({ navigation }) {
   const renderItem = ({ item }) => (
     <View style={styles.userCard}>
       <View style={styles.userInfo}>
-        <Text style={styles.userName}>Código: {item.codigo}</Text>
         <Text style={styles.userName}>Aluno: {item.nome}</Text>
         <Text style={styles.userPlan}>Plano Atual: {item.codplano}</Text>
       </View>
@@ -77,8 +93,7 @@ export function HomeColaboradorPage({ navigation }) {
         style={styles.changePlanButton}
       >
         <View style={styles.buttonContent}>
-          <Text style={styles.buttonText}>Alterar Plano</Text>
-          <MaterialIcons name="edit" size={30} color="black" /> 
+          <MaterialIcons name="edit" size={30} color="black" />
         </View>
       </TouchableHighlight>
     </View>
@@ -89,16 +104,26 @@ export function HomeColaboradorPage({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.txtHeader}>ACADEMIA TOTAL FORCE</Text>
       </View>
+
       <View style={styles.body}>
-        <View style={styles.color}>
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.searchBar}
+            placeholder="Pesquisar aluno pelo nome"
+            value={searchText}
+            onChangeText={filterUsuarios}
+          />
+          <EvilIcons name="search" size={24} color="black" style={styles.searchIcon} />
+        </View>
+
         <FlatList
-          data={usuarios}
+          data={filteredUsuarios}
           renderItem={renderItem}
           keyExtractor={(item) => item.codigo.toString()}
           contentContainerStyle={styles.listContainer}
         />
-        </View>
       </View>
+
       <View style={styles.footer}>
         <Image style={styles.imgFooter} source={logoTotal} />
       </View>
@@ -116,13 +141,14 @@ export function HomeColaboradorPage({ navigation }) {
             style={styles.picker}
           >
             <Picker.Item label="Selecione um plano" value="" />
-            {planos.map((plano) => (
+            {Array.isArray(planos) && planos.map((plano) => (
               <Picker.Item
                 key={plano.codigo}
                 label={plano.nome}
                 value={plano.codigo}
               />
             ))}
+
           </Picker>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
@@ -161,13 +187,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FF9756',
+    borderRadius: 8,
+    width: '90%',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginVertical: 10,
+  },
+  searchBar: {
+    flex: 1,
+    fontSize: 16,
+  },
+  searchIcon: {
+    marginLeft: 8,
+  },
   body: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  color:{
     backgroundColor: '#fff',
   },
   listContainer: {

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal, Image } from 'react-native';
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import logoTotal from '../../Images/logoTotal.png';
 
 export function CadastroLogin({ navigation }) {
   const [etapa, setEtapa] = useState(1); 
@@ -66,33 +68,40 @@ export function CadastroLogin({ navigation }) {
         </TouchableHighlight>
         <Text style={styles.txtheader}>Cadastro de Usuário</Text>
       </View>
-
+  
       {etapa === 1 ? (
-        <View style={styles.body}>
-          <Text style={styles.titulo}>Etapa 1 de 2</Text>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Nome"
-            value={usuario.nome}
-            onChangeText={(text) => setUsuario({ ...usuario, nome: text })}
-          />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Login"
-            value={usuario.login}
-            onChangeText={(text) => setUsuario({ ...usuario, login: text })}
-          />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Senha"
-            value={usuario.senha}
-            onChangeText={(text) => setUsuario({ ...usuario, senha: text })}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.btn} onPress={avancarEtapa}>
-            <Text style={styles.txtbtn}>Avançar</Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          <View style={styles.logoContainer}>
+            <Image source={logoTotal} style={styles.logo} />
+            <Text style={styles.welcomeText}>Bem Vindo!</Text>
+            <Text style={styles.welcomeText}>Faça seu cadastro para começar!</Text>
+          </View>
+          <View style={styles.body}>
+            <Text style={styles.titulo}>Etapa 1 de 2</Text>
+            <TextInput
+              style={styles.inputs}
+              placeholder="Nome"
+              value={usuario.nome}
+              onChangeText={(text) => setUsuario({ ...usuario, nome: text })}
+            />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Login"
+              value={usuario.login}
+              onChangeText={(text) => setUsuario({ ...usuario, login: text })}
+            />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Senha"
+              value={usuario.senha}
+              onChangeText={(text) => setUsuario({ ...usuario, senha: text })}
+              secureTextEntry
+            />
+            <TouchableOpacity style={styles.btn} onPress={avancarEtapa}>
+              <Text style={styles.txtbtn}>Avançar</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       ) : (
         <View style={styles.body}>
           <Text style={styles.titulo}>Etapa 2 de 2</Text>
@@ -116,19 +125,19 @@ export function CadastroLogin({ navigation }) {
             onChangeText={(text) => setUsuario({ ...usuario, altura: text })}
             keyboardType="numeric"
           />
-
+  
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.btnPequeno} onPress={() => setEtapa(1)}>
               <Text style={styles.txtbtn}>Voltar</Text>
             </TouchableOpacity>
-
+  
             <TouchableOpacity style={styles.btnPequeno} onPress={inserirUsuarios}>
               <Text style={styles.txtbtn}>Concluir</Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
-
+  
       <Modal animationType="slide" transparent visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -150,6 +159,7 @@ export function CadastroLogin({ navigation }) {
       </Modal>
     </SafeAreaView>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -175,9 +185,21 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF914C',
     borderRadius: 12,
     elevation: 2,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 340,
+    height: 270,
+    marginBottom: 10,
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 15,
   },
   inputs: {
     width: '100%',
@@ -190,7 +212,7 @@ const styles = StyleSheet.create({
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
@@ -207,13 +229,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   btnPequeno: {
-    width: '48%', 
+    width: '50%', 
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
+    marginHorizontal: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 20,
+  },  
   titulo: {
     fontSize: 20,
     fontWeight: 'bold',

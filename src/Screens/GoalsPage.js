@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from '@expo/vector-icons/Feather';
-import Fontisto from '@expo/vector-icons/Fontisto';
+import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export function GoalsPage({ navigation }) {
@@ -70,7 +70,7 @@ export function GoalsPage({ navigation }) {
       const newGoal = {
         id: goals.length + 1,
         title: `${newLoad} Kg ${newTitle}`,
-        date: `${formattedStartDate} até ${formattedEndDate}`,
+        date: `${formattedStartDate} - ${formattedEndDate}`,
         completed: false,
       };
       const updatedGoals = [...goals, newGoal];
@@ -106,27 +106,28 @@ export function GoalsPage({ navigation }) {
       <View style={styles.body}>
         {goals.map((goal) => (
           <View key={goal.id} style={styles.boxmeta}>
+              <TouchableHighlight onPress={() => toggleCompleted(goal.id)} underlayColor={null}>
+                <Feather
+                  name={goal.completed ? 'check-circle' : 'circle'}
+                  size={40}
+                  color="black"
+                />
+              </TouchableHighlight>
             <View>
               <Text style={styles.txtbox}>{goal.title}</Text>
               <Text style={styles.txtbox}>{goal.date}</Text>
             </View>
             <View style={styles.actions}>
-              <TouchableHighlight onPress={() => toggleCompleted(goal.id)} underlayColor={null}>
-                <Fontisto
-                  name={goal.completed ? 'checkbox-active' : 'checkbox-passive'}
-                  size={28}
-                  color="black"
-                />
-              </TouchableHighlight>
+
               <TouchableHighlight underlayColor={null} style={styles.trash} onPress={() => deleteGoal(goal.id)}>
-                <Feather name="trash-2" size={28} color="black"/>
+                <AntDesign name="close" size={24} color="#EB6808" />
               </TouchableHighlight>
             </View>
           </View>
         ))}
 
         <TouchableHighlight style={styles.btnadd} onPress={() => setModalVisible(true)} underlayColor={null}>
-          <Text>Adicionar Meta</Text>
+          <AntDesign name="plus" size={24} color="#fff" />
         </TouchableHighlight>
       </View>
 
@@ -202,9 +203,6 @@ export function GoalsPage({ navigation }) {
               </View>
 
               <View style={styles.btnContainer}>
-                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={addNewGoal}>
-                  <Text style={styles.txtbtns}>Salvar</Text>
-                </TouchableOpacity>
 
                 <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => {
                   setModalVisible(false);
@@ -214,6 +212,10 @@ export function GoalsPage({ navigation }) {
                   setNewEndDate(new Date());     
                 }}>
                   <Text style={styles.txtbtns}>Cancelar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={addNewGoal}>
+                  <Text style={styles.txtbtns}>Salvar</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -253,16 +255,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   boxmeta: {
-    width: 280, 
-    paddingVertical: 27, 
-    paddingHorizontal: 15, 
-    borderRadius: 15, 
-    backgroundColor: '#FF9756', 
+    width: '80%',  
+    height: 70,
+    borderRadius: 20, 
+    backgroundColor: '#fff', 
     alignItems: 'center', 
     marginBottom: 20, 
-    elevation: 3, 
     flexDirection:'row',
     justifyContent: 'space-around',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   txtbox: {
     fontSize: 22,
@@ -282,6 +286,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginVertical: 20,
     elevation: 3,
+  },
+  txtadd:{
+    height:'4%',
+    color: '#fff',
+    fontSize: 10,
   },
   modalOverlay: {
     flex: 1,
@@ -317,21 +326,29 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 5,
     color: '#000',
     fontSize: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
     marginVertical: 5,
     justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   inputText: {
     fontSize: 16,

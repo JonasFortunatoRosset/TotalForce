@@ -19,7 +19,7 @@ export function NutricaoPage({ navigation }) {
       setResultadoP((vlr * 1.4).toFixed(1));   
       setResultadoCa((vlr * 4).toFixed(1));   
       setResultadoF((vlr * 0.025).toFixed(1)); 
-      setResultadoA((vlr * 35).toFixed(1));    
+      setResultadoA((vlr * 35).toFixed(0));    
     } else {
       setResultadoC(0);
       setResultadoP(0);
@@ -42,7 +42,7 @@ export function NutricaoPage({ navigation }) {
         </TouchableHighlight>
         <Text style={styles.txtheader}>Nutrição</Text>
         <TouchableHighlight underlayColor={null} onPress={() => setModalVisible(true)} style={styles.infoIcon}>
-          <AntDesign name="infocirlceo" size={30} color="black" />
+          <AntDesign name="infocirlceo" size={30} color="#EB6808" />
         </TouchableHighlight>
       </View>
 
@@ -59,27 +59,42 @@ export function NutricaoPage({ navigation }) {
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Creatina</Text>
-          <Text style={styles.txtbox}>Peso x 0,03 = {resultadoC}g</Text>
+          <Text style={styles.txtbox}>Peso x 0,03</Text>
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>{resultadoC}g</Text>
+          </View>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Proteína</Text>
-          <Text style={styles.txtbox}>Peso x 1,4 = {resultadoP}g</Text>
+          <Text style={styles.txtbox}>Peso x 1,4 </Text>
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>{resultadoP}g</Text>
+          </View>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Carboidratos</Text>
-          <Text style={styles.txtbox}>Peso x 4 = {resultadoCa}g</Text>
+          <Text style={styles.txtbox}>Peso x 4 </Text>
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>{resultadoC}g</Text>
+          </View>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Fibras</Text>
-          <Text style={styles.txtbox}>Peso x 0,025 = {resultadoF}g</Text>
+          <Text style={styles.txtbox}>Peso x 0,025 </Text>
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>{resultadoF}g</Text>
+          </View>
         </View>
 
         <View style={styles.boxnutri}>
           <Text style={styles.txtbox}>Água</Text>
-          <Text style={styles.txtbox}>Peso x 35 = {resultadoA}ml</Text>
+          <Text style={styles.txtbox}>Peso x 35 </Text>
+          <View style={styles.resultBox}>
+            <Text style={styles.resultText}>{resultadoA}ml</Text>
+          </View>
         </View>
       </View>
 
@@ -111,7 +126,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -138,26 +153,32 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   inputpeso: {
-    width: '100%',
+    width: '110%',
     height: 50,
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     color: '#000',
     fontSize: 18,
     borderRadius: 10,
     padding: 12,
     textAlign: 'center',
     fontWeight: '600',
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   boxnutri: {
-    width: 280,
-    paddingVertical: 25,
+    width: '90%',
+    paddingVertical: 20,
     paddingHorizontal: 15,
-    borderRadius: 15,
-    backgroundColor: '#FF9756',
+    borderRadius: 10,
+    backgroundColor: '#fff',
     alignItems: 'center',
     marginBottom: 20,
-    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   txtbox: {
     fontSize: 22,
@@ -165,6 +186,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 5,
     textAlign: 'center',
+  },
+  resultBox: {
+    backgroundColor: '#FF9756',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  resultText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
   },
   modalOverlay: {
     flex: 1,
@@ -190,7 +223,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   modalButtonText: {
-    color: '#000',
+    color: '#fff',
     fontWeight: 'bold',
   },
 });

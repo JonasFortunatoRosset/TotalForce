@@ -1,54 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function TrainPage({ navigation }) {
-  const [data, setData] = useState(null);
+  const [dados, setDados] = useState(null);
+  const [planos, setPlanos] = useState([])
   const [codPlano, setCodPlano] = useState(''); 
-  const [codUsuario, setCodUsuario] = useState('');
 
-  const carregarPlanos = async () => {
+
+  const Navegação = (plano) => {     // verificação de navegação
+
+    if(plano.codigo === codPlano){
+      navigation.navigate('ListaTreinos',{codPlano})
+    }
+    else{
+      Alert.alert("Acesso Negado", "Este plano está bloqueado.");
+    }
+
+  }
+
+  const carregarPlanos = async () => {   // coleta de todos os dados
     try {
-      // Obtém o codusuario do AsyncStorage
-      const storedCodUsuario = await AsyncStorage.getItem('codusuario');
-      if (!storedCodUsuario) {
-        Alert.alert('Erro', 'Usuário não logado.');
-        return;
-      }
-      setCodUsuario(JSON.parse(storedCodUsuario)); // Armazena o codusuario no estado
+      const response = await axios.get('http://localhost:3000/pesquisartreinos');
+      console.log('Dados recebidos:', response.data);
+      setDados(response.data);
 
-      // Faz a requisição para o servidor
-      const response = await axios.get(`http://localhost:3000/pesquisartreinos?codigo=${codUsuario}`);
-      console.log(response.data);
+      const planosRecebidos = response.data.Plano;
+      console.log('Planos armazenados:', planosRecebidos); 
+      setPlanos(planosRecebidos);
 
-      if (response.data && response.data.Plano_usuario && response.data.Plano) {
-        setData(response.data);
-        setCodPlano(response.data.Plano_usuario);
+      const planoUsuario = response.data.Plano_usuario;
+      console.log('Plano do usuário:', planoUsuario);
+      setCodPlano(planoUsuario); 
 
-        try {
-          await AsyncStorage.setItem('dadosPlanos', JSON.stringify(response.data));
-        } catch (storageError) {
-          console.error('Erro ao salvar no AsyncStorage:', storageError);
-        }
-      } else {
-        Alert.alert('Erro', 'Estrutura de dados inesperada do servidor.');
-      }
+      await AsyncStorage.setItem('dadosPlanos', JSON.stringify(response.data));
+      console.log('Dados salvos no AsyncStorage');
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
-
-      const errorMessage = error.response
-        ? `Erro ${error.response.status}: ${error.response.statusText || 'Erro desconhecido'}`
-        : 'Erro ao conectar com o servidor.';
-      Alert.alert('Erro', errorMessage);
+      Alert.alert('Erro', 'Não foi possível carregar os planos.');
     }
   };
-
+  
   useEffect(() => {
     carregarPlanos();
   }, []);
+  
 
   return (
     <View style={styles.container}>
@@ -63,36 +61,20 @@ export function TrainPage({ navigation }) {
         <Text style={styles.txtheader}>Planos</Text>
       </View>
       <View style={styles.body}>
-        {data && data.Plano ? (
-          data.Plano.map((i) => (
-            <TouchableOpacity
-              key={i.nome}
-              onPress={() => {
-                if (codPlano) {
-                  navigation.navigate('ListaTreinos', { codPlano });
-                } else {
-                  Alert.alert("Erro", "Plano do usuário não carregado.");
-                }
-              }}
-              style={[
-                styles.planoButton,
-                i.codigo === codPlano ? styles.planoLiberado : styles.planoBloqueado
-              ]}
-            >
-              <Text style={styles.txtPlano}>{i.nome}</Text>
-              {i.codigo !== codPlano && (
-                <MaterialCommunityIcons
-                  name="lock"
-                  size={24}
-                  color="black"
-                  style={styles.cadeado}
-                />
-              )}
+
+        {planos && planos.map((plano) => (    // Mostar todos os planos
+          <View key={plano.codigo} >
+            <TouchableOpacity onPress={() => Navegação(plano)} style={styles.planoBtn} >
+              <Text>
+                {plano.nome} 
+              </Text>
+              {plano.codigo !== codPlano && (
+                 <Icon name="lock" size={25} color="#EA5D04" />  // Ícone de cadeado exibido se os códigos forem diferentes
+              ) }
             </TouchableOpacity>
-          ))
-        ) : (
-          <Text>Carregando planos...</Text>
-        )}
+          </View>
+        ))}
+        
       </View>
     </View>
   );
@@ -101,14 +83,14 @@ export function TrainPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -127,23 +109,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  planoButton: {
-    width: '100%',
+  planoBtn: {
+    width: '80%',
     paddingVertical: 15,
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#FF9756',
-    elevation: 4,
-  },
-  planoLiberado: {
-    backgroundColor: '#FF9756',
-  },
-  planoBloqueado: {
-    backgroundColor: '#EA5D04',
+    justifyContent: 'space-around',
+    backgroundColor: '#ffff',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   txtPlano: {
     fontSize: 20,
@@ -153,4 +133,5 @@ const styles = StyleSheet.create({
   cadeado: {
     marginLeft: 10,
   },
+
 });

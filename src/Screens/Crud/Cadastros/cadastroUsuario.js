@@ -50,13 +50,12 @@ export function CadastroUsuario() {
   
 
   const inserirUsuarios = async () => { 
-    // Verifica se todos os campos obrigatórios estão preenchidos antes de enviar
     if (!usuario.nome || !usuario.login || !usuario.senha || !usuario.codplano) {
       Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
       return;
     }
     
-    console.log("Dados do usuário:", usuario); // Exibe o objeto para verificação
+    console.log("Dados do usuário:", usuario); 
   
     try {
       await axios.post("http://10.32.0.45:3000/usuarios", {
@@ -67,7 +66,7 @@ export function CadastroUsuario() {
         peso: usuario.peso,
         altura: usuario.altura,
         status: usuario.status,
-        codplano: parseInt(usuario.codplano, 10), // Garante que seja um número
+        codplano: parseInt(usuario.codplano, 10), 
       }, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -198,30 +197,30 @@ export function CadastroUsuario() {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
             <Picker
-  selectedValue={usuario.codplano}
-  onValueChange={(itemValue) => {
-    if (itemValue) {
-      setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
-      setModalVisible(false);
-    } else {
-      Alert.alert('Por favor, selecione um plano válido.');
-    }
-  }}
-  style={styles.picker}
->
-  <Picker.Item label="Selecione um plano" value="" />
-  {Array.isArray(planos) && planos.length > 0 ? (
-    planos.map((plano) => (
-      <Picker.Item
-        key={plano.codigo}  
-        label={plano.nome || 'Plano sem Nome'}  
-        value={plano.codigo}
-      />
-    ))
-  ) : (
-    <Picker.Item label="Nenhum plano disponível" value="" />
-  )}
-</Picker>
+                selectedValue={usuario.codplano}
+                onValueChange={(itemValue) => {
+                  if (itemValue) {
+                    setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
+                    setModalVisible(false);
+                  } else {
+                    Alert.alert('Por favor, selecione um plano válido.');
+                  }
+                }}
+                style={styles.picker}
+              >
+                <Picker.Item label="Selecione um plano" value="" />
+                {Array.isArray(planos) && planos.length > 0 ? (
+                  planos.map((plano) => (
+                    <Picker.Item
+                      key={plano.codigo}  
+                      label={plano.nome || 'Plano sem Nome'}  
+                      value={plano.codigo}
+                    />
+                  ))
+                ) : (
+                  <Picker.Item label="Nenhum plano disponível" value="" />
+                )}
+            </Picker>
 
               <TouchableOpacity
                 style={styles.closeButton}
