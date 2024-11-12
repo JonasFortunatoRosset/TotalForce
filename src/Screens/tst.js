@@ -1,60 +1,102 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, Platform,Image,StyleSheet,TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, View, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function Teste({navigation}) {
-  return(
-  <View style={styles.modalContainer}>
-  <View style={styles.modalContent}>
-    <Text style={styles.modalTitle}>Parabéns</Text>
-    <Text style={styles.modalMessage}>
-      Seu cadastro foi concluído, aguarde a confirmação de um administrador para poder realizar login.
-    </Text>
-    <TouchableOpacity
-      style={styles.modalButton}
-      onPress={() => {
-        navigation.navigate('LoginPage');
-      }}
-    >
-      <Text style={styles.modalButtonText}>Entendi!</Text>
-    </TouchableOpacity>
-  </View>
-</View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableHighlight
+          style={styles.seta}
+          underlayColor={null}
+          onPress={() => navigation.navigate('HomePage')}
+        >
+          <AntDesign name="arrowleft" size={30} color="black" />
+        </TouchableHighlight>
+        <Text style={styles.txtheader}>Planos</Text>
+      </View>
+      <View style={styles.body}>
 
-)}
+          <View style={styles.planosBody}  >
+            <TouchableOpacity style={styles.planoBtn} >
+              <Text style={styles.txtPlano}>
+                 Plano1 
+              </Text>
+              <FontAwesome name="arrow-right" size={45} color="#EA5D04" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.planoBtn} >
+              <Text style={styles.txtPlano}>
+                 Plano2 
+              </Text>
+              <FontAwesome name="lock" size={45} color="#EA5D04" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.planoBtn} >
+              <Text style={styles.txtPlano}>
+                 Plano3
+              </Text>
+              <FontAwesome name="lock" size={45} color="#EA5D04" />
+            </TouchableOpacity>
+          </View>
+        
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  container: {
     flex: 1,
+    backgroundColor: '#ffff',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    marginBottom: 30,
+    elevation: 4,
+  },
+  seta: {
+    marginRight: 15,
+  },
+  txtheader: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  body: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  planosBody:{
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
-    backgroundColor: '#FFB031',
-    padding: 20,
+  planoBtn: {
+    width: '80%',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginVertical: 10,
     borderRadius: 12,
     alignItems: 'center',
-    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#ffff',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
-  modalTitle: {
-    fontSize: 24,
+  txtPlano: {
+    fontSize: 27,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#E49413',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-  },
-  modalButtonText: {
     color: '#000',
-    fontSize: 18,
   },
 });

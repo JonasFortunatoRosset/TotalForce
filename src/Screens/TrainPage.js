@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -63,14 +64,16 @@ export function TrainPage({ navigation }) {
       <View style={styles.body}>
 
         {planos && planos.map((plano) => (    // Mostar todos os planos
-          <View key={plano.codigo} >
+          <View style={styles.planosBody} key={plano.codigo} >
             <TouchableOpacity onPress={() => Navegação(plano)} style={styles.planoBtn} >
-              <Text>
+              <Text style={styles.txtPlano}>
                 {plano.nome} 
               </Text>
-              {plano.codigo !== codPlano && (
-                 <Icon name="lock" size={25} color="#EA5D04" />  // Ícone de cadeado exibido se os códigos forem diferentes
-              ) }
+              {plano.codigo !== codPlano ? (
+                <FontAwesome name="lock" size={45} color="#EA5D04" />  // Exibe cadeado se os códigos forem diferentes
+              ) : (
+                <FontAwesome name="arrow-right" size={45} color="#EA5D04" /> // Exibe seta se os códigos forem iguais
+              )}
             </TouchableOpacity>
           </View>
         ))}
@@ -109,15 +112,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  planosBody:{
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   planoBtn: {
     width: '80%',
-    paddingVertical: 15,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     backgroundColor: '#ffff',
     elevation: 6,
     shadowColor: '#000',
@@ -126,12 +134,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   txtPlano: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 27,
+    fontWeight: 'bold',
     color: '#000',
   },
-  cadeado: {
-    marginLeft: 10,
-  },
-
 });
