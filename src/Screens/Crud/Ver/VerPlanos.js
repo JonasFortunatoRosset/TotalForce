@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 
@@ -10,10 +11,15 @@ export function VerPlanos() {
     const navigation = useNavigation();
     const [planos, setPlanos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [dataModalVisible, setDataModalVisible] = useState(false);
     const [dataPlanos, setDataPlanos] = useState({
         codigo: "",
         nome: "",
     });
+
+    const toggleModal = () => {
+        setDataModalVisible(!dataModalVisible);
+      };
 
     const carregarPlanos = async () => {
         axios.get('http://localhost:3000/planos', {
@@ -100,26 +106,56 @@ export function VerPlanos() {
                     data={planos}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.itemContainer}>
-                            <View style={styles.dados}>
-                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                            </View>
 
-                            <View style={styles.icons}>
-                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <Feather name="trash-2" size={40} color="black" />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={40} color="black" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                    <View style={styles.itemContainer}>
+                        <TouchableOpacity style={styles.dados} onPress={toggleModal} >
+                            <Text style={styles.itemText}>{item.nome}</Text>
+                            <FontAwesome5 name="list-alt" size={29} color="#EA5D04" />
+                        </TouchableOpacity>
+                    </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+            visible={dataModalVisible}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={toggleModal}
+             >
+
+                <FlatList
+                    data={planos}
+                    keyExtractor={(item) => item.codigo.toString()}
+                    renderItem={({ item }) => (
+
+                        <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                            <AntDesign name="close" size={24} color="#EB6808" />
+                          </TouchableOpacity>
+                          <Text style={styles.modalTitle}>Dados do Plano</Text>
+                          <Text style={styles.modalText}>Código:   {item.codigo}   </Text>
+            
+                          <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                <Feather name="trash-2" size={40} color="black" />
+                            </TouchableOpacity>
+            
+                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                                <FontAwesome name="pencil" size={40} color="black" />
+                            </TouchableOpacity>
+                          </View>
+            
+                        </View>
+                      </View>
+
+ 
+        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+    />
+        </Modal>
 
             <Modal
                 animationType="slide"
@@ -197,29 +233,31 @@ const styles = StyleSheet.create({
     icons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '30%',
-    },
-    dados: {
-        flexDirection: 'column',
-        padding: 5,
-        height: '100%',
+        marginTop: '5%',
     },
     itemContainer: {
+        marginBottom: 20,
+    },
+    dados: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
-    },
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
     itemText: {
-        color: '#fff',
+        color: '#000',
         fontSize: 16,
-        marginBottom: 5,
-    },
+      },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -230,7 +268,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
         padding: 20,
         shadowColor: '#000',
@@ -239,7 +277,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         padding: 15,
         alignItems: 'center',
     },
@@ -262,7 +300,7 @@ const styles = StyleSheet.create({
         height: 40,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
@@ -284,9 +322,36 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnSave: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     btnCancel: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      closeIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1, 
+      },
 });

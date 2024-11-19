@@ -15,7 +15,7 @@ export function CadastroColaborador({ navigation }) {
 
   const inserirColaborador = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/colaboradores', {
+      await axios.post('http://localhost:3000/colaboradores', {
         nome: colaborador.nome,
         cpf: colaborador.cpf,
         endereco: colaborador.endereco,
@@ -33,6 +33,7 @@ export function CadastroColaborador({ navigation }) {
         senha: "",
         login: ""
       });
+
     } catch (error) {
       Alert.alert('Erro', 'Erro ao cadastrar o colaborador');
       console.error(error);
@@ -42,10 +43,7 @@ export function CadastroColaborador({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.seta}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.seta} onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={30} color="black" />
         </TouchableOpacity>
         <Text style={styles.txtheader}>Cadastro de colaborador</Text>
@@ -93,6 +91,8 @@ export function CadastroColaborador({ navigation }) {
           <Text style={styles.txtbtn}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
+
+     
     </View>
   );
 }
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF914C',
     borderRadius: 12,
     elevation: 2,
     alignItems: 'center',
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',

@@ -10,7 +10,8 @@ export function VerUsuario({ navigation }) {
     const [usuario, setUsuario] = useState([]);
     const [statusFiltro, setStatusFiltro] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
-    const [planos, setPlanos] = useState([]); // Inicializa como array
+    const [dataModalVisible, setDataModalVisible] = useState(false);
+    const [planos, setPlanos] = useState([]); 
     const [dataUsuario, setDataUsuario] = useState({
         codigo: "",
         nome: "",
@@ -23,16 +24,33 @@ export function VerUsuario({ navigation }) {
         status: ""
     });
 
-    const buscarPlanos = async () => {
-        try {
-            const response = await axios.get("http://localhost:3000/planos");
-            setPlanos(response.data);
-        } catch (error) {
-            Alert.alert('Erro', 'Não foi possível buscar os planos.');
-            console.error(error);
-            setPlanos([]); // Garante que planos é um array vazio em caso de erro
-        }
+    useEffect(() => {
+        fetchPlanos();
+      }, []);
+
+    const toggleModal = () => {
+        setDataModalVisible(!dataModalVisible);
     };
+
+    const fetchPlanos = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/planos');
+          console.log("Resposta da API:", response.data); 
+    
+          if (Array.isArray(response.data)) {
+            setPlanos(response.data);
+          } else if (Array.isArray(response.data.Planos)) {
+            setPlanos(response.data.Planos);
+          } else {
+            console.error('A chave "Planos" não é um array:', response.data);
+            Alert.alert('Erro', 'Nenhum plano encontrado.');
+          }
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível carregar os planos.');
+          console.error(error);
+        }
+      };
+
 
     const usuariosFiltrados = () => {
         if (statusFiltro === "") return usuario;
@@ -139,33 +157,64 @@ export function VerUsuario({ navigation }) {
                     data={usuariosFiltrados()}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => ( 
-                        <View style={styles.itemContainer}>
-                            <View style={styles.dados}>
-                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Login: {item.login}</Text>
-                                <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
-                                <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                                <Text style={styles.itemText}>Peso: {item.peso}</Text>
-                                <Text style={styles.itemText}>Altura: {item.altura}</Text>
-                                <Text style={styles.itemText}>Plano: {item.codplano}</Text>
-                                <Text style={styles.itemText}>Status: {item.status}</Text>
-                            </View>
 
-                            <View style={styles.icons}> 
-                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <Feather name="trash-2" size={40} color="black" />
-                                </TouchableOpacity>
+                    <View style={styles.itemContainer}>
+                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                            <Text style={styles.itemText}>{item.nome}</Text>
+                            <FontAwesome name="user" size={29} color={'#EA5D04'} />
+                        </TouchableOpacity>
+                    </View>
 
-                                <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={40} color="black"/>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+          visible={dataModalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={toggleModal}
+        >
+
+                <FlatList
+                    data={administrador}
+                    keyExtractor={(item) => item.codigo.toString()}
+                    renderItem={({ item }) => (
+
+                        <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                            <AntDesign name="close" size={24} color="#EB6808" />
+                          </TouchableOpacity>
+                          <Text style={styles.modalTitle}>Dados do Usuário</Text>
+                                 <Text style={styles.modalText}>Código: {item.codigo}</Text>
+                                 <Text style={styles.modalText}>Login: {item.login}</Text>
+                                 <Text style={styles.modalText}>Endereço: {item.endereco}</Text>
+                                 <Text style={styles.modalText}>Senha: {item.senha}</Text>
+                                 <Text style={styles.modalText}>Peso: {item.peso}</Text>
+                                 <Text style={styles.modalText}>Altura: {item.altura}</Text>
+                                 <Text style={styles.modalText}>Plano: {item.codplano}</Text>
+                                 <Text style={styles.modalText}>Status: {item.status}</Text>
+            
+                          <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                <Feather name="trash-2" size={40} color="black" />
+                            </TouchableOpacity>
+            
+                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                                <FontAwesome name="pencil" size={40} color="black" />
+                            </TouchableOpacity>
+                          </View>
+            
+                        </View>
+                      </View>
+
+ 
+        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+    />
+        </Modal>
 
             <Modal
                 animationType="slide"
@@ -220,16 +269,19 @@ export function VerUsuario({ navigation }) {
                                 <Picker
                                     selectedValue={dataUsuario.codplano}
                                     style={styles.picker}
-                                    onValueChange={(itemValue) => setDataUsuario({ ...dataUsuario, codplano: itemValue })}
+                                    onValueChange={(itemValue) => {
+                                        setDataUsuario({ ...dataUsuario, codplano: itemValue });
+                                        console.log('CodPlano selecionado:', itemValue); 
+                                      }}
                                 >
-                                    <Picker.Item label="Selecione um plano" value="" />
-                                    {planos && planos.length > 0 ? (
-                                        planos.map((plano) => (
-                                            <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                                        ))
-                                    ) : (
-                                        <Picker.Item label="Nenhum plano disponível" value="" />
-                                    )}
+                                <Picker.Item label="Selecione um plano" value="" />
+                                {planos.length > 0 ? (
+                                    planos.map((plano) => (
+                                    <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                                    ))
+                                ) : (
+                                    <Picker.Item label="Nenhum plano disponível" value="" />
+                                )}
                                 </Picker>
 
                                 <Picker
@@ -263,12 +315,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        backgroundColor: '#fff',
     },
     txtheader: {
         fontSize: 24,
@@ -292,7 +345,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     selectedButton: {
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF9756',
     },
     filterText: {
         color: '#000',
@@ -305,26 +358,33 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     itemContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 10,
-        backgroundColor: '#FFB031',
-        borderRadius: 5,
+        marginBottom: 20,
     },
     dados: {
-        flex: 1,
-    },
-    itemText: {
-        fontSize: 14,
-        color: '#000',
-    },
-    icons: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 8,
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
+    itemText: {
+        color: '#000',
+        fontSize: 16,
+      },
+      icons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: '5%',
     },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -335,7 +395,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
         padding: 20,
         shadowColor: '#000',
@@ -344,7 +404,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         padding: 15,
         alignItems: 'center',
     },
@@ -373,7 +433,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     btns: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         borderRadius: 5,
         padding: 10,
         alignItems: 'center',
@@ -383,4 +443,31 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      closeIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1, 
+      },
 });

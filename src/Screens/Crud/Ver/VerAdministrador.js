@@ -2,13 +2,13 @@ import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, M
 import { useState, useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios'; 
-import { useNavigation } from '@react-navigation/native';
 
-export function VerAdministrador() {
-    const navigation = useNavigation();
+export function VerAdministrador({navigation}) {
     const [administrador, setAdministrador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [dataModalVisible, setDataModalVisible] = useState(false);
     const [dataAdministrador, setDataAdministrador] = useState({
         login: "",
         nome: "",
@@ -16,6 +16,10 @@ export function VerAdministrador() {
         login: "",
         senha: ""
     });
+
+    const toggleModal = () => {
+        setDataModalVisible(!dataModalVisible);
+      };
 
     const carregarAdministradores = async () => {
         axios.get('http://localhost:3000/administradores')
@@ -94,30 +98,64 @@ export function VerAdministrador() {
             </View>
 
             <View style={styles.body}>
+
                 <FlatList
                     data={administrador}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
+
                         <View style={styles.itemContainer}>
-                            <View style={styles.dados}>
-                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
-                                <Text style={styles.itemText}>Login: {item.login}</Text>
-                                <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                            </View>
-                            <View style={styles.icons}>
-                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <FontAwesome name="trash" size={30} color="black" />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={30} color="black" />
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                                <Text style={styles.itemText}>{item.nome}</Text>
+                                <Ionicons name="people" size={29} color={'#EA5D04'} />
+                            </TouchableOpacity>
                         </View>
+                                                  
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+        <Modal
+          visible={dataModalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={toggleModal}
+        >
+
+                <FlatList
+                    data={administrador}
+                    keyExtractor={(item) => item.codigo.toString()}
+                    renderItem={({ item }) => (
+
+                        <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                            <AntDesign name="close" size={24} color="#EB6808" />
+                          </TouchableOpacity>
+                          <Text style={styles.modalTitle}>Dados do Administrador</Text>
+                          <Text style={styles.modalText}>CPF:   {item.cpf}   </Text>
+                          <Text style={styles.modalText}>Login: {item.login} </Text>
+                          <Text style={styles.modalText}>Senha: {item.senha} </Text>
+            
+                          <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                <Feather name="trash-2" size={40} color="black" />
+                            </TouchableOpacity>
+            
+                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                                <FontAwesome name="pencil" size={40} color="black" />
+                            </TouchableOpacity>
+                          </View>
+            
+                        </View>
+                      </View>
+
+ 
+        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+    />
+        </Modal>
 
             <Modal
                 animationType="slide"
@@ -207,26 +245,29 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     itemContainer: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        padding: 15,
-        backgroundColor: '#FF9756',
-        borderRadius: 10,
-        marginBottom: 10,
-        alignItems: 'center',
+        marginBottom: 20,
     },
     dados: {
-        flex: 1,
-    },
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
     itemText: {
-        fontSize: 16,
         color: '#000',
-        marginBottom: 5,
-    },
+        fontSize: 16,
+      },
     icons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '30%',
+        marginTop: '5%',
     },
     separator: {
         height: 1,
@@ -246,7 +287,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         padding: 10,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -290,4 +331,31 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 16,
     },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      closeIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1, 
+      },
 });

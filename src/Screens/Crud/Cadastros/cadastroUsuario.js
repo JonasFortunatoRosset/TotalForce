@@ -18,32 +18,28 @@ export function CadastroUsuario() {
     status: "Ativo"
   });
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [planos, setPlanos] = useState([]);
 
   useEffect(() => {
-    buscarPlanos();
+    fetchPlanos();
   }, []);
 
-  const buscarPlanos = async () => {
+  const fetchPlanos = async () => {
     try {
-      const response = await axios.get("http://10.32.0.45:3000/planos", {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (Array.isArray(response.data.Planos) && response.data.Planos.length > 0) {
-        setPlanos(response.data.Planos);
-        console.log('Planos encontrados:', response.data.Planos);
+      const response = await axios.get('http://localhost:3000/planos');
+      console.log("Resposta da API:", response.data); 
+
+      if (Array.isArray(response.data)) {
+        setPlanos(response.data);
+      } else if (Array.isArray(response.data.Planos)) {
+        setPlanos(response.data.Planos); 
       } else {
-        console.log('A chave "Planos" não contém um array ou está vazia:', response.data);
+        console.error('A chave "Planos" não é um array:', response.data);
         Alert.alert('Erro', 'Nenhum plano encontrado.');
       }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível buscar os planos.');
-      console.error('Erro ao buscar planos:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os planos.');
+      console.error(error);
     }
   };
   
@@ -82,8 +78,6 @@ export function CadastroUsuario() {
         codplano: "",
         status: "Ativo"
       });
-      setModalVisible(false);
-      setStatusModalVisible(false);
     } catch (error) {
       Alert.alert("Erro", "Não foi possível cadastrar o usuário");
       console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);
@@ -99,7 +93,6 @@ export function CadastroUsuario() {
         </TouchableOpacity>
         <Text style={styles.txtheader}>Cadastro de Usuário</Text>
       </View>
-      <View style={styles.color}>
       <View style={styles.body}>
         <TextInput
           style={styles.inputs}
@@ -140,22 +133,6 @@ export function CadastroUsuario() {
           onChangeText={(text) => setUsuario({ ...usuario, altura: text })}
           keyboardType="numeric"
         />
-
-        <TouchableOpacity
-          style={styles.inputs}
-          onPress={() => setStatusModalVisible(true)}
-        >
-          <Text style={styles.placeholderText}>{usuario.status}</Text>
-        </TouchableOpacity>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={statusModalVisible}
-          onRequestClose={() => setStatusModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
               <Picker
                 selectedValue={usuario.status}
                 onValueChange={(itemValue) => {
@@ -169,39 +146,12 @@ export function CadastroUsuario() {
                 <Picker.Item label="Em Análise" value="Em Análise" />
                 <Picker.Item label="Recusado" value="Recusado" />
               </Picker>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setStatusModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
 
-        <TouchableOpacity
-          style={styles.inputs}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.placeholderText}>
-            {usuario.codplano ? `Plano: ${usuario.codplano}` : "Selecione um plano"}
-          </Text>
-        </TouchableOpacity>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
             <Picker
                 selectedValue={usuario.codplano}
                 onValueChange={(itemValue) => {
                   if (itemValue) {
                     setUsuario({ ...usuario, codplano: parseInt(itemValue, 10) });
-                    setModalVisible(false);
                   } else {
                     Alert.alert('Por favor, selecione um plano válido.');
                   }
@@ -222,36 +172,25 @@ export function CadastroUsuario() {
                 )}
             </Picker>
 
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
         <TouchableOpacity style={styles.btn} onPress={inserirUsuarios}>
           <Text style={styles.txtbtn}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
       </View>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
     marginTop: 30,
@@ -265,13 +204,10 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
   },
-  color:{
-    backgroundColor: '#E49413'
-  },
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF914C',
     borderRadius: 12,
     elevation: 2,
     alignItems: 'center',
@@ -289,37 +225,15 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 16,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
   picker: {
-    height: 150,
+    height: '10%',
     width: '100%',
   },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#FFB031',
-    borderRadius: 10,
-  },
-  closeButtonText: {
-    color: '#000',
-    fontSize: 16,
-  },
+
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',

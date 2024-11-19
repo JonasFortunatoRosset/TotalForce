@@ -9,37 +9,44 @@ import axios from 'axios';
 export function HomeColaboradorPage({ navigation }) {
   const [usuarios, setUsuarios] = useState([]);
   const [filteredUsuarios, setFilteredUsuarios] = useState([]);
-  const [planos, setPlanos] = useState([]);
+  const [planos, setPlanos] = useState([]); 
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
   const [searchText, setSearchText] = useState('');
 
-  const buscarPlanos = async () => {
+  const fetchPlanos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/planos');
-      console.log('Dados dos planos:', response.data); 
-      setPlanos(response.data);
+      console.log("Resposta da API:", response.data);
+
+      if (Array.isArray(response.data)) {
+        setPlanos(response.data);
+      } else if (Array.isArray(response.data.Planos)) {
+        setPlanos(response.data.Planos); 
+      } else {
+        console.error('A chave "Planos" não é um array:', response.data);
+        Alert.alert('Erro', 'Nenhum plano encontrado.');
+      }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível buscar os planos.');
+      Alert.alert('Erro', 'Não foi possível carregar os planos.');
       console.error(error);
     }
   };
   
-
   const fetchUsuarios = async () => {
     try {
       const response = await axios.get('http://localhost:3000/usuarios');
-      setUsuarios(response.data);
-      setFilteredUsuarios(response.data); 
+      const usuariosData = response.data.usuario; 
+      setUsuarios(usuariosData);
+      setFilteredUsuarios(usuariosData); 
     } catch (error) {
-      console.error('Erro ao buscar usuários:', error);
+      console.error('Erro ao carregar usuários:', error);
     }
   };
 
-  const updateCodPlano = async (codigo, novoCodPlano) => {
+  const updateCodPlano = async (novoCodPlano) => {
     try {
-      await axios.put(`http://localhost:3000/usuarios/${codigo}`, {
+      await axios.put('http://localhost:3000/usuarios', {
         codplano: novoCodPlano,
       });
       Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
@@ -50,14 +57,9 @@ export function HomeColaboradorPage({ navigation }) {
     }
   };
 
-  const handlePlanChange = (codigo) => {
-    setSelectedUserId(codigo);
-    setModalVisible(true);
-  };
-
   const confirmPlanChange = () => {
     if (selectedPlan) {
-      updateCodPlano(selectedUserId, selectedPlan);
+      updateCodPlano(selectedPlan);
       setModalVisible(false);
     } else {
       Alert.alert('Erro', 'Por favor, selecione um plano.');
@@ -69,7 +71,7 @@ export function HomeColaboradorPage({ navigation }) {
     if (text === '') {
       setFilteredUsuarios(usuarios); 
     } else {
-      const filteredData = usuarios.filter((usuario) =>
+      const filteredData = usuarios.filter((usuario) => 
         usuario.nome.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredUsuarios(filteredData);
@@ -78,13 +80,13 @@ export function HomeColaboradorPage({ navigation }) {
 
   useEffect(() => {
     fetchUsuarios();
-    buscarPlanos();
+    fetchPlanos();
   }, []);
 
   const renderItem = ({ item }) => (
     <View style={styles.userCard}>
       <View style={styles.userInfo}>
-        <Text style={styles.userName}>Aluno: {item.nome}</Text>
+        <Text style={styles.userName}>{item.nome}</Text>
         <Text style={styles.userPlan}>Plano Atual: {item.codplano}</Text>
       </View>
       <TouchableHighlight
@@ -93,7 +95,7 @@ export function HomeColaboradorPage({ navigation }) {
         style={styles.changePlanButton}
       >
         <View style={styles.buttonContent}>
-          <MaterialIcons name="edit" size={30} color="black" />
+          <MaterialIcons name="edit" size={30} color="#EB6808" />
         </View>
       </TouchableHighlight>
     </View>
@@ -117,7 +119,7 @@ export function HomeColaboradorPage({ navigation }) {
         </View>
 
         <FlatList
-          data={filteredUsuarios}
+          data={filteredUsuarios} 
           renderItem={renderItem}
           keyExtractor={(item) => item.codigo.toString()}
           contentContainerStyle={styles.listContainer}
@@ -135,23 +137,27 @@ export function HomeColaboradorPage({ navigation }) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <Picker
-            selectedValue={selectedPlan}
-            onValueChange={(itemValue) => setSelectedPlan(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Selecione um plano" value="" />
-            {Array.isArray(planos) && planos.map((plano) => (
-              <Picker.Item
-                key={plano.codigo}
-                label={plano.nome}
-                value={plano.codigo}
-              />
-            ))}
+        <Picker
+                selectedValue={selectedPlan}
+                onValueChange={(itemValue) => {
+                  console.log("Plano selecionado:", itemValue); 
+                  setSelectedPlan(itemValue);
+                }}
+                style={styles.picker}
+              >
+                <Picker.Item label="Selecione um plano" value="" />
+                {Array.isArray(planos) && planos.length > 0 ? (
+                  planos.map((plano) => (
+                    <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                  ))
+                ) : (
+                  <Picker.Item label="Nenhum plano disponível" value="" />
+                )}
+              </Picker>
 
-          </Picker>
+
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
+            <TouchableOpacity onPress={confirmPlanChange()} style={styles.button}>
               <Text style={styles.buttonText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -214,8 +220,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   userCard: {
-    width: '90%',
-    backgroundColor: '#FF9756',
+    width: 300,
+    backgroundColor: '#fff',
     padding: 15,
     marginVertical: 10,
     borderRadius: 12,
@@ -223,6 +229,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   userInfo: {
     flex: 1,

@@ -9,7 +9,6 @@ import axios from 'axios';
 
 export function CadastroExercicio({ navigation }) {
   const [mediaUri, setMediaUri] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
   const [treinos, setTreinos] = useState([]);
   const [exercicio, setExercicio] = useState({
     nome: '',
@@ -25,9 +24,6 @@ export function CadastroExercicio({ navigation }) {
     fetchTreinos();
   }, []);
 
-  useEffect(() => {
-    console.log(treinos);
-  }, [treinos]);
 
   const requestPermission = async () => {
     if (Platform.OS !== 'web') {
@@ -38,11 +34,20 @@ export function CadastroExercicio({ navigation }) {
     }
   };
 
+
   const fetchTreinos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/treinos');
-      console.log('Resposta da API:', response.data); 
-      setTreinos(response.data);
+      console.log("Resposta da API:", response.data); 
+
+      if (Array.isArray(response.data)) {
+        setTreinos(response.data);
+      } else if (Array.isArray(response.data.Treino)) {
+        setTreinos(response.data.Treino); 
+      } else {
+        console.error('A chave "Treinos" não é um array:', response.data);
+        Alert.alert('Erro', 'Nenhum treino encontrado.');
+      }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os treinos.');
       console.error(error);
@@ -139,49 +144,25 @@ export function CadastroExercicio({ navigation }) {
           keyboardType="numeric"
         />
 
-        <TouchableOpacity style={styles.inputpickers} onPress={() => setModalVisible(true)}>
-          <Text style={styles.placeholderText}>
-            {exercicio.codtreino ? `Treino: ${exercicio.codtreino}` : 'Selecionar Treino'}
-          </Text>
-        </TouchableOpacity>
-
-        <Modal
-          animationType="slide"
-          transparent
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-                <Picker
-                  selectedValue={exercicio.codtreino} 
-                  onValueChange={(itemValue) => {
-                    setExercicio({ ...exercicio, codtreino: itemValue });
-                    setModalVisible(false);
-                  }}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Selecione um treino" value="" />
-                  {Array.isArray(treinos) && treinos.length > 0 ? (
-                    treinos.map((treino) => (
-                      <Picker.Item
-                        key={treino.codigo}
-                        label={treino.nome}
-                        value={treino.codigo}
-                      />
-                    ))
-                  ) : (
-                    <Picker.Item label="Nenhum treino disponível" value="" />
-                  )}
-                </Picker>
+            <Picker
+              selectedValue={exercicio.codtreino}
+              onValueChange={(itemValue) => {
+                setExercicio({ ...exercicio, codtreino: itemValue });
+                console.log('CodTreino selecionado:', itemValue); 
+              }}
+              style={styles.picker}
+            >
+              <Picker.Item label="Selecione um treino" value="" />
+              {treinos.length > 0 ? (
+                treinos.map((treino) => (
+                  <Picker.Item key={treino.codigo} label={treino.nome} value={treino.codigo} />
+                ))
+              ) : (
+                <Picker.Item label="Nenhum treino disponível" value="" />
+              )}
+            </Picker>
 
 
-              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
 
         <TouchableOpacity style={styles.inputpickers} onPress={pickMedia}>
           <Text style={styles.placeholderText}>
@@ -202,6 +183,7 @@ export function CadastroExercicio({ navigation }) {
           <Text style={styles.txtbtn}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 }
@@ -209,14 +191,14 @@ export function CadastroExercicio({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
     marginTop: 30,
@@ -232,7 +214,7 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF914C',
     borderRadius: 12,
     elevation: 2,
     alignItems: 'center',
@@ -258,37 +240,13 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 16,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    alignItems: 'center',
-  },
   picker: {
     width: '100%',
-  },
-  closeButton: {
-    backgroundColor: '#FFB031',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: '#000',
-    fontSize: 16,
   },
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',

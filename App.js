@@ -44,7 +44,6 @@ import { Teste } from './src/Screens/tst';
 export default function App() {
 
   const Stack = createStackNavigator();
-  const Tab = createBottomTabNavigator();
 
 
   return (
@@ -54,52 +53,10 @@ export default function App() {
         <Stack.Screen name="HomeAdmPage"           component={HomeAdmPage}></Stack.Screen>
         <Stack.Screen name="HomeColaboradorPage"   component={HomeColaboradorPage}></Stack.Screen>
         <Stack.Screen name="HomePage"              component={HomePage}></Stack.Screen>
-
-        <Tab.Screen
-          name="ConfigPage"
-          component={ConfigPage}
-          options={{
-            tabBarLabel: 'Configurações', // Título da aba
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
-            ),
-          }}
-        />
-        
-        <Tab.Screen
-          name="TrainPage"
-          component={TrainPage}
-          options={{
-            tabBarLabel: 'Treino', // Título da aba
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
-            ),
-          }}
-        />
-
-        <Tab.Screen
-          name="GoalsPage"
-          component={GoalsPage}
-          options={{
-            tabBarLabel: 'Metas', // Título da aba
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
-            ),
-          }}
-        />
-          
-
-        <Tab.Screen
-          name="NutricaoPage"
-          component={NutricaoPage}
-          options={{
-            tabBarLabel: 'Nutrição', // Título da aba
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="settings" size={size} color={color} />
-            ),
-          }}
-        />
-
+        <Stack.Screen name="ConfigPage"            component={ConfigPage}/>
+        <Stack.Screen name="TrainPage"             component={TrainPage}/>
+        <Stack.Screen name="GoalsPage"             component={GoalsPage}/>
+        <Stack.Screen name="NutricaoPage"          component={NutricaoPage}/>
         <Stack.Screen name="ListaTreinos"          component={ListaTreinos}></Stack.Screen>
         <Stack.Screen name="PlanilhaTreino"        component={PlanilhaExercicios}></Stack.Screen>
         <Stack.Screen name="ResultsPage"           component={ResultsPage}></Stack.Screen>

@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
 
-export function CadastroPlanos() {
-    const navigation = useNavigation();
+export function CadastroPlanos({navigation}) {
     const [plano, setPlano] = useState({
         nome: "",
     });
@@ -56,14 +54,14 @@ export function CadastroPlanos() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 12,
         elevation: 4,
         marginTop: 30,
@@ -79,7 +77,7 @@ const styles = StyleSheet.create({
     body: {
         margin: 20,
         padding: 15,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF914C',
         borderRadius: 12,
         elevation: 2,
         alignItems: 'center',
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
     btn: {
         width: '100%',
         height: 45,
-        backgroundColor: '#E49413',
+        backgroundColor: '#EA5D04',
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',

@@ -14,7 +14,6 @@ export function CadastroTreino() {
   });
 
   const [planos, setPlanos] = useState([]); 
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     fetchPlanos();
@@ -23,13 +22,13 @@ export function CadastroTreino() {
   const fetchPlanos = async () => {
     try {
       const response = await axios.get('http://localhost:3000/planos');
-      console.log("Resposta da API:", response.data); // Inspecionando a resposta da API
+      console.log("Resposta da API:", response.data); 
 
-      // Verifique se a resposta contém um array
+   
       if (Array.isArray(response.data)) {
         setPlanos(response.data);
       } else if (Array.isArray(response.data.Planos)) {
-        setPlanos(response.data.Planos); // Ajuste conforme a estrutura esperada
+        setPlanos(response.data.Planos); 
       } else {
         console.error('A chave "Planos" não é um array:', response.data);
         Alert.alert('Erro', 'Nenhum plano encontrado.');
@@ -79,25 +78,10 @@ export function CadastroTreino() {
           onChangeText={(text) => setTreino({ ...treino, descricao: text })}
         />
         
-        <TouchableOpacity style={styles.inputs} onPress={() => setModalVisible(true)}>
-          <Text style={styles.placeholderText}>
-            {treino.codplano ? `Plano: ${treino.codplano}` : 'Selecionar Plano'}
-          </Text>
-        </TouchableOpacity>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
               <Picker
                 selectedValue={treino.codplano}
                 onValueChange={(itemValue) => {
                   setTreino({ ...treino, codplano: parseInt(itemValue) });
-                  setModalVisible(false);
                 }}
                 style={styles.picker}
               >
@@ -111,12 +95,7 @@ export function CadastroTreino() {
                 )}
               </Picker>
 
-              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+
 
         <TouchableOpacity style={styles.btn} onPress={inserirTreino}>
           <Text style={styles.txtbtn}>Cadastrar</Text>
@@ -129,14 +108,14 @@ export function CadastroTreino() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#E49413',
+    backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
     marginTop: 30,
@@ -153,7 +132,7 @@ const styles = StyleSheet.create({
   body: {
     margin: 20,
     padding: 15,
-    backgroundColor: '#FFB031',
+    backgroundColor: '#FF914C',
     borderRadius: 12,
     elevation: 2,
     alignItems: 'center',
@@ -171,28 +150,9 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 16,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
   picker: {
-    height: 150,
+    height: '10%',
     width: '100%',
-  },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#FFB031',
-    borderRadius: 10,
   },
   closeButtonText: {
     color: '#000',
@@ -201,7 +161,7 @@ const styles = StyleSheet.create({
   btn: {
     width: '100%',
     height: 45,
-    backgroundColor: '#E49413',
+    backgroundColor: '#EA5D04',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',

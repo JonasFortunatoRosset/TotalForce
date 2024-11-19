@@ -19,7 +19,6 @@ export function CadastroLogin({ navigation }) {
     status: 'Em Análise',
   });
 
-  const [modalVisible, setModalVisible] = useState(false);
 
   const verificarCamposEtapa1 = () => {
     const { nome, login, senha } = usuario;
@@ -39,7 +38,7 @@ export function CadastroLogin({ navigation }) {
   const inserirUsuarios = async () => {
     try {
       await axios.post('http://localhost:3000/usuarios', usuario);
-
+      Alert.alert("Seu cadastro foi concluído. Aguarde a confirmação de um administrador para realizar login.")
       setUsuario({
         nome: '',
         login: '',
@@ -49,7 +48,7 @@ export function CadastroLogin({ navigation }) {
         altura: '',
       });
 
-      setModalVisible(true); 
+
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível cadastrar o usuário.');
       console.error(error);
@@ -138,25 +137,7 @@ export function CadastroLogin({ navigation }) {
         </View>
       )}
   
-      <Modal animationType="slide" transparent visible={modalVisible}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Parabéns!</Text>
-            <Text style={styles.modalMessage}>
-              Seu cadastro foi concluído. Aguarde a confirmação de um administrador para realizar login.
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('LoginPage');
-              }}
-            >
-              <Text style={styles.modalButtonText}>Entendi!</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+    
     </SafeAreaView>
   );
   
@@ -246,38 +227,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    width: '80%',
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#E49413',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-  },
-  modalButtonText: {
-    fontSize: 18,
-    color: '#000',
   },
 });

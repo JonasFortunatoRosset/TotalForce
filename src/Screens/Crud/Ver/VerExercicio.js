@@ -1,25 +1,65 @@
 import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { Video } from 'expo-av';
+import { Picker } from 'react-native-web';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+
 
 export function VerExercicio() {
     const navigation = useNavigation();
+    const [treinos, setTreinos] = useState([]);
+    const [video,setVideo] = useState(null)
     const [exercicio, setExercicio] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [dataModalVisible, setDataModalVisible] = useState(false);
     const [dataExercicios, setDataExercicios] = useState({
         codigo: "",
         nome: "",
         descricao: "",
-        codtreino: ""
+        serie: "",
+        repeticoes: "",
+        codtreino: "",
+        video: "",
     });
+
+    useEffect(() => {
+        fetchTreinos();
+      }, []);
+
+    const toggleModal = () => {
+        setDataModalVisible(!dataModalVisible);
+    };
+
+    const fetchTreinos = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/treinos');
+          console.log("Resposta da API:", response.data); 
+    
+          if (Array.isArray(response.data)) {
+            setTreinos(response.data);
+          } else if (Array.isArray(response.data.Treino)) {
+            setTreinos(response.data.Treino); 
+          } else {
+            console.error('A chave "Treinos" não é um array:', response.data);
+            Alert.alert('Erro', 'Nenhum treino encontrado.');
+          }
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível carregar os treinos.');
+          console.error(error);
+        }
+      };
 
     const carregarExercicios = async () => {
         try {
             const response = await axios.get('http://localhost:3000/exercicios');
+            const base64Video = response.data.video;
+
+            setVideo(`data:video/mp4;base64,${base64Video}`);
             setExercicio(response.data.Exercicio);
         } catch (error) {
             console.error('Erro ao carregar exercícios:', error);
@@ -43,7 +83,7 @@ export function VerExercicio() {
             carregarExercicios();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-            setDataExercicios({ codigo: "", nome: "", descricao: "", codtreino: "" });
+            setDataExercicios({ codigo: "", nome: "", descricao: "",serie: "",repeticoes:"", codtreino: ""});
         } catch (error) {
             console.error('Erro ao atualizar exercícios:', error);
         }
@@ -93,28 +133,72 @@ export function VerExercicio() {
                     data={exercicio}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
+
                         <View style={styles.itemContainer}>
-                            <View style={styles.dados}>
-                                <Text style={styles.itemText}>Código: {item.codigo}</Text>
-                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Descrição: {item.descricao}</Text>
-                                <Text style={styles.itemText}>Código do treino: {item.codtreino}</Text>
-                            </View>
-
-                            <View style={styles.icons}>
-                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <Feather name="trash-2" size={40} color="black" />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={40} color="black" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                            <Text style={styles.itemText}>{item.nome}</Text>
+                            <MaterialCommunityIcons name="dumbbell" size={29} color="#EA5D04" />
+                        </TouchableOpacity>
+                    </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+            visible={dataModalVisible}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={toggleModal}
+            >
+
+                <FlatList
+                    data={exercicio}
+                    keyExtractor={(item) => item.codigo.toString()}
+                    renderItem={({ item }) => (
+
+                        <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                            <AntDesign name="close" size={24} color="#EB6808" />
+                          </TouchableOpacity>
+                                 <Text style={styles.modalTitle}>Dados do Exercício</Text>
+                                 <Text style={styles.modalText}>Código: {item.codigo}</Text>
+                                 <Text style={styles.modalText}>Nome: {item.nome}</Text>
+                                 <Text style={styles.modalText}>Descrição: {item.descricao}</Text>
+                                 <Text style={styles.modalText}>Séries: {item.serie}</Text>
+                                 <Text style={styles.modalText}>repetições: {item.repeticoes}</Text>
+                                 <Text style={styles.modalText}>Código do treino: {item.codtreino}</Text>
+
+                                 <Video
+                                 source={{ uri: video }}
+                                 rate={1.0}
+                                 volume={1.0}
+                                 isMuted={true}
+                                 resizeMode="contain"
+                                 shouldPlay
+                                 isLooping
+                                 style={styles.video}
+                                 />
+            
+                          <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                <Feather name="trash-2" size={40} color="black" />
+                            </TouchableOpacity>
+            
+                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                                <FontAwesome name="pencil" size={40} color="black" />
+                            </TouchableOpacity>
+                          </View>
+            
+                        </View>
+                      </View>
+
+ 
+                )}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                />
+            </Modal>
 
             <Modal
                 animationType="slide"
@@ -150,10 +234,34 @@ export function VerExercicio() {
                                 />
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="CodTreino"
-                                    value={dataExercicios.codtreino}
-                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, codtreino: text })}
+                                    placeholder="Séries"
+                                    value={dataExercicios.serie}
+                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, serie: text })}
                                 />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Repetições"
+                                    value={dataExercicios.repeticoes}
+                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, repeticoes: text })}
+                                />
+
+                                <Picker
+                                selectedValue={dataExercicios.codtreino}
+                                onValueChange={(itemValue) => {
+                                    setDataExercicios({ ...dataExercicios, codtreino: itemValue });
+                                    console.log('CodTreino selecionado:', itemValue); 
+                                  }}
+                                style={styles.picker}
+                                >
+                                <Picker.Item label="Selecione um treino" value="" />
+                                {treinos.length > 0 ? (
+                                    treinos.map((treino) => (
+                                    <Picker.Item key={treino.codigo} label={treino.nome} value={treino.codigo} />
+                                    ))
+                                ) : (
+                                    <Picker.Item label="Nenhum treino disponível" value="" />
+                                )}
+                                </Picker>
                             </View>
 
                             <View style={styles.btnContainer}>
@@ -176,14 +284,14 @@ export function VerExercicio() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 12,
         elevation: 4,
         marginTop: 30,
@@ -201,29 +309,31 @@ const styles = StyleSheet.create({
     icons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '30%',
-    },
-    dados: {
-        flexDirection: 'column',
-        padding: 5,
-        height: '100%',
+        marginTop: '5%',
     },
     itemContainer: {
+        marginBottom: 20,
+    },
+    dados: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
-    },
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
     itemText: {
-        color: '#fff',
+        color: '#000',
         fontSize: 16,
-        marginBottom: 5,
-    },
+      },
     separator: {
         height: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -234,7 +344,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
         padding: 20,
         shadowColor: '#000',
@@ -243,7 +353,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         padding: 15,
         alignItems: 'center',
     },
@@ -266,7 +376,7 @@ const styles = StyleSheet.create({
         height: 40,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',
@@ -288,9 +398,40 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnSave: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
     btnCancel: {
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
     },
+    video: {
+        width: '80%',
+        height: 300,
+      },
+      modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      closeIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1, 
+      },
 });

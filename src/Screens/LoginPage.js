@@ -102,11 +102,11 @@ export function LoginPage({ navigation }) {
               <Text style={[styles.txttipos, { color: Click === 1 ? '#fff' : '#EA5D04' }]}>User</Text>
             </Pressable>
             <Pressable onPress={() => setClick(2)} style={[styles.logs, { backgroundColor: Click === 2 ? '#FF914C' : '#fff' }]}>
-              <Ionicons name="people" size={50} color={Click === 2 ? '#fff' : '#EA5D04'} />
+              <FontAwesome5 name="chalkboard-teacher" size={50} color={Click === 2 ? '#fff' : '#EA5D04'} />
               <Text style={[styles.txttipos, { color: Click === 2 ? '#fff' : '#EA5D04' }]}>Personal</Text>
             </Pressable>
             <Pressable onPress={() => setClick(3)} style={[styles.logs, { backgroundColor: Click === 3 ? '#FF914C' : '#fff' }]}>
-              <FontAwesome5 name="chalkboard-teacher" size={50} color={Click === 3 ? '#fff' : '#EA5D04'} />  
+              <Ionicons name="people" size={50} color={Click === 3 ? '#fff' : '#EA5D04'} />  
               <Text style={[styles.txttipos, { color: Click === 3 ? '#fff' : '#EA5D04' }]}>Admin</Text>
             </Pressable>
           </View>

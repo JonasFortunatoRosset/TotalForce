@@ -5,12 +5,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Feather from '@expo/vector-icons/Feather';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';  
-import { useNavigation } from '@react-navigation/native';
 
-export function VerColaborador({}) {
-    const navigation = useNavigation();
+export function VerColaborador({navigation}) {
     const [colaborador, setColaborador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [dataModalVisible, setDataModalVisible] = useState(false);
     const [dataColaborador, setDataColaborador] = useState({
         nome: "",
         cpf: "",
@@ -20,6 +19,10 @@ export function VerColaborador({}) {
         login: "",
         status: "",
     });
+
+    const toggleModal = () => {
+        setDataModalVisible(!dataModalVisible);
+      };
 
     const carregarColaboradores = async () => {
         try {
@@ -95,27 +98,59 @@ export function VerColaborador({}) {
                     data={colaborador}
                     keyExtractor={(item) => item.cpf.toString()}
                     renderItem={({ item }) => (
+
                         <View style={styles.itemContainer}>
-                            <View style={styles.dados}>
-                                <Text style={styles.itemText}>Nome: {item.nome}</Text>
-                                <Text style={styles.itemText}>Cpf: {item.cpf}</Text>
-                                <Text style={styles.itemText}>Endereço: {item.endereco}</Text>
-                                <Text style={styles.itemText}>Senha: {item.senha}</Text>
-                                <Text style={styles.itemText}>Status: {item.status}</Text>
-                            </View>
-                            <View style={styles.icons}>
-                                <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                    <Feather name="trash-2" size={30} color="black" />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleEdit(item)}>
-                                    <FontAwesome name="pencil" size={30} color="black" />
-                                </TouchableOpacity>
-                            </View>
+                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                            <Text style={styles.itemText}>{item.nome}</Text>
+                            <Ionicons name="chalkboard-teacher" size={29} color={'#EA5D04'} />
+                        </TouchableOpacity>
                         </View>
                     )}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
+
+            <Modal
+          visible={dataModalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={toggleModal}
+        >
+
+                <FlatList
+                    data={colaborador}
+                    keyExtractor={(item) => item.cpf.toString()}
+                    renderItem={({ item }) => (
+
+                        <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                            <AntDesign name="close" size={24} color="#EB6808" />
+                          </TouchableOpacity>
+                          <Text style={styles.modalTitle}>Dados do Administrador   </Text>
+                          <Text style={styles.modalText}>CPF:      {item.cpf}      </Text>
+                          <Text style={styles.modalText}>Endereço: {item.endereco} </Text>
+                          <Text style={styles.modalText}>Senha:    {item.senha}    </Text>
+                          <Text style={styles.modalText}>Status:   {item.status}   </Text>
+            
+                          <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                                <Feather name="trash-2" size={40} color="black" />
+                            </TouchableOpacity>
+            
+                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                                <FontAwesome name="pencil" size={40} color="black" />
+                            </TouchableOpacity>
+                          </View>
+            
+                        </View>
+                      </View>
+
+ 
+                    )}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                />
+        </Modal>
 
             <Modal
                 animationType="slide"
@@ -211,29 +246,31 @@ const styles = StyleSheet.create({
     icons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '30%',
-    },
-    dados: {
-        flexDirection: 'column',
-        padding: 5,
-        height: '100%',
+        marginTop: '5%',
     },
     itemContainer: {
+        marginBottom: 20,
+    },
+    dados: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         borderRadius: 8,
-    },
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
     itemText: {
         color: '#000',
         fontSize: 16,
-        marginBottom: 5,
-    },
+      },
     separator: {
         height: 1,
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF9756',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -253,7 +290,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     ModalHeader: {
-        backgroundColor: '#FFB031',
+        backgroundColor: '#fff',
         padding: 15,
         alignItems: 'center', 
     },
@@ -298,9 +335,36 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnSave: {
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF9756',
     },
     btnCancel: {
-        backgroundColor: '#FFB031',
+        backgroundColor: '#FF9756',
     },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 16,
+        marginBottom: 5,
+      },
+      closeIcon: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1, 
+      },
 });

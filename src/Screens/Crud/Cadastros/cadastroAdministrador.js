@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -11,7 +11,7 @@ export function CadastroAdministrador({ navigation }) {
     senha: '',
   });
 
-  const [modalVisible, setModalVisible] = useState(false);
+
 
   const inserirAdministrador = async () => {
     try {
@@ -23,7 +23,6 @@ export function CadastroAdministrador({ navigation }) {
 
       Alert.alert('Sucesso', 'Administrador cadastrado!');
       setAdministrador({ nome: '', cpf: '', login: '', senha: '' });
-      setModalVisible(true); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível cadastrar o administrador.');
       console.error(error);
@@ -79,25 +78,7 @@ export function CadastroAdministrador({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <Modal animationType="slide" transparent visible={modalVisible}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Parabéns!</Text>
-            <Text style={styles.modalMessage}>
-              O cadastro do administrador foi concluído com sucesso.
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('LoginPage');
-              }}
-            >
-              <Text style={styles.modalButtonText}>Entendi!</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+
     </View>
   );
 }
@@ -153,39 +134,6 @@ const styles = StyleSheet.create({
   txtbtn: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalMessage: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#EA5D04',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-  },
-  modalButtonText: {
-    fontSize: 18,
     color: '#000',
   },
 });
