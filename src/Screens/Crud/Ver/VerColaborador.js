@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Feather from '@expo/vector-icons/Feather';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';  
 
-export function VerColaborador({navigation}) {
+export function VerColaborador({ navigation }) {
     const [colaborador, setColaborador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
@@ -19,10 +20,11 @@ export function VerColaborador({navigation}) {
         login: "",
         status: "",
     });
+    const [selectedColaborador, setSelectedColaborador] = useState(null);
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
-      };
+    };
 
     const carregarColaboradores = async () => {
         try {
@@ -40,6 +42,11 @@ export function VerColaborador({navigation}) {
     const handleEdit = (col) => {
         setDataColaborador(col);
         setModalVisible(true);
+    };
+
+    const handleView = (col) => {
+        setSelectedColaborador(col);
+        setDataModalVisible(true);
     };
 
     const handleUpdate = async () => {
@@ -82,7 +89,6 @@ export function VerColaborador({navigation}) {
             ]
         );
     };
-    
 
     return (
         <View style={styles.container}>
@@ -98,60 +104,49 @@ export function VerColaborador({navigation}) {
                     data={colaborador}
                     keyExtractor={(item) => item.cpf.toString()}
                     renderItem={({ item }) => (
-
                         <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
-                            <Text style={styles.itemText}>{item.nome}</Text>
-                            <Ionicons name="chalkboard-teacher" size={29} color={'#EA5D04'} />
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.dados} onPress={() => handleView(item)}>
+                                <Text style={styles.itemText}>{item.nome}</Text>
+                                <FontAwesome5 name="chalkboard-teacher" size={29} color={'#EA5D04'} />
+                            </TouchableOpacity>
                         </View>
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
+            {/* Modal de Visualização */}
             <Modal
-          visible={dataModalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={toggleModal}
-        >
-
-                <FlatList
-                    data={colaborador}
-                    keyExtractor={(item) => item.cpf.toString()}
-                    renderItem={({ item }) => (
-
-                        <View style={styles.modalBackground}>
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}>
+                {selectedColaborador && (
+                    <View style={styles.modalBackground}>
                         <View style={styles.modalContainer}>
-                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
-                            <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                          <Text style={styles.modalTitle}>Dados do Administrador   </Text>
-                          <Text style={styles.modalText}>CPF:      {item.cpf}      </Text>
-                          <Text style={styles.modalText}>Endereço: {item.endereco} </Text>
-                          <Text style={styles.modalText}>Senha:    {item.senha}    </Text>
-                          <Text style={styles.modalText}>Status:   {item.status}   </Text>
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                <Feather name="trash-2" size={40} color="black" />
+                            <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                                <AntDesign name="close" size={24} color="#EB6808" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
-                                <FontAwesome name="pencil" size={40} color="black" />
-                            </TouchableOpacity>
-                          </View>
-            
+                            <Text style={styles.modalTitle}>Dados do Colaborador</Text>
+                            <Text style={styles.modalText}>Nome: {selectedColaborador.nome}</Text>
+                            <Text style={styles.modalText}>CPF: {selectedColaborador.cpf}</Text>
+                            <Text style={styles.modalText}>Endereço: {selectedColaborador.endereco}</Text>
+                            <Text style={styles.modalText}>Senha: {selectedColaborador.senha}</Text>
+                            <Text style={styles.modalText}>Status: {selectedColaborador.status}</Text>
+
+                            <View style={styles.icons}>
+                                <TouchableOpacity onPress={() => handleDelete(selectedColaborador.codigo)}>
+                                    <Feather name="trash-2" size={40} color="black" />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEdit(selectedColaborador)}>
+                                    <FontAwesome name="pencil" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                      </View>
+                    </View>
+                )}
+            </Modal>
 
- 
-                    )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
-                />
-        </Modal>
-
+            {/* Modal de Edição */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -217,6 +212,7 @@ export function VerColaborador({navigation}) {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {

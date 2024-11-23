@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import axios from 'axios'; 
+import Feather from '@expo/vector-icons/Feather';
+import axios from 'axios';
 
-export function VerAdministrador({navigation}) {
+export function VerAdministrador({ navigation }) {
     const [administrador, setAdministrador] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
@@ -13,22 +14,22 @@ export function VerAdministrador({navigation}) {
         login: "",
         nome: "",
         cpf: "",
-        login: "",
-        senha: ""
+        senha: "",
+        codigo: ""
     });
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
-      };
+    };
 
     const carregarAdministradores = async () => {
         axios.get('http://localhost:3000/administradores')
-        .then(response => {
-            setAdministrador(response.data.administrador);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar administradores:', error);
-        });
+            .then(response => {
+                setAdministrador(response.data.administrador);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar administradores:', error);
+            });
     };
 
     useEffect(() => {
@@ -43,17 +44,15 @@ export function VerAdministrador({navigation}) {
     const handleUpdate = async () => {
         axios.put('http://localhost:3000/administradores', dataAdministrador, {
             params: { codigo: dataAdministrador.codigo },
-
-
         })
-        .then(response => {
-            carregarAdministradores();
-            setModalVisible(false);
-            Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar administrador:', error);
-        });
+            .then(response => {
+                carregarAdministradores();
+                setModalVisible(false);
+                Alert.alert("Sucesso", "Alterações salvas com sucesso!");
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar administrador:', error);
+            });
     };
 
     const handleDelete = (codigo) => {
@@ -71,14 +70,14 @@ export function VerAdministrador({navigation}) {
                         axios.delete('http://localhost:3000/administradores', {
                             params: { codigo },
                         })
-                        .then(response => {
-                            setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
-                            Alert.alert("Sucesso", "Administrador excluído com sucesso!");
-                        })
-                        .catch(error => {
-                            console.error('Erro ao deletar administrador:', error);
-                            Alert.alert("Erro", "Não foi possível excluir o administrador.");
-                        });
+                            .then(response => {
+                                setAdministrador(administrador.filter(administrador => administrador.codigo !== codigo));
+                                Alert.alert("Sucesso", "Administrador excluído com sucesso!");
+                            })
+                            .catch(error => {
+                                console.error('Erro ao deletar administrador:', error);
+                                Alert.alert("Erro", "Não foi possível excluir o administrador.");
+                            });
                     },
                     style: "destructive"
                 }
@@ -86,7 +85,6 @@ export function VerAdministrador({navigation}) {
             { cancelable: false }
         );
     };
-    
 
     return (
         <View style={styles.container}>
@@ -98,65 +96,57 @@ export function VerAdministrador({navigation}) {
             </View>
 
             <View style={styles.body}>
-
                 <FlatList
                     data={administrador}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-
                         <View style={styles.itemContainer}>
-                            <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                            <TouchableOpacity
+                                style={styles.dados}
+                                onPress={() => {
+                                    setDataAdministrador(item);
+                                    toggleModal();
+                                }}>
                                 <Text style={styles.itemText}>{item.nome}</Text>
                                 <Ionicons name="people" size={29} color={'#EA5D04'} />
                             </TouchableOpacity>
                         </View>
-                                                  
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
-        <Modal
-          visible={dataModalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={toggleModal}
-        >
-
-                <FlatList
-                    data={administrador}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
-
-                        <View style={styles.modalBackground}>
-                        <View style={styles.modalContainer}>
+            {/* Modal para exibir os detalhes do administrador */}
+            <Modal
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}>
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
                             <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                          <Text style={styles.modalTitle}>Dados do Administrador</Text>
-                          <Text style={styles.modalText}>CPF:   {item.cpf}   </Text>
-                          <Text style={styles.modalText}>Login: {item.login} </Text>
-                          <Text style={styles.modalText}>Senha: {item.senha} </Text>
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                        </TouchableOpacity>
+                        <Text style={styles.modalTitle}>Dados do Administrador</Text>
+                        {dataAdministrador && (
+                            <>
+                                <Text style={styles.modalText}>CPF:   {dataAdministrador.cpf}</Text>
+                                <Text style={styles.modalText}>Login: {dataAdministrador.login}</Text>
+                                <Text style={styles.modalText}>Senha: {dataAdministrador.senha}</Text>
+                            </>
+                        )}
+                        <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(dataAdministrador.codigo)}>
                                 <Feather name="trash-2" size={40} color="black" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                            <TouchableOpacity onPress={() => handleEdit(dataAdministrador)}>
                                 <FontAwesome name="pencil" size={40} color="black" />
                             </TouchableOpacity>
-                          </View>
-            
                         </View>
-                      </View>
+                    </View>
+                </View>
+            </Modal>
 
- 
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-    />
-        </Modal>
-
+            {/* Modal para edição do administrador */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -187,18 +177,11 @@ export function VerAdministrador({navigation}) {
                                     value={dataAdministrador.login}
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, login: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Senha"
                                     value={dataAdministrador.senha}
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, senha: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Login"
-                                    value={dataAdministrador.login}
-                                    onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, login: text })}
                                 />
                             </View>
                             <View style={styles.btnContainer}>
@@ -218,7 +201,6 @@ export function VerAdministrador({navigation}) {
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

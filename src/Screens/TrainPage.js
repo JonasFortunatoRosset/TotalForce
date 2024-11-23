@@ -6,38 +6,34 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function TrainPage({ navigation }) {
-  const [dados, setDados] = useState(null);
-  const [planos, setPlanos] = useState([])
-  const [codPlano, setCodPlano] = useState(''); 
+  const [dados, setDados] = useState(null); 
+  const [codplano, setCodplano] = useState();
 
+  const Navegacao = (plano) => {     // verificação de navegação
 
-  const Navegação = (plano) => {     // verificação de navegação
-
-    if(plano.codigo === codPlano){
-      navigation.navigate('ListaTreinos',{codPlano})
+    if(plano.codigo === codplano){
+      navigation.navigate('ListaTreinos')
     }
     else{
       Alert.alert("Acesso Negado", "Este plano está bloqueado.");
     }
-
+    
   }
 
   const carregarPlanos = async () => {   // coleta de todos os dados
     try {
-      const response = await axios.get('http://localhost:3000/pesquisartreinos');
-      console.log('Dados recebidos:', response.data);
+      const codusuario = await AsyncStorage.getItem('codusuario');
+      const response = await axios.get('http://192.168.0.100:3000/pesquisartreinos', {
+        params: { codigo: codusuario }
+      });
       setDados(response.data);
-
-      const planosRecebidos = response.data.Plano;
-      console.log('Planos armazenados:', planosRecebidos); 
-      setPlanos(planosRecebidos);
-
-      const planoUsuario = response.data.Plano_usuario;
-      console.log('Plano do usuário:', planoUsuario);
-      setCodPlano(planoUsuario); 
-
+      const response2 = await axios.get('http://192.168.0.100:3000/pesquisarcodplanousuarios', {
+        params: { codigo: codusuario }
+      });
+      setCodplano(response2.data.codplano);
+      console.log('meu codplano: ', )
+      console.log('Dados recebidos:', codplano);
       await AsyncStorage.setItem('dadosPlanos', JSON.stringify(response.data));
-      console.log('Dados salvos no AsyncStorage');
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
       Alert.alert('Erro', 'Não foi possível carregar os planos.');
@@ -62,14 +58,13 @@ export function TrainPage({ navigation }) {
         <Text style={styles.txtheader}>Planos</Text>
       </View>
       <View style={styles.body}>
-
-        {planos && planos.map((plano) => (    // Mostar todos os planos
+        {dados?.Plano && dados.Plano.map((plano) => (    // Mostar todos os planos
           <View style={styles.planosBody} key={plano.codigo} >
-            <TouchableOpacity onPress={() => Navegação(plano)} style={styles.planoBtn} >
+            <TouchableOpacity onPress={() => Navegacao(plano)} style={styles.planoBtn} >
               <Text style={styles.txtPlano}>
                 {plano.nome} 
               </Text>
-              {plano.codigo !== codPlano ? (
+              {plano.codigo !== codplano ? (
                 <FontAwesome name="lock" size={45} color="#EA5D04" />  // Exibe cadeado se os códigos forem diferentes
               ) : (
                 <FontAwesome name="arrow-right" size={45} color="#EA5D04" /> // Exibe seta se os códigos forem iguais

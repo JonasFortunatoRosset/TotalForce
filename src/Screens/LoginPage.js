@@ -43,7 +43,7 @@ export function LoginPage({ navigation }) {
 
   const loginUsuario = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/loginusuarios', {
+      const response = await axios.post('http://192.168.0.100:3000/loginusuarios', {
         login: dados.login,
         senha: dados.senha,
       });
@@ -55,7 +55,7 @@ export function LoginPage({ navigation }) {
 
   const loginAdministrador = async () => {
     try {
-      const response = await axios.post('http://10.32.0.45:3000/loginadministradores', {
+      const response = await axios.post('http://localhost:3000/loginadministradores', {
         login: dados.login,
         senha: dados.senha,
       });

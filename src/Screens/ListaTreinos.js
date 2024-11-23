@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function ListaTreinos({ route, navigation }) {
-  const { codplano } = route.params; // Pega o código do plano passado pela outra tela
-  const [data, setData] = useState([])
+export function ListaTreinos({ navigation }) {
+  const [treinos, setTreinos] = useState([]);
 
   const BuscarTreinos = async () => {
     try {
       const data = await AsyncStorage.getItem('dadosPlanos');
       if (data !== null) {
-        setData(JSON.parse(data)); 
+        const parsedData = JSON.parse(data);
+        const treinoList = [];
+
+        // Pega apenas os treinos (Treino1, Treino2, ...)
+        Object.keys(parsedData).forEach((key) => {
+          if (key.startsWith('Treino')) {
+            treinoList.push(parsedData[key]);
+          }
+        });
+
+        // Ordenar a lista de treinos (caso necessário)
+        setTreinos(treinoList.sort()); // Ordena alfabeticamente
       } else {
         console.log('Nenhum dado encontrado');
       }
@@ -18,8 +29,6 @@ export function ListaTreinos({ route, navigation }) {
       console.error('Erro ao buscar os dados:', error);
     }
   };
-
-
 
   useEffect(() => {
     BuscarTreinos();
@@ -35,27 +44,19 @@ export function ListaTreinos({ route, navigation }) {
         >
           <AntDesign name="arrowleft" size={30} color="black" />
         </TouchableHighlight>
-        <Text style={styles.txtheader}>Planos</Text>
+        <Text style={styles.txtheader}>Treinos</Text>
       </View>
 
       <View style={styles.body}>
-        <TouchableOpacity style={styles.planoButton} onPress={() => navigation.navigate('PlanilhaTreino', {codplano})}>
-          <Text style={styles.txtPlano}>
-            {data.Treino1}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.planoButton}>
-          <Text style={styles.txtPlano}>
-            {data.Treino2}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.planoButton}>
-          <Text style={styles.txtPlano}>
-            {data.Treino3}
-          </Text>
-        </TouchableOpacity>
+        {treinos.map((treino, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.planoButton}
+            onPress={() => navigation.navigate('PlanilhaTreino', { treino, index })}
+          >
+            <Text style={styles.txtPlano}>{treino}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
@@ -64,14 +65,14 @@ export function ListaTreinos({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffff',
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFB031',
+    backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 12,
@@ -89,22 +90,27 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems: 'center', // Centraliza os itens horizontalmente
   },
   planoButton: {
-    width: '100%',
-    paddingVertical: 15,
+    width: '80%',
+    paddingVertical: 8,
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 12,
-    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#E49413',
-    elevation: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   txtPlano: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 27,
+    fontWeight: 'bold',
     color: '#000',
   },
 });

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
 
@@ -70,7 +71,6 @@ export function VerUsuario({ navigation }) {
 
     useEffect(() => {
         carregarUsuarios();
-        buscarPlanos(); 
     }, []);
 
     const handleEdit = (use) => {
@@ -166,7 +166,6 @@ export function VerUsuario({ navigation }) {
                     </View>
 
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
@@ -178,7 +177,7 @@ export function VerUsuario({ navigation }) {
         >
 
                 <FlatList
-                    data={administrador}
+                    data={usuario}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
 
@@ -212,7 +211,6 @@ export function VerUsuario({ navigation }) {
 
  
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
         </Modal>
 

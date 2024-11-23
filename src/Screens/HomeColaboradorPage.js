@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity, FlatList, Alert, Modal, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import EvilIcons from '@expo/vector-icons/EvilIcons'; 
-import logoTotal from './Images/logoTotal.png';
 import axios from 'axios';
 
 export function HomeColaboradorPage({ navigation }) {
@@ -13,6 +12,7 @@ export function HomeColaboradorPage({ navigation }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [selectedUserCode, setSelectedUserCode] = useState(null);  // Armazenar código do usuário selecionado
 
   const fetchPlanos = async () => {
     try {
@@ -44,22 +44,34 @@ export function HomeColaboradorPage({ navigation }) {
     }
   };
 
-  const updateCodPlano = async (novoCodPlano) => {
+  const updateCodPlano = async (novoCodPlano, codusuario) => {
+    if (!novoCodPlano || !codusuario) {
+      Alert.alert('Erro', 'Plano ou usuário não selecionado corretamente.');
+      return;
+    }
+  
     try {
-      await axios.put('http://localhost:3000/usuarios', {
+      const response = await axios.put('http://localhost:3000/usuarios', {
+        codigo: codusuario,
         codplano: novoCodPlano,
       });
-      Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
-      fetchUsuarios();
+      
+      if (response.status === 200) {
+        Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
+        fetchUsuarios(); // Atualiza a lista de usuários
+      }
     } catch (error) {
-      console.error('Erro ao atualizar o plano:', error);
-      Alert.alert('Erro', 'Não foi possível atualizar o plano.');
+      console.log("Resposta da API:", codusuario,novoCodPlano);
+      console.error('Erro ao atualizar o plano:', error.response?.data || error.message);
+      Alert.alert('Erro', `Erro ao atualizar o plano: ${error.response?.data?.message || 'Verifique os dados enviados.'}`);
     }
+    
   };
+  
 
   const confirmPlanChange = () => {
-    if (selectedPlan) {
-      updateCodPlano(selectedPlan);
+    if (selectedPlan && selectedUserCode) {
+      updateCodPlano(selectedPlan, selectedUserCode);  // Usando selectedUserCode
       setModalVisible(false);
     } else {
       Alert.alert('Erro', 'Por favor, selecione um plano.');
@@ -78,11 +90,6 @@ export function HomeColaboradorPage({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    fetchUsuarios();
-    fetchPlanos();
-  }, []);
-
   const renderItem = ({ item }) => (
     <View style={styles.userCard}>
       <View style={styles.userInfo}>
@@ -90,7 +97,10 @@ export function HomeColaboradorPage({ navigation }) {
         <Text style={styles.userPlan}>Plano Atual: {item.codplano}</Text>
       </View>
       <TouchableHighlight
-        onPress={() => handlePlanChange(item.codigo)}
+        onPress={() => {
+          setModalVisible(true);
+          setSelectedUserCode(item.codigo);  // Passa o código do usuário selecionado
+        }}
         underlayColor={null}
         style={styles.changePlanButton}
       >
@@ -100,6 +110,11 @@ export function HomeColaboradorPage({ navigation }) {
       </TouchableHighlight>
     </View>
   );
+
+  useEffect(() => {
+    fetchUsuarios();
+    fetchPlanos();
+  }, []); 
 
   return (
     <View style={styles.container}>
@@ -126,10 +141,6 @@ export function HomeColaboradorPage({ navigation }) {
         />
       </View>
 
-      <View style={styles.footer}>
-        <Image style={styles.imgFooter} source={logoTotal} />
-      </View>
-
       <Modal
         transparent={true}
         animationType="slide"
@@ -137,27 +148,27 @@ export function HomeColaboradorPage({ navigation }) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-        <Picker
-                selectedValue={selectedPlan}
-                onValueChange={(itemValue) => {
-                  console.log("Plano selecionado:", itemValue); 
-                  setSelectedPlan(itemValue);
-                }}
-                style={styles.picker}
-              >
-                <Picker.Item label="Selecione um plano" value="" />
-                {Array.isArray(planos) && planos.length > 0 ? (
-                  planos.map((plano) => (
-                    <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                  ))
-                ) : (
-                  <Picker.Item label="Nenhum plano disponível" value="" />
-                )}
-              </Picker>
-
+          <Picker
+            selectedValue={selectedPlan}
+            onValueChange={(itemValue) => {
+              setSelectedPlan(itemValue);
+              console.log('Código do Usuário:', selectedUserCode);  // Exibe o código do usuário no console
+              console.log('Plano Selecionado:', itemValue);  // Exibe o plano selecionado no console
+            }}
+            style={styles.picker}
+          >
+            <Picker.Item label="Selecione um plano" value="" />
+            {Array.isArray(planos) && planos.length > 0 ? (
+              planos.map((plano) => (
+                <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+              ))
+            ) : (
+              <Picker.Item label="Nenhum plano disponível" value="" />
+            )}
+          </Picker>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={confirmPlanChange()} style={styles.button}>
+            <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
               <Text style={styles.buttonText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
