@@ -6,6 +6,7 @@ import { Video } from 'expo-av';
 import { Picker } from '@react-native-picker/picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroExercicio({ navigation }) {
   const [mediaUri, setMediaUri] = useState(null);
@@ -37,7 +38,7 @@ export function CadastroExercicio({ navigation }) {
 
   const fetchTreinos = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/treinos');
+      const response = await axios.get(`http://${apiRoute}:3000/treinos`);
       console.log("Resposta da API:", response.data); 
 
       if (Array.isArray(response.data)) {
@@ -81,7 +82,7 @@ export function CadastroExercicio({ navigation }) {
 
   const inserirExercicio = async () => {
     try {
-      await axios.post('http://localhost:3000/exercicios', { ...exercicio }, {
+      await axios.post(`http://${apiRoute}:3000/exercicios`, { ...exercicio }, {
         headers: { 'Content-Type': 'application/json' }
       });
       Alert.alert('Sucesso', 'Exercício cadastrado com sucesso!');

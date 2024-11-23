@@ -1,18 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight,ScrollView } from 'react-native';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import dumbel from './Images/dumbel.png';
 import nutricao from './Images/nutricao.png';
 
 export function HomePage({ navigation }) {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-        <EvilIcons name="user" size={60} color="black" />
       </View>
 
       
@@ -61,9 +61,20 @@ export function HomePage({ navigation }) {
               <MaterialCommunityIcons name="checkbox-multiple-marked-outline" size={125} color="black" />
             </View>
           </TouchableHighlight>
+
+          <TouchableHighlight 
+            onPress={() => navigation.navigate('ConfigPage')} 
+            underlayColor={'#855200'} 
+            style={styles.boxHighlight}
+          >
+            <View style={styles.box}>
+              <Text style={styles.boxText}>Configurações</Text>
+              <FontAwesome name="gear" size={120} color="black" />
+            </View>
+          </TouchableHighlight>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -76,13 +87,13 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FF9756',
     paddingVertical: 15,
-    paddingHorizontal: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    padding: 10,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent:'center',
     elevation: 4,
     borderRadius: 12,
-    marginTop: 25,
+    marginTop: 30,
   },
   txtheader: {
     fontSize: 24,

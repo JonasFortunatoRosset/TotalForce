@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroColaborador({ navigation }) {
   const [colaborador, setColaborador] = useState({
@@ -15,7 +16,7 @@ export function CadastroColaborador({ navigation }) {
 
   const inserirColaborador = async () => {
     try {
-      await axios.post('http://localhost:3000/colaboradores', {
+      await axios.post(`http://${apiRoute}:3000/colaboradores`, {
         nome: colaborador.nome,
         cpf: colaborador.cpf,
         endereco: colaborador.endereco,

@@ -8,7 +8,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
-
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerExercicio() {
     const navigation = useNavigation();
@@ -37,7 +37,7 @@ export function VerExercicio() {
 
     const fetchTreinos = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/treinos');
+          const response = await axios.get(`http://${apiRoute}:3000/treinos`);
           console.log("Resposta da API:", response.data); 
     
           if (Array.isArray(response.data)) {
@@ -56,7 +56,7 @@ export function VerExercicio() {
 
     const carregarExercicios = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/exercicios');
+            const response = await axios.get(`http://${apiRoute}:3000/exercicios`);
             const base64Video = response.data.video;
 
             setVideo(`data:video/mp4;base64,${base64Video}`);
@@ -77,7 +77,7 @@ export function VerExercicio() {
 
     const handleUpdate = async () => {
         try {
-            await axios.put('http://localhost:3000/exercicios', dataExercicios, {
+            await axios.put(`http://${apiRoute}:3000/exercicios`, dataExercicios, {
                 params: { codigo: dataExercicios.codigo },
             });
             carregarExercicios();
@@ -103,7 +103,7 @@ export function VerExercicio() {
                     text: "Excluir",
                     onPress: async () => {
                         try {
-                            await axios.delete('http://localhost:3000/exercicios', {
+                            await axios.delete(`http://${apiRoute}:3000/exercicios`, {
                                 params: { codigo },
                             });
                             setExercicio(exercicio.filter(exercicio => exercicio.codigo !== codigo));

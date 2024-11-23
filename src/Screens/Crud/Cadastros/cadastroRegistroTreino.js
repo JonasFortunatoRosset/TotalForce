@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroRegistroTreino() {
   const navigation = useNavigation();
@@ -39,7 +40,7 @@ export function CadastroRegistroTreino() {
 
   const buscarPlanos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/planos");
+      const response = await axios.get(`http://${apiRoute}:3000/planos`);
       setPlanos(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os planos.');
@@ -49,7 +50,7 @@ export function CadastroRegistroTreino() {
 
   const buscarUsuario = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/usuarios");
+      const response = await axios.get(`http://${apiRoute}:3000/usuarios`);
       setUsers(response.data); 
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível buscar os usuários.');
@@ -58,7 +59,7 @@ export function CadastroRegistroTreino() {
   };
 
   const inserirRegistrosTreino = async () => {
-    axios.post("http://localhost:3000/resultadousuarios",
+    axios.post(`http://${apiRoute}:3000/resultadousuarios`,
         {
             exercicio1: registroTreino.exercicio1,
             exercicio2: registroTreino.exercicio2,

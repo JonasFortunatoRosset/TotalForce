@@ -7,6 +7,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerTreino() {
     const navigation = useNavigation();
@@ -31,7 +32,7 @@ export function VerTreino() {
     
       const fetchPlanos = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/planos');
+          const response = await axios.get(`http://${apiRoute}:3000/planos`);
           console.log("Resposta da API:", response.data); 
     
        
@@ -50,7 +51,7 @@ export function VerTreino() {
       };
 
     const carregarTreinos = async () => {
-        axios.get('http://localhost:3000/treinos', {
+        axios.get(`http://${apiRoute}:3000/treinos`, {
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -73,7 +74,7 @@ export function VerTreino() {
     };
 
     const handleUpdate = async () => {
-        axios.put('http://localhost:3000/treinos', dataTreino, {
+        axios.put(`http://${apiRoute}:3000/treinos`, dataTreino, {
             params: { codigo: dataTreino.codigo },
             headers: {
                 'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export function VerTreino() {
                 { text: "Cancelar", style: "cancel" },
                 { text: "Excluir", style: "destructive", onPress: async () => {
                     try {
-                        await axios.delete('http://localhost:3000/treinos', {
+                        await axios.delete(`http://${apiRoute}:3000/treinos`, {
                             params: { codigo },
                             headers: { 'Content-Type': 'application/json' }
                         });

@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { apiRoute } from '../../apiRoute';
 
 export function PlanilhaExercicios({ route, navigation }) {
   const { treino, index } = route.params; // Recebe o treino e o índice
@@ -68,7 +69,7 @@ export function PlanilhaExercicios({ route, navigation }) {
     formattedData.codusuario = codusuario; // Substitua pelo código real do usuário
 
     try {
-      const response = await axios.post('http://192.168.0.100:3000/resultadousuarios', {
+      const response = await axios.post(`http://${apiRoute}:3000/resultadousuarios`, {
         ...formattedData,
       });
       if (response.status === 200) {

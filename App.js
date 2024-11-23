@@ -1,6 +1,5 @@
 import { StyleSheet }               from 'react-native';
 import { createStackNavigator }     from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer }      from '@react-navigation/native';
   
 // Importação das páginas 
@@ -15,6 +14,7 @@ import { PlanilhaExercicios }  from './src/Screens/PlanilhaTreino'
 import { ResultsPage }         from './src/Screens/ResultsPage';
 import { GoalsPage }           from './src/Screens/GoalsPage';
 import { NutricaoPage }        from './src/Screens/NutricaoPage';
+import { ChangePlan }          from './src/Screens/ChangePlan';
 
 // importação de telas de cadastro
 import { CadastroGeral }            from './src/Screens/Crud/Cadastros/cadastrosGerais';
@@ -55,6 +55,7 @@ export default function App() {
         <Stack.Screen name="HomePage"              component={HomePage}></Stack.Screen>
         <Stack.Screen name="ConfigPage"            component={ConfigPage}/>
         <Stack.Screen name="TrainPage"             component={TrainPage}/>
+        <Stack.Screen name="ChangePlan"            component={ChangePlan}/>
         <Stack.Screen name="GoalsPage"             component={GoalsPage}/>
         <Stack.Screen name="NutricaoPage"          component={NutricaoPage}/>
         <Stack.Screen name="ListaTreinos"          component={ListaTreinos}></Stack.Screen>

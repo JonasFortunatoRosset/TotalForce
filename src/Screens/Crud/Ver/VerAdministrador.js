@@ -5,6 +5,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerAdministrador({ navigation }) {
     const [administrador, setAdministrador] = useState([]);
@@ -23,7 +24,7 @@ export function VerAdministrador({ navigation }) {
     };
 
     const carregarAdministradores = async () => {
-        axios.get('http://localhost:3000/administradores')
+        axios.get(`http://${apiRoute}:3000/administradores`)
             .then(response => {
                 setAdministrador(response.data.administrador);
             })
@@ -42,7 +43,7 @@ export function VerAdministrador({ navigation }) {
     };
 
     const handleUpdate = async () => {
-        axios.put('http://localhost:3000/administradores', dataAdministrador, {
+        axios.put(`http://${apiRoute}:3000/administradores`, dataAdministrador, {
             params: { codigo: dataAdministrador.codigo },
         })
             .then(response => {
@@ -67,7 +68,7 @@ export function VerAdministrador({ navigation }) {
                 {
                     text: "Excluir",
                     onPress: () => {
-                        axios.delete('http://localhost:3000/administradores', {
+                        axios.delete(`http://${apiRoute}:3000/administradores`, {
                             params: { codigo },
                         })
                             .then(response => {

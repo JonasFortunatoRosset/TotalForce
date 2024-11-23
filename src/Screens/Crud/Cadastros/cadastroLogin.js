@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHi
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { apiRoute } from '../../../../apiRoute';
 
 import logoTotal from '../../Images/logoTotal.png';
 
@@ -37,7 +38,7 @@ export function CadastroLogin({ navigation }) {
 
   const inserirUsuarios = async () => {
     try {
-      await axios.post('http://localhost:3000/usuarios', usuario);
+      await axios.post(`http://${apiRoute}:3000/usuarios`, usuario);
       Alert.alert("Seu cadastro foi concluído. Aguarde a confirmação de um administrador para realizar login.")
       setUsuario({
         nome: '',

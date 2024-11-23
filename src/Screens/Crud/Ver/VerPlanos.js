@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerPlanos() {
     const navigation = useNavigation();
@@ -22,7 +23,7 @@ export function VerPlanos() {
       };
 
     const carregarPlanos = async () => {
-        axios.get('http://localhost:3000/planos', {
+        axios.get(`http://${apiRoute}:3000/planos`, {
             headers: {
                 'Content-Type': 'application/json',  
             }
@@ -45,7 +46,7 @@ export function VerPlanos() {
     };
 
     const handleUpdate = async () => {
-        axios.put('http://localhost:3000/planos', dataPlanos, {
+        axios.put(`http://${apiRoute}:3000/planos`, dataPlanos, {
             params: { codigo: dataPlanos.codigo },
             headers: {
                 'Content-Type': 'application/json', 
@@ -74,7 +75,7 @@ export function VerPlanos() {
                     text: "Excluir",
                     onPress: async () => {
                         try {
-                            await axios.delete('http://localhost:3000/planos', {
+                            await axios.delete(`http://${apiRoute}:3000/planos`, {
                                 params: { codigo },
                                 headers: { 'Content-Type': 'application/json' },
                             });
@@ -208,14 +209,14 @@ export function VerPlanos() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E49413',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#E49413',
+        backgroundColor: '#FF9756',
         borderRadius: 12,
         elevation: 4,
         marginTop: 30,
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
       },
     separator: {
         height: 1,
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         marginVertical: 10,
     },
     modalOverlay: {

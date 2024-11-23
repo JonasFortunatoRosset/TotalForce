@@ -4,6 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiRoute } from '../../apiRoute';
 
 export function TrainPage({ navigation }) {
   const [dados, setDados] = useState(null); 
@@ -23,11 +24,11 @@ export function TrainPage({ navigation }) {
   const carregarPlanos = async () => {   // coleta de todos os dados
     try {
       const codusuario = await AsyncStorage.getItem('codusuario');
-      const response = await axios.get('http://192.168.0.100:3000/pesquisartreinos', {
+      const response = await axios.get(`http://${apiRoute}:3000/pesquisartreinos`, {
         params: { codigo: codusuario }
       });
       setDados(response.data);
-      const response2 = await axios.get('http://192.168.0.100:3000/pesquisarcodplanousuarios', {
+      const response2 = await axios.get(`http://${apiRoute}:3000/pesquisarcodplanousuarios`, {
         params: { codigo: codusuario }
       });
       setCodplano(response2.data.codplano);

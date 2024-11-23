@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroUsuario() {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ export function CadastroUsuario() {
 
   const fetchPlanos = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/planos');
+      const response = await axios.get(`http://${apiRoute}:3000/planos`);
       console.log("Resposta da API:", response.data); 
 
       if (Array.isArray(response.data)) {
@@ -54,7 +55,7 @@ export function CadastroUsuario() {
     console.log("Dados do usuário:", usuario); 
   
     try {
-      await axios.post("http://10.32.0.45:3000/usuarios", {
+      await axios.post(`http://${apiRoute}:3000/usuarios`, {
         nome: usuario.nome,
         login: usuario.login,
         endereco: usuario.endereco,

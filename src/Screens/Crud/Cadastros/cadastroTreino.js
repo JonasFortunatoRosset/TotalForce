@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroTreino() {
   const navigation = useNavigation();
@@ -21,7 +22,7 @@ export function CadastroTreino() {
 
   const fetchPlanos = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/planos');
+      const response = await axios.get(`http://${apiRoute}:3000/planos`);
       console.log("Resposta da API:", response.data); 
 
    
@@ -41,7 +42,7 @@ export function CadastroTreino() {
 
   const inserirTreino = async () => {
     try {
-      await axios.post('http://localhost:3000/treinos', {
+      await axios.post(`http://${apiRoute}:3000/treinos`, {
         nome: treino.nome,
         descricao: treino.descricao,
         codplano: treino.codplano,

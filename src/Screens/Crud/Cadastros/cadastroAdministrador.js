@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroAdministrador({ navigation }) {
   const [administrador, setAdministrador] = useState({
@@ -16,7 +17,7 @@ export function CadastroAdministrador({ navigation }) {
   const inserirAdministrador = async () => {
     try {
       await axios.post(
-        'http://localhost:3000/administradores',
+        `http://${apiRoute}:3000/administradores`,
         administrador,
         { headers: { 'Content-Type': 'application/json' } }
       );

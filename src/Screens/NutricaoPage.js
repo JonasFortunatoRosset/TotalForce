@@ -50,7 +50,7 @@ export function NutricaoPage({ navigation }) {
         <View style={styles.boxinputpeso}>
           <TextInput
             style={styles.inputpeso}
-            placeholder="Digite seu Peso"
+            placeholder="Digite seu Peso(KG)"
             value={peso}
             onChangeText={setPeso}
             keyboardType="numeric"
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   inputpeso: {
-    width: '110%',
+    width: '120%',
     height: 50,
     backgroundColor: '#fff',
     color: '#000',

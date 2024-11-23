@@ -6,6 +6,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { apiRoute } from '../../apiRoute';
 
 
 import logoTotal from './Images/logoTotal.png';
@@ -43,7 +44,7 @@ export function LoginPage({ navigation }) {
 
   const loginUsuario = async () => {
     try {
-      const response = await axios.post('http://192.168.0.100:3000/loginusuarios', {
+      const response = await axios.post(`http://${apiRoute}:3000/loginusuarios`, {
         login: dados.login,
         senha: dados.senha,
       });
@@ -55,7 +56,7 @@ export function LoginPage({ navigation }) {
 
   const loginAdministrador = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/loginadministradores', {
+       const response = await axios.post(`http://${apiRoute}:3000/loginadministradores`, { 
         login: dados.login,
         senha: dados.senha,
       });
@@ -67,7 +68,7 @@ export function LoginPage({ navigation }) {
 
   const loginColaborador = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/logincolaboradores', {
+      const response = await axios.post(`http://${apiRoute}:3000/logincolaboradores`, { 
         login: dados.login,
         senha: dados.senha,
       });

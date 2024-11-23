@@ -6,6 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerUsuario({ navigation }) {
     const [usuario, setUsuario] = useState([]);
@@ -35,7 +36,7 @@ export function VerUsuario({ navigation }) {
 
     const fetchPlanos = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/planos');
+          const response = await axios.get(`http://${apiRoute}:3000/planos`);
           console.log("Resposta da API:", response.data); 
     
           if (Array.isArray(response.data)) {
@@ -62,7 +63,7 @@ export function VerUsuario({ navigation }) {
 
     const carregarUsuarios = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/usuarios');
+            const response = await axios.get(`http://${apiRoute}:3000/usuarios`);
             setUsuario(response.data.usuario);
         } catch (error) {
             console.error('Erro ao carregar usuários:', error);
@@ -80,7 +81,7 @@ export function VerUsuario({ navigation }) {
 
     const handleUpdate = async () => {
         try {
-            await axios.put('http://localhost:3000/usuarios', dataUsuario, {
+            await axios.put(`http://${apiRoute}:3000/usuarios`, dataUsuario, {
                 params: { codigo: dataUsuario.codigo },
             });
             carregarUsuarios();
@@ -110,7 +111,7 @@ export function VerUsuario({ navigation }) {
                 { text: "Cancelar", style: "cancel" },
                 { text: "Excluir", style: "destructive", onPress: async () => {
                     try {
-                        await axios.delete('http://localhost:3000/usuarios', {
+                        await axios.delete(`http://${apiRoute}:3000/usuarios`, {
                             params: { codigo },
                         });
                         setUsuario(usuario.filter(user => user.codigo !== codigo));

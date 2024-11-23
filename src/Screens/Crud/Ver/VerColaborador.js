@@ -6,6 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';  
+import { apiRoute } from '../../../../apiRoute';
 
 export function VerColaborador({ navigation }) {
     const [colaborador, setColaborador] = useState([]);
@@ -28,7 +29,7 @@ export function VerColaborador({ navigation }) {
 
     const carregarColaboradores = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/colaboradores');
+            const response = await axios.get(`http://${apiRoute}:3000/colaboradores`);
             setColaborador(response.data.colaborador);
         } catch (error) {
             console.error('Erro ao carregar colaboradores:', error);
@@ -51,7 +52,7 @@ export function VerColaborador({ navigation }) {
 
     const handleUpdate = async () => {
         try {
-            await axios.put('http://localhost:3000/colaboradores', dataColaborador, {
+            await axios.put(`http://${apiRoute}:3000/colaboradores`, dataColaborador, {
                 params: { codigo: dataColaborador.codigo },
             });
             carregarColaboradores();
@@ -75,7 +76,7 @@ export function VerColaborador({ navigation }) {
                     text: "Excluir",
                     onPress: async () => {
                         try {
-                            await axios.delete('http://localhost:3000/colaboradores', {
+                            await axios.delete(`http://${apiRoute}:3000/colaboradores`, {
                                 params: { codigo },
                             });
                             setColaborador(colaborador.filter(col => col.codigo !== codigo));

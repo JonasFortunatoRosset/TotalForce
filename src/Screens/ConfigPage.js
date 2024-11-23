@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Switch, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 export function ConfigPage() {
@@ -34,7 +35,12 @@ export function ConfigPage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Configurações</Text>
+      <View style={styles.header}>
+        <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
+          <Ionicons name="arrow-back" size={28} color="black" />
+        </TouchableHighlight>
+        <Text style={styles.title}>Configurações</Text>
+      </View>
 
       {/* Alternar Tema */}
       <View style={styles.settingItem}>
@@ -68,6 +74,46 @@ export function ConfigPage() {
         <Text style={styles.settingText}>Sincronizar Dados</Text>
       </TouchableOpacity>
 
+      {/* Alterar Foto de Perfil */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Alterar Foto", "Função para alterar foto não implementada.")}>
+        <Text style={styles.settingText}>Alterar Foto de Perfil</Text>
+      </TouchableOpacity>
+
+      {/* Gerenciamento de Conta */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Conta", "Função de gerenciamento de conta em desenvolvimento.")}>
+        <Text style={styles.settingText}>Gerenciamento de Conta</Text>
+      </TouchableOpacity>
+
+      {/* Histórico de Atividades */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Histórico", "Seu histórico foi carregado.")}>
+        <Text style={styles.settingText}>Histórico de Atividades</Text>
+      </TouchableOpacity>
+
+      {/* Feedback */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Feedback", "Obrigado pelo seu feedback!")}>
+        <Text style={styles.settingText}>Enviar Feedback</Text>
+      </TouchableOpacity>
+
+      {/* Idioma */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Idioma", "Função para alterar idioma não implementada.")}>
+        <Text style={styles.settingText}>Alterar Idioma</Text>
+      </TouchableOpacity>
+
+      {/* Privacidade */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Privacidade", "Função para configurar privacidade não implementada.")}>
+        <Text style={styles.settingText}>Configurações de Privacidade</Text>
+      </TouchableOpacity>
+
+      {/* Limpar Cache */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Limpar Cache", "Cache limpo com sucesso!")}>
+        <Text style={styles.settingText}>Limpar Cache</Text>
+      </TouchableOpacity>
+
+      {/* Atualizações */}
+      <TouchableOpacity style={styles.settingItem} onPress={() => Alert.alert("Atualizações", "Aplicativo está atualizado!")}>
+        <Text style={styles.settingText}>Verificar Atualizações</Text>
+      </TouchableOpacity>
+
       {/* Botão de Logout */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutButtonText}>Deslogar</Text>
@@ -82,12 +128,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 20,
   },
+  header: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    elevation: 4,
+    borderRadius: 12,
+    marginTop: 25,
+  },
+  backButton: {
+    paddingRight: '20%',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FF914C',
-    marginBottom: 20,
-    textAlign: 'center',
+    color: '#FF9756',
   },
   settingItem: {
     flexDirection: 'row',
@@ -95,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#FF914C',
+    borderBottomColor: '#FF9756',
   },
   settingText: {
     fontSize: 16,

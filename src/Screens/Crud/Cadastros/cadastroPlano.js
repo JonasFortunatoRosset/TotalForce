@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import axios from 'axios';
+import { apiRoute } from '../../../../apiRoute';
 
 export function CadastroPlanos({navigation}) {
     const [plano, setPlano] = useState({
@@ -9,7 +10,7 @@ export function CadastroPlanos({navigation}) {
     });
 
     const inserirPlano = async () => {
-        axios.post("http://localhost:3000/planos", {
+        axios.post(`http://${apiRoute}:3000/planos`, {
             nome: plano.nome,
         }, {
             headers: {
