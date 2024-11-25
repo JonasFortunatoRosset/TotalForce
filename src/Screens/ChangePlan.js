@@ -54,24 +54,18 @@ export function ChangePlan({ navigation }) {
   
     try {
       const response = await axios.put(`http://${apiRoute}:3000/usuarios`, {
-        codigo: String(codusuario),  // agora sendo enviando como string
-        codplano: String(novoCodPlano),
+        codigo: codusuario,  
+        codplano: novoCodPlano,
       });
-      
+  
       if (response.status === 200) {
         Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
-        fetchUsuarios(); 
+        fetchUsuarios(); // Atualiza a lista de usuários
       }
     } catch (error) {
-      console.log("Resposta da API:", codusuario,novoCodPlano);
-      // {
-      //   "codigo": 3, ->  os dados estava sendo enviado assim 
-      //   "codplano": 2
-      // }
       console.error('Erro ao atualizar o plano:', error.response?.data || error.message);
       Alert.alert('Erro', `Erro ao atualizar o plano: ${error.response?.data?.message || 'Verifique os dados enviados.'}`);
     }
-    
   };
   
 
@@ -124,12 +118,12 @@ export function ChangePlan({ navigation }) {
 
   return (
     <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
-                    <Ionicons name="arrow-back" size={28} color="black" />
-                </TouchableHighlight>
-                <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
-            </View>
+      <View style={styles.header}>
+        <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
+          <Ionicons name="arrow-back" size={28} color="black" />
+        </TouchableHighlight>
+        <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
+      </View>
 
       <View style={styles.body}>
         <View style={styles.searchBarContainer}>
@@ -157,35 +151,38 @@ export function ChangePlan({ navigation }) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <Picker
-            selectedValue={selectedPlan}
-            onValueChange={(itemValue) => {
-              setSelectedPlan(itemValue);
-              console.log('Código do Usuário:', selectedUserCode);  // Exibe o código do usuário no console
-              console.log('Plano Selecionado:', itemValue);  // Exibe o plano selecionado no console
-            }}
-            style={styles.picker}
-          >
-            <Picker.Item label="Selecione um plano" value="" />
-            {Array.isArray(planos) && planos.length > 0 ? (
-              planos.map((plano) => (
-                <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-              ))
-            ) : (
-              <Picker.Item label="Nenhum plano disponível" value="" />
-            )}
-          </Picker>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
-              <Text style={styles.buttonText}>Confirmar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={styles.button}
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Selecione um plano</Text>
+            <Picker
+              selectedValue={selectedPlan}
+              onValueChange={(itemValue) => {
+                setSelectedPlan(itemValue);
+                console.log('Código do Usuário:', selectedUserCode);  // Exibe o código do usuário no console
+                console.log('Plano Selecionado:', itemValue);  // Exibe o plano selecionado no console
+              }}
+              style={styles.picker}
             >
-              <Text style={styles.buttonText}>Cancelar</Text>
-            </TouchableOpacity>
+              <Picker.Item label="Selecione um plano" value="" />
+              {Array.isArray(planos) && planos.length > 0 ? (
+                planos.map((plano) => (
+                  <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                ))
+              ) : (
+                <Picker.Item label="Nenhum plano disponível" value="" />
+              )}
+            </Picker>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -204,21 +201,20 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-
     elevation: 4,
     borderRadius: 12,
     marginTop: 35,
-},
-backButton: {
+  },
+  backButton: {
     paddingRight: -10,
-},
-txtheader: {
+  },
+  txtheader: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#000',
     flex: 1,
     textAlign: 'center',
-},
+  },
   searchBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -301,8 +297,20 @@ txtheader: {
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    width: '80%',
+    elevation: 4,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
   picker: {
-    width: 300,
+    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 4,
@@ -310,8 +318,8 @@ txtheader: {
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '80%',
-    marginTop: 10,
+    width: '100%',
+    marginTop: 20,
   },
   button: {
     backgroundColor: '#FF9756',

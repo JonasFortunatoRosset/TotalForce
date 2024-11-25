@@ -13,7 +13,7 @@ import { apiRoute } from '../../../../apiRoute';
 export function VerExercicio() {
     const navigation = useNavigation();
     const [treinos, setTreinos] = useState([]);
-    const [video,setVideo] = useState(null)
+    const [video, setVideo] = useState(null);
     const [exercicio, setExercicio] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
@@ -29,7 +29,7 @@ export function VerExercicio() {
 
     useEffect(() => {
         fetchTreinos();
-      }, []);
+    }, []);
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
@@ -37,22 +37,22 @@ export function VerExercicio() {
 
     const fetchTreinos = async () => {
         try {
-          const response = await axios.get(`http://${apiRoute}:3000/treinos`);
-          console.log("Resposta da API:", response.data); 
-    
-          if (Array.isArray(response.data)) {
-            setTreinos(response.data);
-          } else if (Array.isArray(response.data.Treino)) {
-            setTreinos(response.data.Treino); 
-          } else {
-            console.error('A chave "Treinos" não é um array:', response.data);
-            Alert.alert('Erro', 'Nenhum treino encontrado.');
-          }
+            const response = await axios.get(`http://${apiRoute}:3000/treinos`);
+            console.log("Resposta da API:", response.data);
+
+            if (Array.isArray(response.data)) {
+                setTreinos(response.data);
+            } else if (Array.isArray(response.data.Treino)) {
+                setTreinos(response.data.Treino);
+            } else {
+                console.error('A chave "Treinos" não é um array:', response.data);
+                Alert.alert('Erro', 'Nenhum treino encontrado.');
+            }
         } catch (error) {
-          Alert.alert('Erro', 'Não foi possível carregar os treinos.');
-          console.error(error);
+            Alert.alert('Erro', 'Não foi possível carregar os treinos.');
+            console.error(error);
         }
-      };
+    };
 
     const carregarExercicios = async () => {
         try {
@@ -83,7 +83,7 @@ export function VerExercicio() {
             carregarExercicios();
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-            setDataExercicios({ codigo: "", nome: "", descricao: "",serie: "",repeticoes:"", codtreino: ""});
+            setDataExercicios({ codigo: "", nome: "", descricao: "", serie: "", repeticoes: "", codtreino: "" });
         } catch (error) {
             console.error('Erro ao atualizar exercícios:', error);
         }
@@ -117,7 +117,6 @@ export function VerExercicio() {
             ]
         );
     };
-    
 
     return (
         <View style={styles.container}>
@@ -133,71 +132,56 @@ export function VerExercicio() {
                     data={exercicio}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-
                         <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
-                            <Text style={styles.itemText}>{item.nome}</Text>
-                            <MaterialCommunityIcons name="dumbbell" size={29} color="#EA5D04" />
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity
+                                style={styles.dados}
+                                onPress={() => {
+                                    setDataExercicios(item);
+                                    toggleModal();
+                                }}>
+                                <Text style={styles.itemText}>{item.nome}</Text>
+                                <MaterialCommunityIcons name="dumbbell" size={29} color="#EA5D04" />
+                            </TouchableOpacity>
+                        </View>
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
             <Modal
-            visible={dataModalVisible}
-            transparent={true}
-            animationType="slide"
-            onRequestClose={toggleModal}
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}
             >
-
-                <FlatList
-                    data={exercicio}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
-
-                        <View style={styles.modalBackground}>
-                        <View style={styles.modalContainer}>
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
                             <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                                 <Text style={styles.modalTitle}>Dados do Exercício</Text>
-                                 <Text style={styles.modalText}>Código: {item.codigo}</Text>
-                                 <Text style={styles.modalText}>Nome: {item.nome}</Text>
-                                 <Text style={styles.modalText}>Descrição: {item.descricao}</Text>
-                                 <Text style={styles.modalText}>Séries: {item.serie}</Text>
-                                 <Text style={styles.modalText}>repetições: {item.repeticoes}</Text>
-                                 <Text style={styles.modalText}>Código do treino: {item.codtreino}</Text>
+                        </TouchableOpacity>
 
-                                 <Video
-                                 source={{ uri: video }}
-                                 rate={1.0}
-                                 volume={1.0}
-                                 isMuted={true}
-                                 resizeMode="contain"
-                                 shouldPlay
-                                 isLooping
-                                 style={styles.video}
-                                 />
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                        <Text style={styles.modalTitle}>Dados do Exercício</Text>
+                        {dataExercicios && (
+                            <>
+                                <Text style={styles.modalText}>Código: {dataExercicios.codigo}</Text>
+                                <Text style={styles.modalText}>Nome: {dataExercicios.nome}</Text>
+                                <Text style={styles.modalText}>Descrição: {dataExercicios.descricao}</Text>
+                                <Text style={styles.modalText}>Séries: {dataExercicios.serie}</Text>
+                                <Text style={styles.modalText}>Repetições: {dataExercicios.repeticoes}</Text>
+                                <Text style={styles.modalText}>Código do treino: {dataExercicios.codtreino}</Text>
+                            </>
+                        )}
+
+                        <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(dataExercicios.codigo)}>
                                 <Feather name="trash-2" size={40} color="black" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
+
+                            <TouchableOpacity onPress={() => handleEdit(dataExercicios)}>
                                 <FontAwesome name="pencil" size={40} color="black" />
                             </TouchableOpacity>
-                          </View>
-            
                         </View>
-                      </View>
-
- 
-                )}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-                />
+                    </View>
+                </View>
             </Modal>
 
             <Modal
@@ -206,7 +190,8 @@ export function VerExercicio() {
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(false);
-                }}>
+                }}
+            >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
@@ -246,31 +231,30 @@ export function VerExercicio() {
                                 />
 
                                 <Picker
-                                selectedValue={dataExercicios.codtreino}
-                                onValueChange={(itemValue) => {
-                                    setDataExercicios({ ...dataExercicios, codtreino: itemValue });
-                                    console.log('CodTreino selecionado:', itemValue); 
-                                  }}
-                                style={styles.picker}
+                                    selectedValue={dataExercicios.codtreino}
+                                    onValueChange={(itemValue) => {
+                                        setDataExercicios({ ...dataExercicios, codtreino: itemValue });
+                                        console.log('CodTreino selecionado:', itemValue);
+                                    }}
+                                    style={styles.picker}
                                 >
-                                <Picker.Item label="Selecione um treino" value="" />
-                                {treinos.length > 0 ? (
-                                    treinos.map((treino) => (
-                                    <Picker.Item key={treino.codigo} label={treino.nome} value={treino.codigo} />
-                                    ))
-                                ) : (
-                                    <Picker.Item label="Nenhum treino disponível" value="" />
-                                )}
+                                    <Picker.Item label="Selecione um treino" value="" />
+                                    {treinos.length > 0 ? (
+                                        treinos.map((treino) => (
+                                            <Picker.Item key={treino.codigo} label={treino.nome} value={treino.codigo} />
+                                        ))
+                                    ) : (
+                                        <Picker.Item label="Nenhum treino disponível" value="" />
+                                    )}
                                 </Picker>
                             </View>
 
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
-                                    <Text style={styles.txtbtns}>Salvar</Text>
+                                    <Text style={styles.txtBtn}>Salvar</Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => setModalVisible(false)}>
-                                    <Text style={styles.txtbtns}>Cancelar</Text>
+                                    <Text style={styles.txtBtn}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -331,11 +315,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 16,
       },
-    separator: {
-        height: 1,
-        backgroundColor: '#FF9756',
-        marginVertical: 10,
-    },
     modalOverlay: {
         flex: 1,
         justifyContent: 'center',

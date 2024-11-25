@@ -24,31 +24,31 @@ export function VerTreino() {
 
     useEffect(() => {
         fetchPlanos();
-      }, []);
+    }, []);
 
-      const toggleModal = () => {
-        setDataModalVisible(!dataModalVisible);
-      };
-    
-      const fetchPlanos = async () => {
-        try {
-          const response = await axios.get(`http://${apiRoute}:3000/planos`);
-          console.log("Resposta da API:", response.data); 
-    
-       
-          if (Array.isArray(response.data)) {
-            setPlanos(response.data);
-          } else if (Array.isArray(response.data.Planos)) {
-            setPlanos(response.data.Planos); 
-          } else {
-            console.error('A chave "Planos" não é um array:', response.data);
-            Alert.alert('Erro', 'Nenhum plano encontrado.');
-          }
-        } catch (error) {
-          Alert.alert('Erro', 'Não foi possível carregar os planos.');
-          console.error(error);
+    const toggleModal = (treino = null) => {
+        if (treino) {
+            setDataTreino(treino); // Atualiza os dados do treino clicado
         }
-      };
+        setDataModalVisible(!dataModalVisible);
+    };
+
+    const fetchPlanos = async () => {
+        try {
+            const response = await axios.get(`http://${apiRoute}:3000/planos`);
+            if (Array.isArray(response.data)) {
+                setPlanos(response.data);
+            } else if (Array.isArray(response.data.Planos)) {
+                setPlanos(response.data.Planos); 
+            } else {
+                console.error('A chave "Planos" não é um array:', response.data);
+                Alert.alert('Erro', 'Nenhum plano encontrado.');
+            }
+        } catch (error) {
+            Alert.alert('Erro', 'Não foi possível carregar os planos.');
+            console.error(error);
+        }
+    };
 
     const carregarTreinos = async () => {
         axios.get(`http://${apiRoute}:3000/treinos`, {
@@ -128,9 +128,8 @@ export function VerTreino() {
                     data={treinos}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-
                         <View style={styles.itemContainer}>
-                            <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                            <TouchableOpacity style={styles.dados} onPress={() => toggleModal(item)}>
                                 <Text style={styles.itemText}>{item.nome}</Text>
                                 <MaterialCommunityIcons name="weight-lifter" size={29} color="#EA5D04" />
                             </TouchableOpacity>
@@ -140,55 +139,49 @@ export function VerTreino() {
                 />
             </View>
 
-
+            {/* Modal para exibir os detalhes do treino */}
             <Modal
-          visible={dataModalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={toggleModal}
-        >
-
-                <FlatList
-                    data={treinos}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
-                                                
-                        <View style={styles.modalBackground}>
-                        <View style={styles.modalContainer}>
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
                             <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                          <Text style={styles.modalTitle}>Dados do Treino</Text>
-                          <Text style={styles.modalText}>Código:   {item.codigo}   </Text>
-                          <Text style={styles.modalText}>Descrição: {item.descricao} </Text>
-                          <Text style={styles.modalText}>Plano: {item.codplano} </Text>
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                        </TouchableOpacity>
+
+                        <Text style={styles.modalTitle}>Dados do Treino</Text>
+                        {dataTreino && (
+                                    <>  
+                                        <Text style={styles.modalText}>Código: {dataTreino.codigo}</Text>
+                                        <Text style={styles.modalText}>Descrição: {dataTreino.descricao}</Text>
+                                        <Text style={styles.modalText}>Plano: {dataTreino.codplano}</Text>
+                                    </>
+                                )}
+
+                        <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(dataTreino.codigo)}>
                                 <Feather name="trash-2" size={40} color="black" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                            <TouchableOpacity onPress={() => handleEdit(dataTreino)}>
                                 <FontAwesome name="pencil" size={40} color="black" />
                             </TouchableOpacity>
-                          </View>
-            
                         </View>
-                      </View>
+                    </View>
+                </View>
+            </Modal>
 
- 
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-    />
-        </Modal>
-
+            {/* Modal de edição */}
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(false);
-                }}>
+                }}
+            >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
@@ -214,35 +207,31 @@ export function VerTreino() {
                                     value={dataTreino.descricao}
                                     onChangeText={(text) => setDataTreino({ ...dataTreino, descricao: text })}
                                 />
-
                                 <Picker
-                                    selectedValue={treinos.codplano}
+                                    selectedValue={dataTreino.codplano}
                                     style={styles.picker}
                                     onValueChange={(itemValue) => {
                                         setDataTreino({ ...dataTreino, codplano: itemValue });
-                                        console.log('CodPlano selecionado:', itemValue); 
-                                      }}
+                                    }}
                                 >
                                     <Picker.Item label="Selecione um plano" value="" />
                                     {planos.length > 0 ? (
                                         planos.map((plano) => (
-                                        <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                                            <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
                                         ))
                                     ) : (
                                         <Picker.Item label="Nenhum plano disponível" value="" />
                                     )}
                                 </Picker>
-
                             </View>
-
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
                                     <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity
                                     style={[styles.btns, styles.btnCancel]}
-                                    onPress={() => { setModalVisible(false); }}>
+                                    onPress={() => { setModalVisible(false); }}
+                                >
                                     <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
@@ -349,7 +338,7 @@ const styles = StyleSheet.create({
         height: 40,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#ffff',
+        backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
         color: '#000',

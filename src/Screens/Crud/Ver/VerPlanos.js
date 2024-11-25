@@ -1,75 +1,75 @@
-import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import { apiRoute } from '../../../../apiRoute';
 
-export function VerPlanos() {
-    const navigation = useNavigation();
+export function VerPlanos({ navigation }) {
     const [planos, setPlanos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
-    const [dataPlanos, setDataPlanos] = useState({
-        codigo: "",
+    const [dataPlano, setDataPlano] = useState({
         nome: "",
+        codigo: "",
     });
+    const [selectedPlano, setSelectedPlano] = useState(null);
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
-      };
+    };
 
     const carregarPlanos = async () => {
-        axios.get(`http://${apiRoute}:3000/planos`, {
-            headers: {
-                'Content-Type': 'application/json',  
+        try {
+            const response = await axios.get(`http://${apiRoute}:3000/planos`);
+            if (response.data && Array.isArray(response.data.Planos)) {
+                setPlanos(response.data.Planos); // Corrigido para "Planos" com "P" maiúsculo
+            } else {
+                console.error('Formato de resposta inesperado:', response.data);
+                setPlanos([]);
             }
-        })
-        .then(response => {
-            setPlanos(response.data.planos);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erro ao carregar planos:', error);
-        });
+            Alert.alert("Erro", "Não foi possível carregar os planos.");
+        }
     };
 
     useEffect(() => {
         carregarPlanos();
     }, []);
 
-    const handleEdit = (pla) => {
-        setDataPlanos(pla);
+    const handleEdit = (plano) => {
+        setDataPlano(plano);
         setModalVisible(true);
     };
 
-    const handleUpdate = async () => {
-        axios.put(`http://${apiRoute}:3000/planos`, dataPlanos, {
-            params: { codigo: dataPlanos.codigo },
-            headers: {
-                'Content-Type': 'application/json', 
-            }
-        })
-        .then(response => {
-            carregarPlanos();
-            setModalVisible(false);
-            Alert.alert("Sucesso", "Alterações salvas com sucesso!");
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar planos:', error);
-        });
+    const handleView = (plano) => {
+        setSelectedPlano(plano);
+        setDataModalVisible(true);
     };
 
-    const handleDelete = (codigo) => {
+    const handleUpdate = async () => {
+        try {
+            await axios.put(`http://${apiRoute}:3000/planos`, dataPlano, {
+                params: { codigo: dataPlano.codigo },
+            });
+            carregarPlanos();
+            setModalVisible(false);
+            Alert.alert("Sucesso", "Plano atualizado com sucesso!");
+        } catch (error) {
+            console.error('Erro ao atualizar plano:', error);
+        }
+    };
+
+    const handleDelete = async (codigo) => {
         Alert.alert(
-            "Confirmação",
+            "Confirmar Exclusão",
             "Tem certeza de que deseja excluir este plano?",
             [
                 {
                     text: "Cancelar",
-                    style: "cancel",
+                    style: "cancel"
                 },
                 {
                     text: "Excluir",
@@ -77,7 +77,6 @@ export function VerPlanos() {
                         try {
                             await axios.delete(`http://${apiRoute}:3000/planos`, {
                                 params: { codigo },
-                                headers: { 'Content-Type': 'application/json' },
                             });
                             setPlanos(planos.filter(plano => plano.codigo !== codigo));
                             Alert.alert("Sucesso", "Plano excluído com sucesso!");
@@ -85,13 +84,11 @@ export function VerPlanos() {
                             console.error('Erro ao deletar plano:', error);
                         }
                     },
-                    style: "destructive",
-                },
-            ],
-            { cancelable: false }
+                    style: "destructive"
+                }
+            ]
         );
     };
-    
 
     return (
         <View style={styles.container}>
@@ -99,7 +96,7 @@ export function VerPlanos() {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <AntDesign name="arrowleft" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.txtheader}>Pesquisa de Planos</Text>
+                <Text style={styles.txtheader}>Planos </Text>
             </View>
 
             <View style={styles.body}>
@@ -107,64 +104,49 @@ export function VerPlanos() {
                     data={planos}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-
-                    <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.dados} onPress={toggleModal} >
-                            <Text style={styles.itemText}>{item.nome}</Text>
-                            <FontAwesome5 name="list-alt" size={29} color="#EA5D04" />
-                        </TouchableOpacity>
-                    </View>
+                        <View style={styles.itemContainer}>
+                            <TouchableOpacity style={styles.dados} onPress={() => handleView(item)}>
+                                <Text style={styles.itemText}>{item.nome}</Text>
+                                <Feather name="list" size={29} color={'#EA5D04'} />
+                            </TouchableOpacity>
+                        </View>
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
             <Modal
-            visible={dataModalVisible}
-            transparent={true}
-            animationType="slide"
-            onRequestClose={toggleModal}
-             >
-
-                <FlatList
-                    data={planos}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
-
-                        <View style={styles.modalBackground}>
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}>
+                {selectedPlano && (
+                    <View style={styles.modalBackground}>
                         <View style={styles.modalContainer}>
-                        <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
-                            <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                          <Text style={styles.modalTitle}>Dados do Plano</Text>
-                          <Text style={styles.modalText}>Código:   {item.codigo}   </Text>
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
-                                <Feather name="trash-2" size={40} color="black" />
+                            <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
+                                <AntDesign name="close" size={24} color="#EB6808" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
-                                <FontAwesome name="pencil" size={40} color="black" />
-                            </TouchableOpacity>
-                          </View>
-            
-                        </View>
-                      </View>
+                            <Text style={styles.modalTitle}>Dados do Plano</Text>
+                            <Text style={styles.modalText}>Nome: {selectedPlano.nome}</Text>
+                            <Text style={styles.modalText}>Código: {selectedPlano.codigo}</Text>
 
- 
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-    />
-        </Modal>
+                            <View style={styles.icons}>
+                                <TouchableOpacity onPress={() => handleDelete(selectedPlano.codigo)}>
+                                    <Feather name="trash-2" size={40} color="black" />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEdit(selectedPlano)}>
+                                    <FontAwesome name="pencil" size={40} color="black" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )}
+            </Modal>
 
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(false);
-                }}>
+                onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.ModalHeader}>
@@ -174,27 +156,24 @@ export function VerPlanos() {
                             <View style={styles.BoxInputs}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Código"
-                                    value={dataPlanos.codigo}
-                                    onChangeText={(text) => setDataPlanos({ ...dataPlanos, codigo: text })}
+                                    placeholder="Nome"
+                                    value={dataPlano.nome}
+                                    onChangeText={(text) => setDataPlano({ ...dataPlano, nome: text })}
                                 />
-
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Nome"
-                                    value={dataPlanos.nome}
-                                    onChangeText={(text) => setDataPlanos({ ...dataPlanos, nome: text })}
+                                    placeholder="Código"
+                                    value={dataPlano.codigo}
+                                    editable={false}
                                 />
                             </View>
-
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
                                     <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
-
                                 <TouchableOpacity
                                     style={[styles.btns, styles.btnCancel]}
-                                    onPress={() => { setModalVisible(false); }}>
+                                    onPress={() => setModalVisible(false)}>
                                     <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>

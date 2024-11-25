@@ -13,7 +13,7 @@ export function VerUsuario({ navigation }) {
     const [statusFiltro, setStatusFiltro] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
-    const [planos, setPlanos] = useState([]); 
+    const [planos, setPlanos] = useState([]);
     const [dataUsuario, setDataUsuario] = useState({
         codigo: "",
         nome: "",
@@ -28,7 +28,7 @@ export function VerUsuario({ navigation }) {
 
     useEffect(() => {
         fetchPlanos();
-      }, []);
+    }, []);
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
@@ -36,23 +36,22 @@ export function VerUsuario({ navigation }) {
 
     const fetchPlanos = async () => {
         try {
-          const response = await axios.get(`http://${apiRoute}:3000/planos`);
-          console.log("Resposta da API:", response.data); 
-    
-          if (Array.isArray(response.data)) {
-            setPlanos(response.data);
-          } else if (Array.isArray(response.data.Planos)) {
-            setPlanos(response.data.Planos);
-          } else {
-            console.error('A chave "Planos" não é um array:', response.data);
-            Alert.alert('Erro', 'Nenhum plano encontrado.');
-          }
-        } catch (error) {
-          Alert.alert('Erro', 'Não foi possível carregar os planos.');
-          console.error(error);
-        }
-      };
+            const response = await axios.get(`http://${apiRoute}:3000/planos`);
+            console.log("Resposta da API:", response.data);
 
+            if (Array.isArray(response.data)) {
+                setPlanos(response.data);
+            } else if (Array.isArray(response.data.Planos)) {
+                setPlanos(response.data.Planos);
+            } else {
+                console.error('A chave "Planos" não é um array:', response.data);
+                Alert.alert('Erro', 'Nenhum plano encontrado.');
+            }
+        } catch (error) {
+            Alert.alert('Erro', 'Não foi possível carregar os planos.');
+            console.error(error);
+        }
+    };
 
     const usuariosFiltrados = () => {
         if (statusFiltro === "") return usuario;
@@ -87,14 +86,14 @@ export function VerUsuario({ navigation }) {
             carregarUsuarios();
             setDataUsuario({
                 codigo: "",
-                nome: "", 
-                login: "", 
-                endereco: "", 
-                senha: "", 
-                peso: "", 
+                nome: "",
+                login: "",
+                endereco: "",
+                senha: "",
+                peso: "",
                 altura: "",
-                codplano: "", 
-                status: "" 
+                codplano: "",
+                status: ""
             });
             setModalVisible(false);
             Alert.alert("Sucesso", "Alterações salvas com sucesso!");
@@ -129,7 +128,7 @@ export function VerUsuario({ navigation }) {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Feather name="arrow-left" size={30} color="black" /> 
+                    <Feather name="arrow-left" size={30} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.txtheader}>Pesquisa de Usuários</Text>
             </View>
@@ -138,7 +137,7 @@ export function VerUsuario({ navigation }) {
                 <View style={styles.filterContainer}>
                     <View style={styles.filterButtons}>
                         {["Todos", "Ativo", "Inativo", "Em Análise", "Recusado"].map((status) => (
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 key={status}
                                 style={[styles.filterButton, statusFiltro === status && styles.selectedButton]}
                                 onPress={() => setStatusFiltro(status === "Todos" ? "" : status)}
@@ -157,63 +156,52 @@ export function VerUsuario({ navigation }) {
                 <FlatList
                     data={usuariosFiltrados()}
                     keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => ( 
-
-                    <View style={styles.itemContainer}>
-                        <TouchableOpacity style={styles.dados} onPress={toggleModal}>
-                            <Text style={styles.itemText}>{item.nome}</Text>
-                            <FontAwesome name="user" size={29} color={'#EA5D04'} />
-                        </TouchableOpacity>
-                    </View>
-
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
+                            <TouchableOpacity style={styles.dados} onPress={toggleModal}>
+                                <Text style={styles.itemText}>{item.nome}</Text>
+                                <FontAwesome name="user" size={29} color={'#EA5D04'} />
+                            </TouchableOpacity>
+                        </View>
                     )}
                 />
             </View>
 
             <Modal
-          visible={dataModalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={toggleModal}
-        >
-
-                <FlatList
-                    data={usuario}
-                    keyExtractor={(item) => item.codigo.toString()}
-                    renderItem={({ item }) => (
-
-                        <View style={styles.modalBackground}>
-                        <View style={styles.modalContainer}>
+                visible={dataModalVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={toggleModal}
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
                         <TouchableOpacity onPress={toggleModal} style={styles.closeIcon}>
                             <AntDesign name="close" size={24} color="#EB6808" />
-                          </TouchableOpacity>
-                          <Text style={styles.modalTitle}>Dados do Usuário</Text>
-                                 <Text style={styles.modalText}>Código: {item.codigo}</Text>
-                                 <Text style={styles.modalText}>Login: {item.login}</Text>
-                                 <Text style={styles.modalText}>Endereço: {item.endereco}</Text>
-                                 <Text style={styles.modalText}>Senha: {item.senha}</Text>
-                                 <Text style={styles.modalText}>Peso: {item.peso}</Text>
-                                 <Text style={styles.modalText}>Altura: {item.altura}</Text>
-                                 <Text style={styles.modalText}>Plano: {item.codplano}</Text>
-                                 <Text style={styles.modalText}>Status: {item.status}</Text>
-            
-                          <View style={styles.icons}>
-                            <TouchableOpacity onPress={() => handleDelete(item.codigo)}>
+                        </TouchableOpacity>
+                        <Text style={styles.modalTitle}>Dados do Usuário</Text>
+                        {dataUsuario && (
+                            <>
+                                <Text style={styles.modalText}>Código: {dataUsuario.codigo}</Text>
+                                <Text style={styles.modalText}>Login: {dataUsuario.login}</Text>
+                                <Text style={styles.modalText}>Endereço: {dataUsuario.endereco}</Text>
+                                <Text style={styles.modalText}>Senha: {dataUsuario.senha}</Text>
+                                <Text style={styles.modalText}>Peso: {dataUsuario.peso}</Text>
+                                <Text style={styles.modalText}>Altura: {dataUsuario.altura}</Text>
+                                <Text style={styles.modalText}>Plano: {dataUsuario.codplano}</Text>
+                                <Text style={styles.modalText}>Status: {dataUsuario.status}</Text>
+                            </>
+                        )}
+                        <View style={styles.icons}>
+                            <TouchableOpacity onPress={() => handleDelete(dataUsuario.codigo)}>
                                 <Feather name="trash-2" size={40} color="black" />
                             </TouchableOpacity>
-            
-                            <TouchableOpacity onPress={() => handleEdit(item)}>
+                            <TouchableOpacity onPress={() => handleEdit(dataUsuario)}>
                                 <FontAwesome name="pencil" size={40} color="black" />
                             </TouchableOpacity>
-                          </View>
-            
                         </View>
-                      </View>
-
- 
-        )}
-    />
-        </Modal>
+                    </View>
+                </View>
+            </Modal>
 
             <Modal
                 animationType="slide"
@@ -228,67 +216,60 @@ export function VerUsuario({ navigation }) {
                         </View>
                         <View style={styles.modalBody}>
                             <View style={styles.BoxInputs}>
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Nome"
                                     value={dataUsuario.nome}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, nome: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, nome: text })}
                                 />
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Login"
                                     value={dataUsuario.login}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, login: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, login: text })}
                                 />
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Endereço"
                                     value={dataUsuario.endereco}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, endereco: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, endereco: text })}
                                 />
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Senha"
                                     value={dataUsuario.senha}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, senha: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, senha: text })}
                                 />
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Peso"
                                     value={dataUsuario.peso}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, peso: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, peso: text })}
                                 />
-                                <TextInput 
-                                    style={styles.input} 
+                                <TextInput
+                                    style={styles.input}
                                     placeholder="Altura"
                                     value={dataUsuario.altura}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })} 
+                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })}
                                 />
-
                                 <Picker
                                     selectedValue={dataUsuario.codplano}
                                     style={styles.picker}
                                     onValueChange={(itemValue) => {
                                         setDataUsuario({ ...dataUsuario, codplano: itemValue });
-                                        console.log('CodPlano selecionado:', itemValue); 
-                                      }}
+                                    }}
                                 >
-                                <Picker.Item label="Selecione um plano" value="" />
-                                {planos.length > 0 ? (
-                                    planos.map((plano) => (
-                                    <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
-                                    ))
-                                ) : (
-                                    <Picker.Item label="Nenhum plano disponível" value="" />
-                                )}
+                                    {planos.map((plano) => (
+                                        <Picker.Item key={plano.codigo} label={plano.nome} value={plano.codigo} />
+                                    ))}
                                 </Picker>
-
                                 <Picker
                                     selectedValue={dataUsuario.status}
                                     style={styles.picker}
-                                    onValueChange={(itemValue) => setDataUsuario({ ...dataUsuario, status: itemValue })}
+                                    onValueChange={(itemValue) =>
+                                        setDataUsuario({ ...dataUsuario, status: itemValue })
+                                    }
                                 >
-                                    <Picker.Item label="Selecione um status" value="" />
                                     <Picker.Item label="Ativo" value="Ativo" />
                                     <Picker.Item label="Inativo" value="Inativo" />
                                     <Picker.Item label="Em Análise" value="Em Análise" />
@@ -296,12 +277,14 @@ export function VerUsuario({ navigation }) {
                                 </Picker>
                             </View>
 
-                            <TouchableOpacity 
-                                style={styles.btnsalvar}
-                                onPress={handleUpdate}
-                            >
-                                <Text style={styles.btnsalvarText}>Salvar Alterações</Text>
-                            </TouchableOpacity>
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity onPress={handleUpdate} style={styles.saveButton}>
+                                    <Text style={styles.btnText}>Salvar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+                                    <Text style={styles.btnText}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -309,6 +292,7 @@ export function VerUsuario({ navigation }) {
         </SafeAreaView>
     );
 }
+    
 
 const styles = StyleSheet.create({
     container: {
@@ -427,7 +411,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     picker: {
-        height: 50,
+        height: 25,
         width: '100%',
         marginBottom: 10,
     },
@@ -462,6 +446,16 @@ const styles = StyleSheet.create({
       modalText: {
         fontSize: 16,
         marginBottom: 5,
+      },
+      saveButton: {
+	backgroundColor: '#FF9756',
+      },
+      cancelButton: {
+	backgroundColor: '#FF9756',
+      },
+      btnContainer: {
+	flexDirection: 'row',
+	width: '50%',
       },
       closeIcon: {
         position: 'absolute',
