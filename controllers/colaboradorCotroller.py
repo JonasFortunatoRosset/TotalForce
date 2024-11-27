@@ -10,6 +10,7 @@ def colaboradorController():
     if request.method == 'POST':
         try:
             data = request.get_json()
+            print(data)
             # Pega dados de data
             senha = data['senha'] 
             cpf   = data['cpf'] 

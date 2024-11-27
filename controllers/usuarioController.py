@@ -15,7 +15,6 @@ def usuariosController():
             senha = data['senha'] 
             # transforma os dados em hash  
             senha_hash = hash_senha(senha)
-            print(data)
             usuario = Usuario(nome=data['nome'],endereco=data['endereco'],login=data['login'],senha=senha_hash,peso=data['peso'],altura=data['altura'],codplano=data['codplano'],status=data['status'])
             db.session.add(usuario)
             db.session.commit()
@@ -37,7 +36,10 @@ def usuariosController():
         try:
             data = request.get_json()
             put_usuario_codigo = data['codigo']
+            print(f"codplano front: {data['codplano']}")
+            print(f"cod usuario: {put_usuario_codigo}")
             put_usuario = Usuario.query.get(put_usuario_codigo)
+            print(f"codplano atual {put_usuario.codplano}")
             if put_usuario is None:
                     return jsonify({'error': 'Usuário não encontrado'}), 404
             put_usuario.nome     = data.get('nome'    , put_usuario.nome)
@@ -49,7 +51,7 @@ def usuariosController():
             put_usuario.status   = data.get('status'  , put_usuario.status)
             atualizar_senha_banco(data, put_usuario)
             db.session.commit()
-            return jsonify({'Usuário atualizado com sucesso'}), 200
+            return jsonify({'message': 'Usuário atualizado com sucesso'}), 200
         except Exception as e:
             return jsonify({'error': 'Erro ao atualizar usuário. Erro: {}'.format(e)}), 400
     

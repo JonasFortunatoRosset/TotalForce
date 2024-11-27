@@ -26,7 +26,6 @@ def treinoController():
     elif request.method == 'PUT':
         try:
             data = request.get_json()
-            print(data)
             put_treino_id = data['codigo']
             put_treino = Treino.query.get(put_treino_id)
             if put_treino is None:

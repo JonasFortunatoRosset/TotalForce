@@ -23,7 +23,7 @@ class Usuario(db.Model):
     peso     = db.Column(db.Float)
     altura   = db.Column(db.Integer)
     codplano = db.Column(db.Integer)
-    status   = db.Column(db.String(20))
+    status   = db.Column(db.String(50))
 
 
     def __init__(self,nome,endereco,login,senha,peso,altura,codplano,status):

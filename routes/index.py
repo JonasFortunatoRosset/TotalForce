@@ -13,7 +13,9 @@ from routes.validarTokenRoute import validartokens
 from routes.invalidartoken import invalidartokens
 from routes.planoRoute   import planos
 from routes.resultadoUsuarioRoute import resultadoUsuarios
-
+from routes.pesquisarcodplanousuarioRoute import pesquisarCodplanoUsuarios
+from routes.getTreinoRoute import getTreinos
+from routes.pesquisarResultadoUsuarioRoute import pesquisarResultadoUsuario
 
 def default_routes(app):
     usuarios(app)
@@ -29,3 +31,6 @@ def default_routes(app):
     invalidartokens(app)
     planos(app)
     resultadoUsuarios(app)
+    pesquisarCodplanoUsuarios(app)
+    getTreinos(app)
+    pesquisarResultadoUsuario(app)

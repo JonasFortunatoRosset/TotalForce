@@ -30,7 +30,9 @@ def pesquisarTreinoController():
             # Pega do banco os exercícios do treino 3
             exercicio3 = Exercicio.query.filter_by(codtreino=treino3)
             exercicio_treino_dict3 = [exercicio3.to_dict() for exercicio3 in exercicio3]
+
             data = Plano.query.all()
+            
             plano_dict = [plano.to_dict() for plano in data]
             response = {
                 'Plano_usuario': plano_usuario,
@@ -40,7 +42,7 @@ def pesquisarTreinoController():
                 'Treino3': treino[2].nome,
                 'Exercicio1': exercicio_treino_dict1,
                 'Exercicio2': exercicio_treino_dict2,
-                'Exercicio3': exercicio_treino_dict13
+                'Exercicio3': exercicio_treino_dict3
 
             }
 

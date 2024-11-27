@@ -6,6 +6,7 @@ def resultadoUsuarioController():
     if request.method == 'POST':
         try:
             data = request.get_json()
+            print(data)
             resultado_usuario = ResultadoUsuario(exercicio1=data['exercicio1'],exercicio2=data['exercicio2'],exercicio3=data['exercicio3'],exercicio4=data['exercicio4'],exercicio5=data['exercicio5'],exercicio6=data['exercicio6'],exercicio7=data['exercicio7'],exercicio8=data['exercicio8'],exercicio9=data['exercicio9'],exercicio10=data['exercicio10'],exercicio11=data['exercicio11'],data=data['data'],codtreino=data['codtreino'],codusuario=data['codusuario'])
             db.session.add(resultado_usuario)
             db.session.commit()

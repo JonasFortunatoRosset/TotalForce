@@ -35,10 +35,11 @@ class ResultadoUsuario(db.Model):
     exercicio9  = db.Column(db.Float)
     exercicio10 = db.Column(db.Float)
     exercicio11 = db.Column(db.Float)
+    data        = db.Column(db.String(12))
     codtreino   = db.Column(db.Integer) 
     codusuario  = db.Column(db.Integer)
 
-    def __init__(self,exercicio1,exercicio2,exercicio3,exercicio4,exercicio5,exercicio6,exercicio7,exercicio8,exercicio9,exercio10,exercicio11,data,codtreino,codusuario):
+    def __init__(self,exercicio1,exercicio2,exercicio3,exercicio4,exercicio5,exercicio6,exercicio7,exercicio8,exercicio9,exercicio10,exercicio11,data,codtreino,codusuario):
         self.exercicio1  = exercicio1
         self.exercicio2  = exercicio2
         self.exercicio3  = exercicio3
