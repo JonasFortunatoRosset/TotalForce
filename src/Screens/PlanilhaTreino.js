@@ -55,19 +55,22 @@ export function PlanilhaExercicios({ route, navigation }) {
   };
 
   const enviarResultado = async () => {
-    const formattedData = data.reduce((acc, exercise, idx) => {
-      // Converte as cargas para float (caso estejam como strings)
-      acc[`exercicio${idx + 1}`] = parseFloat(exercise.carga) || 0; // Se a carga não for válida, coloca 0
-      return acc;
-    }, {});
-    
+    // Cria um objeto com os 11 campos de exercícios, definindo como 0 caso não existam
+    const formattedData = {};
+    for (let i = 0; i < 11; i++) {
+      const exerciseKey = `exercicio${i + 1}`;
+      const exercise = data.find((item) => item.id === i + 1);
+      formattedData[exerciseKey] = exercise && exercise.carga ? parseFloat(exercise.carga) : 0; // Usa 0 se a carga não estiver definida
+    }
+  
+    // Obtém o codusuario do AsyncStorage
     const codusuario = await AsyncStorage.getItem('codusuario');
-
+  
     // Formata a data para o formato YYYY-MM-DD
-    formattedData.data = selectedDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-    formattedData.codtreino = codtreino; // Usa o codtreino do primeiro exercício
-    formattedData.codusuario = codusuario; // Substitua pelo código real do usuário
-
+    formattedData.data = selectedDate.toISOString().split('T')[0];
+    formattedData.codtreino = codtreino;
+    formattedData.codusuario = codusuario;
+  
     try {
       const response = await axios.post(`http://${apiRoute}:3000/resultadousuarios`, {
         ...formattedData,
@@ -109,7 +112,7 @@ export function PlanilhaExercicios({ route, navigation }) {
         >
           <AntDesign name="arrowleft" size={30} color="black" />
         </TouchableOpacity>
-        <Text style={styles.txtheader}>Treino: {treino}</Text>
+        <Text style={styles.txtheader}> {treino}</Text>
       </View>
 
       <FlatList
@@ -137,9 +140,11 @@ export function PlanilhaExercicios({ route, navigation }) {
             }}
           />
         )}
+        <View style={styles.selectedDate}>
         <Text style={styles.selectedDateText}>
           Data selecionada: {selectedDate.toLocaleDateString()}
         </Text>
+        </View>
 
         <TouchableOpacity
           style={styles.confirmButton}
@@ -155,7 +160,7 @@ export function PlanilhaExercicios({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4E9E3',
+    backgroundColor: '#fff',
     paddingTop: 40,
     paddingHorizontal: 20,
   },
@@ -166,11 +171,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 15,
     marginBottom: 20,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
   },
   seta: {
     marginRight: 10,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   txtheader: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#EA5D04',
+    color: '#000',
   },
   planoButton: {
     flexDirection: 'row',
@@ -237,5 +237,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  selectedDate:{
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -135,7 +135,6 @@ export function VerTreino() {
                             </TouchableOpacity>
                         </View>
                     )}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </View>
 
@@ -156,6 +155,7 @@ export function VerTreino() {
                         {dataTreino && (
                                     <>  
                                         <Text style={styles.modalText}>Código: {dataTreino.codigo}</Text>
+                                        <Text style={styles.modalText}>Nome: {dataTreino.nome}</Text>
                                         <Text style={styles.modalText}>Descrição: {dataTreino.descricao}</Text>
                                         <Text style={styles.modalText}>Plano: {dataTreino.codplano}</Text>
                                     </>
@@ -191,12 +191,6 @@ export function VerTreino() {
                             <View style={styles.BoxInputs}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Código"
-                                    value={dataTreino.codigo}
-                                    onChangeText={(text) => setDataTreino({ ...dataTreino, codigo: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
                                     placeholder="Nome"
                                     value={dataTreino.nome}
                                     onChangeText={(text) => setDataTreino({ ...dataTreino, nome: text })}
@@ -209,7 +203,7 @@ export function VerTreino() {
                                 />
                                 <Picker
                                     selectedValue={dataTreino.codplano}
-                                    style={styles.picker}
+                                    style={styles.input}
                                     onValueChange={(itemValue) => {
                                         setDataTreino({ ...dataTreino, codplano: itemValue });
                                     }}
@@ -255,7 +249,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        elevation: 4,
         marginTop: 30,
     },
     txtheader: {
@@ -284,10 +277,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 4,
       },
     itemText: {
         color: '#000',
@@ -295,7 +285,7 @@ const styles = StyleSheet.create({
       },
     separator: {
         height: 1,
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         marginVertical: 10,
     },
     modalOverlay: {
@@ -341,6 +331,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
+        elevation: 5,
         color: '#000',
     },
     btnContainer: {

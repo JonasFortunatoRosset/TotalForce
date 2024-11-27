@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   newuser: {
     color: '#000',
     fontSize: 12,
-    marginTop: 15,
+    marginTop: 8,
     textAlign: 'center',
   },
 });

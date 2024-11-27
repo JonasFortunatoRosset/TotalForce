@@ -131,7 +131,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 12,
     marginBottom: 30,
-    elevation: 4,
   },
   seta: {
     marginRight: 15,
@@ -151,8 +150,10 @@ const styles = StyleSheet.create({
     width: 280,
     alignItems: 'center',
     marginBottom: 25,
+
   },
   inputpeso: {
+    elevation: 4,
     width: '120%',
     height: 50,
     backgroundColor: '#fff',
@@ -175,10 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+    elevation: 4,
   },
   txtbox: {
     fontSize: 22,

@@ -128,9 +128,11 @@ export function VerColaborador({ navigation }) {
                                 <AntDesign name="close" size={24} color="#EB6808" />
                             </TouchableOpacity>
                             <Text style={styles.modalTitle}>Dados do Colaborador</Text>
+                            <Text style={styles.modalText}>Código: {selectedColaborador.codigo}</Text>
                             <Text style={styles.modalText}>Nome: {selectedColaborador.nome}</Text>
                             <Text style={styles.modalText}>CPF: {selectedColaborador.cpf}</Text>
                             <Text style={styles.modalText}>Endereço: {selectedColaborador.endereco}</Text>
+                            <Text style={styles.modalText}>Login: {selectedColaborador.login}</Text>
                             <Text style={styles.modalText}>Senha: {selectedColaborador.senha}</Text>
                             <Text style={styles.modalText}>Status: {selectedColaborador.status}</Text>
 
@@ -177,6 +179,12 @@ export function VerColaborador({ navigation }) {
                                     placeholder="Endereço"
                                     value={dataColaborador.endereco}
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, endereco: text })}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Login"
+                                    value={dataColaborador.login}
+                                    onChangeText={(text) => setDataColaborador({ ...dataColaborador, login: text })}
                                 />
                                 <TextInput
                                     style={styles.input}
@@ -227,7 +235,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        elevation: 4,
         marginTop: 30,
     },
     txtheader: {
@@ -256,10 +263,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 4,
       },
     itemText: {
         color: '#000',
@@ -313,6 +317,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
+        elevation: 5,
         color: '#000',
     },
     btnContainer: {

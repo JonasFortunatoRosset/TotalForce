@@ -14,6 +14,7 @@ export function VerUsuario({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [dataModalVisible, setDataModalVisible] = useState(false);
     const [planos, setPlanos] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [dataUsuario, setDataUsuario] = useState({
         codigo: "",
         nome: "",
@@ -32,6 +33,14 @@ export function VerUsuario({ navigation }) {
 
     const toggleModal = () => {
         setDataModalVisible(!dataModalVisible);
+    };
+
+    const usersFiltrados = () => {
+        return usuario.filter((user) => {
+            const matchesStatus = statusFiltro === "" || user.status === statusFiltro;
+            const matchesSearch = user.nome.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesStatus && matchesSearch;
+        });
     };
 
     const fetchPlanos = async () => {
@@ -152,19 +161,35 @@ export function VerUsuario({ navigation }) {
                         Total {statusFiltro || "Usuários"}: {contarUsuariosFiltrados()}
                     </Text>
                 </View>
+                <View style={styles.searchContainer}>
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Pesquisar por nome"
+                        value={searchTerm}
+                        onChangeText={(text) => setSearchTerm(text)}
+                    />
+                </View>
+
 
                 <FlatList
                     data={usuariosFiltrados()}
                     keyExtractor={(item) => item.codigo.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.itemContainer}>
-                            <TouchableOpacity style={styles.dados} onPress={toggleModal}>
-                                <Text style={styles.itemText}>{item.nome}</Text>
-                                <FontAwesome name="user" size={29} color={'#EA5D04'} />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
+                <View style={styles.itemContainer}>
+                    <TouchableOpacity
+                        style={styles.dados}
+                        onPress={() => {
+                            setDataUsuario(item); // Define o usuário selecionado no estado
+                            toggleModal(); // Abre o modal
+                        }}
+                    >
+                <Text style={styles.itemText}>{item.nome}</Text>
+                <FontAwesome name="user" size={29} color={'#EA5D04'} />
+            </TouchableOpacity>
+        </View>
+    )}
+/>
+
             </View>
 
             <Modal
@@ -185,8 +210,8 @@ export function VerUsuario({ navigation }) {
                                 <Text style={styles.modalText}>Login: {dataUsuario.login}</Text>
                                 <Text style={styles.modalText}>Endereço: {dataUsuario.endereco}</Text>
                                 <Text style={styles.modalText}>Senha: {dataUsuario.senha}</Text>
-                                <Text style={styles.modalText}>Peso: {dataUsuario.peso}</Text>
-                                <Text style={styles.modalText}>Altura: {dataUsuario.altura}</Text>
+                                <Text style={styles.modalText}>Peso: {dataUsuario.peso}kg</Text>
+                                <Text style={styles.modalText}>Altura: {dataUsuario.altura}cm</Text>
                                 <Text style={styles.modalText}>Plano: {dataUsuario.codplano}</Text>
                                 <Text style={styles.modalText}>Status: {dataUsuario.status}</Text>
                             </>
@@ -243,18 +268,22 @@ export function VerUsuario({ navigation }) {
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Peso"
-                                    value={dataUsuario.peso}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, peso: text })}
+                                    value={dataUsuario.peso?.toString()}
+                                    onChangeText={(text) =>
+                                        setDataUsuario({ ...dataUsuario, peso: text.replace(/[^0-9]/g, '') }) 
+                                    }
                                 />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Altura"
-                                    value={dataUsuario.altura}
-                                    onChangeText={(text) => setDataUsuario({ ...dataUsuario, altura: text })}
+                                    value={dataUsuario.altura?.toString()}
+                                    onChangeText={(text) =>
+                                        setDataUsuario({ ...dataUsuario, altura: text.replace(/[^0-9]/g, '') }) 
+                                    }
                                 />
                                 <Picker
                                     selectedValue={dataUsuario.codplano}
-                                    style={styles.picker}
+                                    style={styles.input}
                                     onValueChange={(itemValue) => {
                                         setDataUsuario({ ...dataUsuario, codplano: itemValue });
                                     }}
@@ -265,7 +294,7 @@ export function VerUsuario({ navigation }) {
                                 </Picker>
                                 <Picker
                                     selectedValue={dataUsuario.status}
-                                    style={styles.picker}
+                                    style={styles.input}
                                     onValueChange={(itemValue) =>
                                         setDataUsuario({ ...dataUsuario, status: itemValue })
                                     }
@@ -277,12 +306,23 @@ export function VerUsuario({ navigation }) {
                                 </Picker>
                             </View>
 
-                            <View style={styles.btnContainer}>
+                            {/* <View style={styles.btnContainer}>
                                 <TouchableOpacity onPress={handleUpdate} style={styles.saveButton}>
                                     <Text style={styles.btnText}>Salvar</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
                                     <Text style={styles.btnText}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View> */}
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
+                                    <Text style={styles.txtbtns}>Salvar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.btns, styles.btnCancel]}
+                                    onPress={() => { setModalVisible(false); }}
+                                >
+                                    <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -323,7 +363,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     filterButton: {
-        padding: 10,
+        padding: 7,
         borderRadius: 5,
         backgroundColor: '#fff',
     },
@@ -351,10 +391,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 4,
       },
     itemText: {
         color: '#000',
@@ -404,11 +441,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
+        width: 250,
+        height: 40,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginVertical: 5,
+        elevation: 5,
+        color: '#000',
     },
     picker: {
         height: 25,
@@ -416,15 +457,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     btns: {
-        backgroundColor: '#FF9756',
-        borderRadius: 5,
+        width: '48%',
         padding: 10,
+        borderRadius: 8,
+        marginVertical: 5,
         alignItems: 'center',
-        marginTop: 10,
+    },
+    btnSave: {
+        backgroundColor: '#FF9756',
+    },
+    btnCancel: {
+        backgroundColor: '#FF9756',
     },
     txtbtns: {
-        color: '#fff',
-        fontWeight: 'bold',
+        color: '#000',
+        fontSize: 16
     },
     modalBackground: {
         flex: 1,
@@ -454,9 +501,10 @@ const styles = StyleSheet.create({
 	backgroundColor: '#FF9756',
       },
       btnContainer: {
-	flexDirection: 'row',
-	width: '50%',
-      },
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 250,
+    },
       closeIcon: {
         position: 'absolute',
         top: 10,

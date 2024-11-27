@@ -3,28 +3,37 @@ import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity, FlatList,
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import EvilIcons from '@expo/vector-icons/EvilIcons'; 
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 import axios from 'axios';
 import { apiRoute } from '../../apiRoute';
 
 export function ChangePlan({ navigation }) {
   const [usuarios, setUsuarios] = useState([]);
   const [filteredUsuarios, setFilteredUsuarios] = useState([]);
-  const [planos, setPlanos] = useState([]); 
+  const [planos, setPlanos] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [selectedUserCode, setSelectedUserCode] = useState(null); 
+  const [selectedUserCode, setSelectedUserCode] = useState(null);
+  const [dataUsuario, setDataUsuario] = useState({
+    nome: '',
+    endereco: '',
+    login: '',
+    senha: '',
+    peso: '',
+    altura: '',
+    codplano: '', // Será atualizado pelo usuário selecionando um plano
+    status: '',
+    codigo: '', // Adicionei o código do usuário aqui
+  });
 
   const fetchPlanos = async () => {
     try {
       const response = await axios.get(`http://${apiRoute}:3000/planos`);
-      console.log("Resposta da API:", response.data);
-
       if (Array.isArray(response.data)) {
         setPlanos(response.data);
       } else if (Array.isArray(response.data.Planos)) {
-        setPlanos(response.data.Planos); 
+        setPlanos(response.data.Planos);
       } else {
         console.error('A chave "Planos" não é um array:', response.data);
         Alert.alert('Erro', 'Nenhum plano encontrado.');
@@ -34,56 +43,58 @@ export function ChangePlan({ navigation }) {
       console.error(error);
     }
   };
-  
+
   const fetchUsuarios = async () => {
     try {
       const response = await axios.get(`http://${apiRoute}:3000/usuarios`);
-      const usuariosData = response.data.usuario; 
+      const usuariosData = response.data.usuario;
       setUsuarios(usuariosData);
-      setFilteredUsuarios(usuariosData); 
+      setFilteredUsuarios(usuariosData);
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
     }
   };
 
-  const updateCodPlano = async (novoCodPlano, codusuario) => {
-    if (!novoCodPlano || !codusuario) {
+  const updateCodPlano = async () => {
+    if (!selectedPlan || !selectedUserCode) {
       Alert.alert('Erro', 'Plano ou usuário não selecionado corretamente.');
       return;
     }
-  
+
     try {
-      const response = await axios.put(`http://${apiRoute}:3000/usuarios`, {
-        codigo: codusuario,  
-        codplano: novoCodPlano,
+      // Atualiza os dados do usuário com o plano selecionado
+      const updatedUsuario = {
+        ...dataUsuario,
+        codplano: selectedPlan, // Atualiza o plano selecionado
+        codigo: selectedUserCode, // Inclui o código do usuário
+      };
+
+      // Envia a requisição PUT com todos os dados do usuário
+      await axios.put(`http://${apiRoute}:3000/usuarios`, updatedUsuario, {
+        params: { codigo: selectedUserCode },
       });
-  
-      if (response.status === 200) {
-        Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
-        fetchUsuarios(); // Atualiza a lista de usuários
-      }
+
+      fetchUsuarios();
+      setModalVisible(false);
+      setSelectedPlan(null);
+      setSelectedUserCode(null);
+      Alert.alert('Sucesso', 'O plano foi atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o plano:', error.response?.data || error.message);
       Alert.alert('Erro', `Erro ao atualizar o plano: ${error.response?.data?.message || 'Verifique os dados enviados.'}`);
     }
   };
-  
 
   const confirmPlanChange = () => {
-    if (selectedPlan && selectedUserCode) {
-      updateCodPlano(selectedPlan, selectedUserCode);  // Usando selectedUserCode
-      setModalVisible(false);
-    } else {
-      Alert.alert('Erro', 'Por favor, selecione um plano.');
-    }
+    updateCodPlano();
   };
 
   const filterUsuarios = (text) => {
     setSearchText(text);
     if (text === '') {
-      setFilteredUsuarios(usuarios); 
+      setFilteredUsuarios(usuarios);
     } else {
-      const filteredData = usuarios.filter((usuario) => 
+      const filteredData = usuarios.filter((usuario) =>
         usuario.nome.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredUsuarios(filteredData);
@@ -99,7 +110,19 @@ export function ChangePlan({ navigation }) {
       <TouchableHighlight
         onPress={() => {
           setModalVisible(true);
-          setSelectedUserCode(item.codigo);  // Passa o código do usuário selecionado
+          setSelectedUserCode(item.codigo); // Passa o código do usuário selecionado
+          setDataUsuario({
+            ...dataUsuario,
+            nome: item.nome,
+            endereco: item.endereco,
+            login: item.login,
+            senha: item.senha,
+            peso: item.peso,
+            altura: item.altura,
+            codplano: item.codplano,
+            status: item.status,
+            codigo: item.codigo, // Atualiza o estado com o código do usuário
+          });
         }}
         underlayColor={null}
         style={styles.changePlanButton}
@@ -114,7 +137,7 @@ export function ChangePlan({ navigation }) {
   useEffect(() => {
     fetchUsuarios();
     fetchPlanos();
-  }, []); 
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -137,7 +160,7 @@ export function ChangePlan({ navigation }) {
         </View>
 
         <FlatList
-          data={filteredUsuarios} 
+          data={filteredUsuarios}
           renderItem={renderItem}
           keyExtractor={(item) => item.codigo.toString()}
           contentContainerStyle={styles.listContainer}
@@ -157,8 +180,6 @@ export function ChangePlan({ navigation }) {
               selectedValue={selectedPlan}
               onValueChange={(itemValue) => {
                 setSelectedPlan(itemValue);
-                console.log('Código do Usuário:', selectedUserCode);  // Exibe o código do usuário no console
-                console.log('Plano Selecionado:', itemValue);  // Exibe o plano selecionado no console
               }}
               style={styles.picker}
             >
@@ -173,14 +194,11 @@ export function ChangePlan({ navigation }) {
             </Picker>
 
             <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={confirmPlanChange} style={styles.button}>
                 <Text style={styles.buttonText}>Confirmar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Cancelar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -189,6 +207,8 @@ export function ChangePlan({ navigation }) {
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -218,7 +238,8 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
+    elevation: 4,
     borderRadius: 8,
     width: '90%',
     paddingHorizontal: 10,

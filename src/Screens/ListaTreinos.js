@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 12,
     marginBottom: 30,
-    elevation: 4,
   },
   seta: {
     marginRight: 15,

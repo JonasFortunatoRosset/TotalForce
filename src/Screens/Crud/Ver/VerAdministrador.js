@@ -130,6 +130,8 @@ export function VerAdministrador({ navigation }) {
                         <Text style={styles.modalTitle}>Dados do Administrador</Text>
                         {dataAdministrador && (
                             <>
+                                <Text style={styles.modalText}>Código:  {dataAdministrador.codigo}</Text>
+                                <Text style={styles.modalText}>Nome:  {dataAdministrador.nome}</Text>
                                 <Text style={styles.modalText}>CPF:   {dataAdministrador.cpf}</Text>
                                 <Text style={styles.modalText}>Login: {dataAdministrador.login}</Text>
                                 <Text style={styles.modalText}>Senha: {dataAdministrador.senha}</Text>
@@ -214,7 +216,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        elevation: 4,
         marginTop: 30,
     },
     txtheader: {
@@ -238,14 +239,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 6,
       },
     itemText: {
         color: '#000',
         fontSize: 16,
+        
       },
     icons: {
         flexDirection: 'row',
@@ -293,6 +292,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 10,
         color: '#000',
+        elevation:5,
     },
     btnContainer: {
         flexDirection: 'row',

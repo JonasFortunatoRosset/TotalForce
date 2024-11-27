@@ -126,8 +126,8 @@ export function VerPlanos({ navigation }) {
                                 <AntDesign name="close" size={24} color="#EB6808" />
                             </TouchableOpacity>
                             <Text style={styles.modalTitle}>Dados do Plano</Text>
-                            <Text style={styles.modalText}>Nome: {selectedPlano.nome}</Text>
                             <Text style={styles.modalText}>Código: {selectedPlano.codigo}</Text>
+                            <Text style={styles.modalText}>Nome: {selectedPlano.nome}</Text>
 
                             <View style={styles.icons}>
                                 <TouchableOpacity onPress={() => handleDelete(selectedPlano.codigo)}>
@@ -154,17 +154,12 @@ export function VerPlanos({ navigation }) {
                         </View>
                         <View style={styles.modalBody}>
                             <View style={styles.BoxInputs}>
+
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Nome"
                                     value={dataPlano.nome}
                                     onChangeText={(text) => setDataPlano({ ...dataPlano, nome: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Código"
-                                    value={dataPlano.codigo}
-                                    editable={false}
                                 />
                             </View>
                             <View style={styles.btnContainer}>
@@ -195,9 +190,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 10,
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         borderRadius: 12,
-        elevation: 4,
         marginTop: 30,
     },
     txtheader: {
@@ -226,10 +220,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 4,
       },
     itemText: {
         color: '#000',
@@ -283,6 +274,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
+        elevation: 5,
         color: '#000',
     },
     btnContainer: {

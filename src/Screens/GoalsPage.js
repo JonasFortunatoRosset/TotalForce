@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 12,
     marginBottom: 30,
-    elevation: 4,
   },
   seta: {
     marginRight: 15,
@@ -263,10 +262,7 @@ const styles = StyleSheet.create({
     marginBottom: 20, 
     flexDirection:'row',
     justifyContent: 'space-around',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
+    elevation: 4,
   },
   txtbox: {
     fontSize: 22,
@@ -306,7 +302,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   ModalHeader: {
-    backgroundColor: '#FF9756',
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
@@ -332,10 +328,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     color: '#000',
     fontSize: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
+    elevation: 4,
   },
   dateInputContainer: {
     flexDirection: 'row',
@@ -345,10 +338,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
+    elevation: 4,
   },
   inputText: {
     fontSize: 16,

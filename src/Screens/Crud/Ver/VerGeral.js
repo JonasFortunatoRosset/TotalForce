@@ -9,7 +9,7 @@ export function VerGeral({ navigation }) {
                 <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
                     <Ionicons name="arrow-back" size={28} color="black" />
                 </TouchableHighlight>
-                <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
+                <Text style={styles.txtheader}>VISUALIZAR CADASTROS</Text>
             </View>
             <View style={styles.color}>
             <View style={styles.body}>
@@ -37,9 +37,6 @@ export function VerGeral({ navigation }) {
                     <Text style={styles.txtbox}>Ver Usuários</Text>
                 </TouchableHighlight>
             </View>
-            <View style={styles.footer}>
-
-            </View>
             </View>
         </ScrollView>
     );
@@ -48,11 +45,11 @@ export function VerGeral({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
     },
     header: {
         width: '100%',
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',

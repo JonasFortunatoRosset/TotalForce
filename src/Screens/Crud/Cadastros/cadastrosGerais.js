@@ -9,7 +9,7 @@ export function CadastroGeral({ navigation }) {
                 <TouchableHighlight onPress={() => navigation.goBack()} style={styles.backButton} underlayColor={null}>
                     <Ionicons name="arrow-back" size={28} color="black" />
                 </TouchableHighlight>
-                <Text style={styles.txtheader}>ACADEMIA TOTAL FORCE</Text>
+                <Text style={styles.txtheader}>CADASTROS</Text>
             </View>
             <View style={styles.body}>
                 <TouchableHighlight style={styles.boxtbns} underlayColor={null} onPress={() => navigation.navigate('cadastroAdministrador')}>
@@ -45,17 +45,17 @@ export function CadastroGeral({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
     },
     header: {
         width: '100%',
-        backgroundColor: '#FF9756',
+        backgroundColor: '#fff',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
         elevation: 4,
         borderRadius: 12,
-        marginTop: 37,
+        marginTop: 5,
     },
     backButton: {
         paddingRight: 0,

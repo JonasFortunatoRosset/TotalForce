@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity, TextInput, M
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Video } from 'expo-av';
-import { Picker } from 'react-native-web';
+import { Picker } from '@react-native-picker/picker';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -201,12 +201,6 @@ export function VerExercicio() {
                             <View style={styles.BoxInputs}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Código"
-                                    value={dataExercicios.codigo}
-                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, codigo: text })}
-                                />
-                                <TextInput
-                                    style={styles.input}
                                     placeholder="Nome"
                                     value={dataExercicios.nome}
                                     onChangeText={(text) => setDataExercicios({ ...dataExercicios, nome: text })}
@@ -219,15 +213,19 @@ export function VerExercicio() {
                                 />
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Séries"
-                                    value={dataExercicios.serie}
-                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, serie: text })}
+                                    placeholder="Série"
+                                    value={dataExercicios.serie?.toString()}
+                                    onChangeText={(text) =>
+                                        setDataExercicios({ ...dataExercicios, serie: text.replace(/[^0-9]/g, '') }) 
+                                    }
                                 />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Repetições"
-                                    value={dataExercicios.repeticoes}
-                                    onChangeText={(text) => setDataExercicios({ ...dataExercicios, repeticoes: text })}
+                                    value={dataExercicios.repeticoes?.toString()}
+                                    onChangeText={(text) =>
+                                        setDataExercicios({ ...dataExercicios, repeticoes: text.replace(/[^0-9]/g, '') }) 
+                                    }
                                 />
 
                                 <Picker
@@ -236,12 +234,13 @@ export function VerExercicio() {
                                         setDataExercicios({ ...dataExercicios, codtreino: itemValue });
                                         console.log('CodTreino selecionado:', itemValue);
                                     }}
-                                    style={styles.picker}
+                                    style={styles.input}
                                 >
                                     <Picker.Item label="Selecione um treino" value="" />
                                     {treinos.length > 0 ? (
                                         treinos.map((treino) => (
-                                            <Picker.Item key={treino.codigo} label={treino.nome} value={treino.codigo} />
+                                        <Picker.Item key={treino.codigo} label={`${treino.codigo} - ${treino.nome}`} value={treino.codigo} />
+
                                         ))
                                     ) : (
                                         <Picker.Item label="Nenhum treino disponível" value="" />
@@ -251,10 +250,10 @@ export function VerExercicio() {
 
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
-                                    <Text style={styles.txtBtn}>Salvar</Text>
+                                    <Text style={styles.txtbtns}>Salvar</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={[styles.btns, styles.btnCancel]} onPress={() => setModalVisible(false)}>
-                                    <Text style={styles.txtBtn}>Cancelar</Text>
+                                    <Text style={styles.txtbtns}>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -277,7 +276,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        elevation: 4,
         marginTop: 30,
     },
     txtheader: {
@@ -306,10 +304,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
+        elevation: 4,
       },
     itemText: {
         color: '#000',
@@ -358,6 +353,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginVertical: 5,
+        elevation: 5,
         color: '#000',
     },
     btnContainer: {
