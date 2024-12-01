@@ -11,7 +11,7 @@ import { ConfigPage }          from './src/Screens/ConfigPage';
 import { TrainPage }           from './src/Screens/TrainPage';
 import { ListaTreinos }        from './src/Screens/ListaTreinos';
 import { PlanilhaExercicios }  from './src/Screens/PlanilhaTreino'
-import { ResultsPage }         from './src/Screens/ResultsPage';
+import { ResultsPage }         from './src/Screens/ResultPage';
 import { GoalsPage }           from './src/Screens/GoalsPage';
 import { NutricaoPage }        from './src/Screens/NutricaoPage';
 import { ChangePlan }          from './src/Screens/ChangePlan';

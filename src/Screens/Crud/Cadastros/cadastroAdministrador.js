@@ -57,6 +57,7 @@ export function CadastroAdministrador({ navigation }) {
           value={administrador.cpf}
           onChangeText={(text) => setAdministrador({ ...administrador, cpf: text })}
           keyboardType="numeric"
+          secureTextEntry
         />
 
         <TextInput

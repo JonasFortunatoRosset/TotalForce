@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
 import { LineChart } from 'react-native-chart-kit';
-import { apiRoute } from '../../../../apiRoute';
+import { apiRoute } from '../../apiRoute';
 
 export function ResultsPage({ navigation }) {
   const [dados, setDados] = useState([]);
@@ -15,18 +15,20 @@ export function ResultsPage({ navigation }) {
   useEffect(() => {
     const carregarParametros = async () => {
       try {
-        const codusuario = await AsyncStorage.getItem('codusuario');
+        const codusuario = await AsyncStorage.getItem('codusuario'); //pega o código do usuário
         if (!codusuario) {
           throw new Error('Código do usuário não encontrado.');
         }
 
-        const response = await axios.get(`http://${apiRoute}:3000/pesquisarcodplanousuarios`, {
-          params: { codigo: codusuario },
+        const response = await axios.get(`http://${apiRoute}:3000/pesquisarcodplanousuarios`, { // pega o código do plano do usuário
+          params: { codigo: codusuario }, //usa o código do usuário como parametro para pegar o código do plano
         });
 
         if (response.data?.codplano) {
-          setCodplano(response.data.codplano);
+          setCodplano(response.data.codplano); 
           setCodUser(codusuario);
+          console.log('Código do plano:', response.data.codplano);
+          console.log('Código do usuário',codusuario);
         } else {
           throw new Error('Plano não encontrado para o usuário.');
         }
@@ -45,13 +47,14 @@ export function ResultsPage({ navigation }) {
 
       try {
         const response = await axios.post(
-          `http://${apiRoute}:3000/pesquisarResultadoUsuario`,
+          `http://${apiRoute}:3000/pesquisarResultadoUsuario`,  //pega os dados de resultado de acordo com o plano do usuário
           null,
           { params: { codigo: codUser, codplano } }
         );
 
         if (response.data) {
           setDados(response.data);
+          console.log(response.data) //verifica a resposta da requisição
         } else {
           Alert.alert('Aviso', 'Nenhum resultado encontrado.');
         }
@@ -62,7 +65,7 @@ export function ResultsPage({ navigation }) {
     };
 
     fetchResultados();
-  }, [codUser, codplano]);
+  }, [codUser, codplano]);  //chama a função passando o código do usuário e do plano
 
   const formatarDadosParaGrafico = () => {
     if (!dados || Object.keys(dados).length === 0) {
@@ -87,6 +90,7 @@ export function ResultsPage({ navigation }) {
   };
 
   const dadosGrafico = formatarDadosParaGrafico();
+  console.log('Dados formatados: ', dadosGrafico)
 
   return (
     <View style={styles.container}>

@@ -35,13 +35,6 @@ export function VerUsuario({ navigation }) {
         setDataModalVisible(!dataModalVisible);
     };
 
-    const usersFiltrados = () => {
-        return usuario.filter((user) => {
-            const matchesStatus = statusFiltro === "" || user.status === statusFiltro;
-            const matchesSearch = user.nome.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchesStatus && matchesSearch;
-        });
-    };
 
     const fetchPlanos = async () => {
         try {
@@ -63,9 +56,13 @@ export function VerUsuario({ navigation }) {
     };
 
     const usuariosFiltrados = () => {
-        if (statusFiltro === "") return usuario;
-        return usuario.filter((user) => user.status === statusFiltro);
+        return usuario.filter((user) => {
+            const matchesStatus = statusFiltro === "" || user.status === statusFiltro;
+            const matchesSearch = searchTerm === "" || user.nome.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesStatus && matchesSearch;
+        });
     };
+    
 
     const contarUsuariosFiltrados = () => usuariosFiltrados().length;
 
@@ -179,8 +176,8 @@ export function VerUsuario({ navigation }) {
                     <TouchableOpacity
                         style={styles.dados}
                         onPress={() => {
-                            setDataUsuario(item); // Define o usuário selecionado no estado
-                            toggleModal(); // Abre o modal
+                            setDataUsuario(item);
+                            toggleModal(); 
                         }}
                     >
                 <Text style={styles.itemText}>{item.nome}</Text>
@@ -263,6 +260,7 @@ export function VerUsuario({ navigation }) {
                                     style={styles.input}
                                     placeholder="Senha"
                                     value={dataUsuario.senha}
+                                    secureTextEntry
                                     onChangeText={(text) => setDataUsuario({ ...dataUsuario, senha: text })}
                                 />
                                 <TextInput
@@ -306,14 +304,6 @@ export function VerUsuario({ navigation }) {
                                 </Picker>
                             </View>
 
-                            {/* <View style={styles.btnContainer}>
-                                <TouchableOpacity onPress={handleUpdate} style={styles.saveButton}>
-                                    <Text style={styles.btnText}>Salvar</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-                                    <Text style={styles.btnText}>Cancelar</Text>
-                                </TouchableOpacity>
-                            </View> */}
                             <View style={styles.btnContainer}>
                                 <TouchableOpacity style={[styles.btns, styles.btnSave]} onPress={handleUpdate}>
                                     <Text style={styles.txtbtns}>Salvar</Text>

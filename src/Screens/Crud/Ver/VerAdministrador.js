@@ -172,6 +172,7 @@ export function VerAdministrador({ navigation }) {
                                     style={styles.input}
                                     placeholder="CPF"
                                     value={dataAdministrador.cpf}
+                                    secureTextEntry
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, cpf: text })}
                                 />
                                 <TextInput
@@ -184,6 +185,7 @@ export function VerAdministrador({ navigation }) {
                                     style={styles.input}
                                     placeholder="Senha"
                                     value={dataAdministrador.senha}
+                                    secureTextEntry
                                     onChangeText={(text) => setDataAdministrador({ ...dataAdministrador, senha: text })}
                                 />
                             </View>

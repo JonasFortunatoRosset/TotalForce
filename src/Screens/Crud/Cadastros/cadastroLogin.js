@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Modal, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import axios from 'axios';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,14 +10,14 @@ import logoTotal from '../../Images/logoTotal.png';
 export function CadastroLogin({ navigation }) {
   const [etapa, setEtapa] = useState(1); 
   const [usuario, setUsuario] = useState({
-    nome: '',
-    login: '',
-    endereco: '',
-    senha: '',
-    peso: '',
-    altura: '',
+    nome: "",
+    login: "",
+    endereco: "",
+    senha: "",
+    peso: "",
+    altura: "",
     codplano: 1,
-    status: 'Em Análise',
+    status: "Em Análise"
   });
 
 
@@ -36,23 +36,42 @@ export function CadastroLogin({ navigation }) {
     }
   };
 
-  const inserirUsuarios = async () => {
+  const inserirUsuarios = async () => { 
+    if (!usuario.endereco || !usuario.peso || !usuario.altura ) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos .");
+      return;
+    }
+    
+    console.log("Dados do usuário:", usuario); 
+  
     try {
-      await axios.post(`http://${apiRoute}:3000/usuarios`, usuario);
+      await axios.post(`http://${apiRoute}:3000/usuarios`, {
+        nome: usuario.nome,
+        login: usuario.login,
+        endereco: usuario.endereco,
+        senha: usuario.senha,
+        peso: usuario.peso,
+        altura: usuario.altura,
+        status: usuario.status,
+        codplano: parseInt(usuario.codplano, 10), 
+      }, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
       Alert.alert("Seu cadastro foi concluído. Aguarde a confirmação de um administrador para realizar login.")
       setUsuario({
-        nome: '',
-        login: '',
-        endereco: '',
-        senha: '',
-        peso: '',
-        altura: '',
+        nome: "",
+        login: "",
+        endereco: "",
+        senha: "",
+        peso: "",
+        altura: "",
+        codplano: 1,
+        status: "Ativo"
       });
-
-
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível cadastrar o usuário.');
-      console.error(error);
+      Alert.alert("Erro", "Não foi possível cadastrar o usuário");
+      console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);
     }
   };
 
@@ -137,8 +156,6 @@ export function CadastroLogin({ navigation }) {
           </View>
         </View>
       )}
-  
-    
     </SafeAreaView>
   );
   

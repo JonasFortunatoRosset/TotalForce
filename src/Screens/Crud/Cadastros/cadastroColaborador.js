@@ -64,6 +64,7 @@ export function CadastroColaborador({ navigation }) {
           value={colaborador.cpf}
           onChangeText={(text) => setColaborador({ ...colaborador, cpf: text })}
           keyboardType="numeric"
+          secureTextEntry
         />
 
         <TextInput
@@ -79,6 +80,7 @@ export function CadastroColaborador({ navigation }) {
           value={colaborador.senha}
           secureTextEntry
           onChangeText={(text) => setColaborador({ ...colaborador, senha: text })}
+          
         />
 
         <TextInput

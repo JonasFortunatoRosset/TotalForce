@@ -172,6 +172,7 @@ export function VerColaborador({ navigation }) {
                                     style={styles.input}
                                     placeholder="CPF"
                                     value={dataColaborador.cpf}
+                                    secureTextEntry
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, cpf: text })}
                                 />
                                 <TextInput
@@ -190,6 +191,7 @@ export function VerColaborador({ navigation }) {
                                     style={styles.input}
                                     placeholder="Senha"
                                     value={dataColaborador.senha}
+                                    secureTextEntry
                                     onChangeText={(text) => setDataColaborador({ ...dataColaborador, senha: text })}
                                 />
                                 <Picker
